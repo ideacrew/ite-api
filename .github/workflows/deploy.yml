@@ -17,4 +17,4 @@ jobs:
           heroku_email: "kristin.merbach@ideacrew.com"
           usedocker: true
         env:
-          MONGODB_URI: "mongodb+srv://kristinmerbach:1NGP6DZhPMdsiCRY@cluster0.upyyjy9.mongodb.net"
+          HD_MONGODB_URI: "mongodb+srv://kristinmerbach:1NGP6DZhPMdsiCRY@cluster0.upyyjy9.mongodb.net"
