@@ -85,4 +85,4 @@ COPY --chown=nonroot:nonroot . $HOME
 
 USER nonroot
 
-CMD rails s
+# CMD rails s
