@@ -5,7 +5,7 @@ ruby '3.1.1'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem 'rails', '~> 7.0', '>= 7.0.3'
-
+# gem 'sqlite3', '~> 1.4'
 # use mongoid as the database
 gem 'mongoid', '~> 7.4'
 
