@@ -43,6 +43,8 @@ ENV HOME=/dbh
 RUN mkdir $HOME \
   && chown -R nonroot:nonroot $HOME
 
+ENV SECRET_KEY_BASE=c8d2b9b204fbac78081a88a2c29b28cfeb82e6ccd3664b3948b813463b5917b315dbbd3040e8dffcb5b68df427099db0ce03e59e2432dfe5d272923b00755b82
+
 WORKDIR $HOME
 ENV RAILS_ENV=production
 
