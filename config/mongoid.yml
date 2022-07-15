@@ -1,7 +1,8 @@
 production:
   clients:
     default:
-      uri: <%= ENV['MONGODB_URI'] %>
+      uri: mongodb+srv://kristinmerbach:1NGP6DZhPMdsiCRY@cluster0.upyyjy9.mongodb.net/ite_api_production
+           # mongodb+srv://[username:password@]host[/[database][?options]]
 
 development:
   # Configure available database clients. (required)
