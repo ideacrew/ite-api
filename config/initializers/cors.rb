@@ -7,7 +7,7 @@
 
  Rails.application.config.middleware.insert_before 0, Rack::Cors do
    allow do
-     origins 'https://markgoho-ideacrew-ite-portal-969qg56g27g45-4200.githubpreview.dev'
+     origins '*'
 #
      resource '*',
        headers: :any,
