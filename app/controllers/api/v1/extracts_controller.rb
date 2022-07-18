@@ -10,7 +10,7 @@ module Api
         payload = params.to_h.deep_symbolize_keys
         extract = Extract.new(payload: payload, provider_identifier: payload[:provider_identifier], extract_type: payload[:extract_type])
         extract.save
-        render json: { response_text: "got payload", status: 200 }
+        render inline: "got payload", status: 200, content_type: "application/json"
       end
 
       def index
