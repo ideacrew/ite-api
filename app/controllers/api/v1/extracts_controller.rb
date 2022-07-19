@@ -7,12 +7,11 @@ module Api
       before_action :permit_params
 
       def ingest
-        payload = params.to_h.deep_symbolize_keys
-        p payload
-        extract = Extract.new(payload: payload, provider_identifier: payload[:provider_identifier], extract_type: payload[:extract_type])
+        payload = permit_params.to_h.deep_symbolize_keys
+        payload.merge(payload: payload)
+        extract = Extract.new(payload)
         extract.save
-        puts "saved extract"
-        render inline: "got payload", status: 200, content_type: "application/json"
+        render json: {status_text: "ingested payload", status: 200, content_type: "application/json", payload: payload}
       end
 
       def index
@@ -22,7 +21,7 @@ module Api
       private
 
       def permit_params
-        params.permit!
+        params[:extract].permit!
       end
     end
   end
