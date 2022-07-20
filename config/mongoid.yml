@@ -1,9 +1,9 @@
-production:
+development:
   clients:
     default:
       uri: <%= ENV['MONGODB_URI'] %>
 
-development:
+production:
   # Configure available database clients. (required)
   clients:
     # Defines the default client. (required)

@@ -7,8 +7,9 @@ module Api
       before_action :permit_params
 
       def ingest
-        payload = permit_params[:extract].to_h.deep_symbolize_keys
-        # payload.merge(payload:)
+        payload = permit_params.to_h.deep_symbolize_keys
+
+        payload[:extract].merge(payload: payload[:extract])
         # result =
         # result = Contracts::ExtractContract.new.call(payload)
 
@@ -17,7 +18,7 @@ module Api
         #  else
         #    Failure(result)
         #  end
-        extract = Extract.new(payload)
+        extract = Extract.new(payload[:extract])
         extract.save
         render json: { status_text: 'ingested payload', status: 200, content_type: 'application/json', payload: }
       end
