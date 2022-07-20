@@ -2,7 +2,7 @@
 ### Base image ###
 ############################################
 
-FROM ruby:3.1.1-slim-buster as base
+FROM ruby:3.1.2-slim-buster as base
 LABEL author="IdeaCrew"
 
 RUN apt-get update \

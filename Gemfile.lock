@@ -180,6 +180,8 @@ GEM
     nio4r (2.5.8)
     nokogiri (1.13.7-x86_64-darwin)
       racc (~> 1.4)
+    nokogiri (1.13.7-x86_64-linux)
+      racc (~> 1.4)
     oj (3.13.16)
     orm_adapter (0.5.0)
     parallel (1.22.1)
@@ -290,6 +292,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-20
+  x86_64-linux
 
 DEPENDENCIES
   awesome_print (~> 1.9, >= 1.9.2)
@@ -319,7 +322,7 @@ DEPENDENCIES
   web-console (~> 4.2)
 
 RUBY VERSION
-   ruby 3.1.1p18
+   ruby 3.1.2p20
 
 BUNDLED WITH
    2.2.14
