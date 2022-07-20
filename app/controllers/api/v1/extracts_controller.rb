@@ -7,8 +7,8 @@ module Api
       before_action :permit_params
 
       def ingest
-        payload = permit_params.to_h.deep_symbolize_keys
-        payload.merge(payload:)
+        payload = permit_params[:extract].to_h.deep_symbolize_keys
+        # payload.merge(payload:)
         # result =
         # result = Contracts::ExtractContract.new.call(payload)
 
@@ -29,7 +29,7 @@ module Api
       private
 
       def permit_params
-        params[:extract].permit!
+        params.permit!
       end
     end
   end

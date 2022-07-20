@@ -16,9 +16,17 @@ RSpec.describe Api::V1::Extract, type: :model do
 
   context 'with a valid payload' do
     context 'all values filled in' do
+      before do
+        @extract = described_class.create(extract_params)
+      end
+
       it 'will create an extract' do
-        extract = described_class.create(extract_params)
-        expect(extract.class).to eq(described_class)
+        expect(@extract.class).to eq(described_class)
+      end
+
+      it 'will have a coverage range' do
+        binding.pry
+        expect(@extract.coverage_range).to eq(Date.new(2022, 01, 01)..Date.new(2022, 02, 01))
       end
     end
   end
