@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require './app/models/types'
+
 module Validators
   module Api
     module V1
@@ -12,7 +14,42 @@ module Validators
           required(:extracted_on).filled(:date)
           optional(:file_name).maybe(:string)
           required(:file_type).filled(:string)
-          required(:transaction_group).filled(:string)
+          required(:transaction_group).filled(::Types::TransactionGroups)
+        end
+
+        rule(:coverage_start) do
+          if key && value && value > Date.today
+            key.failure(text: "invalid coverage start date - Date should be today or in the past.",
+                        error: result.errors.to_h)
+          end
+        end
+
+        rule(:coverage_end) do
+          if key && value && value > Date.today
+            key.failure(text: "invalid coverage end date - Date should be today or in the past.",
+                        error: result.errors.to_h)
+          end
+        end
+
+        rule(:coverage_end, :coverage_start) do
+          if key && value && value > Date.today
+            key.failure(text: "invalid coverage end date - Date should be today or in the past.",
+                        error: result.errors.to_h)
+          end
+        end
+
+        rule(:coverage_start, :coverage_end) do
+          if key && values[:coverage_start] && values[:coverage_end] && values[:coverage_end] < values[:coverage_start]
+              key.failure(text: "invalid coverage dates - coverage end date should be later than start date.",
+                          error: result.errors.to_h)
+          end
+        end
+
+        rule(:extracted_on) do
+          if key && value && value > Date.today
+            key.failure(text: "invalid extraction date - Date should be today or in the past.",
+                        error: result.errors.to_h)
+          end
         end
       end
     end

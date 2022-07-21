@@ -7,11 +7,11 @@ RSpec.describe ::Validators::Api::V1::ExtractContract do
   let(:required_params) do
     {
       provider_gateway_identifier: '73982',
-      coverage_start: '01-01-2022',
-      coverage_end: '01-01-2022',
-      extracted_on: '01-01-2022',
+      coverage_start: Date.today.to_s,
+      coverage_end: Date.today.to_s,
+      extracted_on: Date.today.to_s,
       file_type: 'Initial',
-      transaction_group: 'Admmission'
+      transaction_group: 'admission'
     }
   end
 
@@ -19,9 +19,9 @@ RSpec.describe ::Validators::Api::V1::ExtractContract do
     context 'with missing keys' do
       let(:missing_key_params) do
         {
-          coverage_start: '01-01-2022',
-          coverage_end: '01-01-2022',
-          extracted_on: '01-01-2022',
+          coverage_start: Date.today.to_s,
+          coverage_end: Date.today.to_s,
+          extracted_on: Date.today.to_s,
           file_type: 'Initial',
           transaction_group: 'Admmission'
         }
@@ -43,6 +43,62 @@ RSpec.describe ::Validators::Api::V1::ExtractContract do
       it 'should return failure' do
         required_params.merge!(provider_gateway_identifier: 128)
         expect(subject.call(required_params).errors.to_h).to eq({ provider_gateway_identifier: ['must be a string'] })
+      end
+    end
+
+    context 'invalid coverage dates' do
+      context 'with coverage start date in the future' do
+        it 'should fail validation' do
+          required_params[:coverage_start] = Date.today + 1
+          result = subject.call(required_params)
+          expect(result.success?).to be_falsey
+        end
+      end
+
+      context 'with coverage end date in the future' do
+        it 'should fail validation' do
+          required_params[:coverage_end] = Date.today + 1
+          result = subject.call(required_params)
+          expect(result.success?).to be_falsey
+        end
+      end
+
+      context 'with coverage start date after coverage end date' do
+        it 'should fail validation' do
+          required_params[:coverage_start] = Date.today
+          required_params[:coverage_end] = Date.today - 5
+          result = subject.call(required_params)
+          expect(result.success?).to be_falsey
+        end
+      end
+
+      context 'with coverage start date more than 12 months greater than end date' do
+        it 'should fail validation' do
+          required_params[:coverage_start] = Date.today
+          required_params[:coverage_end] = Date.today - 500
+          result = subject.call(required_params)
+          expect(result.success?).to be_falsey
+        end
+      end
+    end
+
+    context 'invalid extraction date' do
+      context 'with extraction date in the future' do
+        it 'should fail validation' do
+          required_params[:extracted_on] = Date.today + 1
+          result = subject.call(required_params)
+          expect(result.success?).to be_falsey
+        end
+      end
+    end
+
+    context 'invalid transaction group' do
+      context 'with transaction group not from list' do
+        it 'should fail validation' do
+          required_params[:transaction_group] = "WrongOption"
+          result = subject.call(required_params)
+          expect(result.success?).to be_falsey
+        end
       end
     end
   end

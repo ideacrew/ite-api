@@ -8,4 +8,7 @@ Dry::Types.load_extensions(:maybe)
 module Types
   include Dry.Types
   include Dry::Logic
+
+  TransactionGroups =
+      Types::String.enum('admission', 'update/discharge').freeze
 end

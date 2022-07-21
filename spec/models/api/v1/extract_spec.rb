@@ -5,11 +5,11 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::Extract, type: :model do
   let(:extract_params) do
-    { "provider_identifier": 'all_fields',
+    { "provider_gateway_identifier": 'all_fields',
       "file_type": 'Admission',
       "coverage_start": Date.new(2022, 0o1, 0o1),
       "coverage_end": Date.new(2022, 0o1, 31),
-      "npi": 'randomId' }
+    }
   end
 
   context 'with a valid payload' do
@@ -31,7 +31,7 @@ RSpec.describe Api::V1::Extract, type: :model do
   context 'with a invalid payload' do
     context 'without a provider identifier' do
       it 'will not create an extract' do
-        extract_params[:provider_identifier] = nil
+        extract_params[:provider_gateway_identifier] = nil
         extract = described_class.new(extract_params)
         expect(extract.save).to eq false
       end
