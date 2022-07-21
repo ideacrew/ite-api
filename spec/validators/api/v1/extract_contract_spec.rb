@@ -50,16 +50,14 @@ RSpec.describe ::Validators::Api::V1::ExtractContract do
       context 'with coverage start date in the future' do
         it 'should fail validation' do
           required_params[:coverage_start] = Date.today + 1
-          result = subject.call(required_params)
-          expect(result.success?).to be_falsey
+          expect(subject.call(required_params).errors.to_h).to have_key(:coverage_start)
         end
       end
 
       context 'with coverage end date in the future' do
         it 'should fail validation' do
           required_params[:coverage_end] = Date.today + 1
-          result = subject.call(required_params)
-          expect(result.success?).to be_falsey
+          expect(subject.call(required_params).errors.to_h).to have_key(:coverage_end)
         end
       end
 
@@ -67,8 +65,7 @@ RSpec.describe ::Validators::Api::V1::ExtractContract do
         it 'should fail validation' do
           required_params[:coverage_start] = Date.today
           required_params[:coverage_end] = Date.today - 5
-          result = subject.call(required_params)
-          expect(result.success?).to be_falsey
+          expect(subject.call(required_params).errors.to_h).to have_key(:coverage_start)
         end
       end
 
@@ -76,8 +73,7 @@ RSpec.describe ::Validators::Api::V1::ExtractContract do
         it 'should fail validation' do
           required_params[:coverage_start] = Date.today
           required_params[:coverage_end] = Date.today - 500
-          result = subject.call(required_params)
-          expect(result.success?).to be_falsey
+          expect(subject.call(required_params).errors.to_h).to have_key(:coverage_start)
         end
       end
     end
@@ -86,8 +82,7 @@ RSpec.describe ::Validators::Api::V1::ExtractContract do
       context 'with extraction date in the future' do
         it 'should fail validation' do
           required_params[:extracted_on] = Date.today + 1
-          result = subject.call(required_params)
-          expect(result.success?).to be_falsey
+          expect(subject.call(required_params).errors.to_h).to have_key(:extracted_on)
         end
       end
     end
@@ -96,8 +91,7 @@ RSpec.describe ::Validators::Api::V1::ExtractContract do
       context 'with transaction group not from list' do
         it 'should fail validation' do
           required_params[:transaction_group] = "WrongOption"
-          result = subject.call(required_params)
-          expect(result.success?).to be_falsey
+          expect(subject.call(required_params).errors.to_h).to have_key(:transaction_group)
         end
       end
     end
