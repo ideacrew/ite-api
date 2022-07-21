@@ -90,7 +90,7 @@ RSpec.describe ::Validators::Api::V1::ExtractContract do
     context 'invalid transaction group' do
       context 'with transaction group not from list' do
         it 'should fail validation' do
-          required_params[:transaction_group] = "WrongOption"
+          required_params[:transaction_group] = 'WrongOption'
           expect(subject.call(required_params).errors.to_h).to have_key(:transaction_group)
         end
       end

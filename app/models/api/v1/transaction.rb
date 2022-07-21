@@ -18,10 +18,7 @@ module Api
 
       index({ status: 1 })
 
-      private
-
       # add validation to identify the warnings as opposed to the failures -> need to know what those fields are
-
     end
   end
 end
