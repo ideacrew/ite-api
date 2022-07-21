@@ -7,7 +7,7 @@ module Api
       include Mongoid::Document
       include Mongoid::Timestamps
 
-      field :payload, type: Hash
+      # field :payload, type: Hash
       field :provider_identifier, type: String
       field :npi, type: String
       field :coverage_start, type: Date
@@ -17,9 +17,13 @@ module Api
       # Initial, Resubmission, Update
       field :file_type, type: String
       # Should be admission, discharge and update?
-      # field :extract_type, type: String
-      field :failures, type: Hash
+      field :transaction_group, type: String
+      # field :failures, type: Hash
       field :status, type: String
+
+      embeds_many :transactions, cascade_callbacks: true, validate: true
+
+      accepts_nested_attributes_for :transactions
 
       validates_presence_of :provider_identifier
 

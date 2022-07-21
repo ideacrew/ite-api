@@ -20,7 +20,7 @@ module Api
         #  end
         extract = Extract.new(payload[:extract])
         extract.save
-        render json: { status_text: 'ingested payload', status: 200, content_type: 'application/json', payload: }
+        render json: { status_text: 'ingested payload', status: 200, content_type: 'application/json', payload: payload}
       end
 
       def index
