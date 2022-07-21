@@ -26,7 +26,7 @@ module Api
       index({ provider_identifier: 1 }, { sparse: true })
 
       def coverage_range
-        coverage_start.beginning_of_day..coverage_end.end_of_day
+        coverage_start..coverage_end
       end
     end
   end

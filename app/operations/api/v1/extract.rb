@@ -8,6 +8,10 @@ module Operations
         def call(params)
           validated_extract = yield validate_extract(params)
           extract_entity = yield create_entity(validated_extract)
+          # save extract ?
+          # validate payload for errors
+          # add errors to extract, set extract status
+          # save extract
         end
 
         private
@@ -18,8 +22,8 @@ module Operations
           result.success? ? Success(result.to_h) : Failure(result.errors.to_h)
         end
 
-        def create_entity(validated_extract)
-          # TBD
+        def create_entity(_validated_extract)
+          Success(::Api::V1::ExtractEntity.new.call(params))
         end
       end
     end

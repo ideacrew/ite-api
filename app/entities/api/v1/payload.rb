@@ -11,7 +11,7 @@ module Api
       attribute :extracted_on, Types::Date.optional.meta(omittable: true)
       attribute :file_name, Types::String.optional.meta(omittable: true)
       attribute :file_type, Types::String.optional.meta(omittable: true)
-      attribute :episodes, Types::Array.of(Episode)
+      attribute :episodes, Types::Array.of(Episode).optional.meta(omittable: true)
     end
   end
 end

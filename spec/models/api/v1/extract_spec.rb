@@ -4,14 +4,12 @@ require 'rails_helper'
 # require 'types'
 
 RSpec.describe Api::V1::Extract, type: :model do
-
-  let(:extract_params) do 
-    {"provider_identifier": "all_fields",
-    "file_type": "Admission",
-    "coverage_start": Date.new(2022, 01, 01),
-    "coverage_end": Date.new(2022, 02, 01),
-    "npi": "randomId"
-    }
+  let(:extract_params) do
+    { "provider_identifier": 'all_fields',
+      "file_type": 'Admission',
+      "coverage_start": Date.new(2022, 0o1, 0o1),
+      "coverage_end": Date.new(2022, 0o1, 31),
+      "npi": 'randomId' }
   end
 
   context 'with a valid payload' do
@@ -25,8 +23,7 @@ RSpec.describe Api::V1::Extract, type: :model do
       end
 
       it 'will have a coverage range' do
-        binding.pry
-        expect(@extract.coverage_range).to eq(Date.new(2022, 01, 01)..Date.new(2022, 02, 01))
+        expect(@extract.coverage_range.count).to eq(31)
       end
     end
   end
@@ -40,5 +37,4 @@ RSpec.describe Api::V1::Extract, type: :model do
       end
     end
   end
-
 end

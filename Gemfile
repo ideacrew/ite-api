@@ -56,9 +56,9 @@ group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails', '~> 6.2'
   gem 'faker', '~> 2.20'
+  gem 'mongoid-rspec', '~> 4.1'
   gem 'pry-byebug', '~> 3.9'
   gem 'rspec-rails', '~> 5.1', '>= 5.1.2'
-  gem 'mongoid-rspec', '~> 4.1'
   # gem 'database_cleaner', '~> 2.0', '>= 2.0.1'
   # awesome print to make the payloads easier to visually parse
   gem 'awesome_print', '~> 1.9', '>= 1.9.2'
