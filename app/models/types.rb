@@ -10,5 +10,5 @@ module Types
   include Dry::Logic
 
   TransactionGroups =
-    Types::String.enum('admission', 'update/discharge').freeze
+    Types::String.enum('admission', 'discharge').freeze
 end
