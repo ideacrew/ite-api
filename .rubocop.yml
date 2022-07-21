@@ -4,3 +4,6 @@ AllCops:
   TargetRubyVersion: 3.1.2
   Exclude:
     - "./bin/**/*"
+
+Metrics/BlockLength:
+  Enabled: false

@@ -15,12 +15,8 @@ module Operations
         def call(params)
           validated_extract = yield validate_extract(params)
           extract_entity = yield create_entity(validated_extract)
-          extract = yield create_extract(extract_entity)
-          _transactions = create_transactions(extract, params)
-
-          # validate payload for errors
-          # add errors to extract, set extract status
-          # save extract
+          _extract = yield create_extract(extract_entity)
+          # _transactions = create_transactions(extract, params)
         end
 
         private
@@ -44,7 +40,7 @@ module Operations
           extract.save ? Success(extract) : Failure('Failed to save extract')
         end
 
-        def validate_transactions(extract, params)
+        def create_transactions(extract, params)
           if params[:csv].present?
             CSV.parse(File.read(params[:csv]), headers: true)
             Operations::Api :V1::CreateTransaction

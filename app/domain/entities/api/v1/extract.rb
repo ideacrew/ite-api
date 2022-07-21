@@ -5,14 +5,13 @@ module Entities
     module V1
       # entity for extract for use in validations
       class Extract < Dry::Struct
-        attribute :provider_identifier, Types::String.meta(omittable: false)
-        attribute :npi, Types::String.optional.meta(omittable: true)
-        attribute :coverage_start, Types::Date.optional.meta(omittable: true)
-        attribute :coverage_end, Types::Date.optional.meta(omittable: true)
-        attribute :extracted_on, Types::Date.optional.meta(omittable: true)
+        attribute :provider_gateway_identifier, Types::String.meta(omittable: false)
+        attribute :coverage_start, Types::Date.meta(omittable: false)
+        attribute :coverage_end, Types::Date.meta(omittable: false)
+        attribute :extracted_on, Types::Date.meta(omittable: false)
         attribute :file_name, Types::String.optional.meta(omittable: true)
-        attribute :file_type, Types::String.optional.meta(omittable: true)
-        attribute :transaction_group, Types::String.optional.meta(omittable: true)
+        attribute :file_type, Types::String.meta(omittable: false)
+        attribute :transaction_group, Types::String.meta(omittable: false)
       end
     end
   end

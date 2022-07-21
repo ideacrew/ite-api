@@ -8,8 +8,7 @@ module Api
       include Mongoid::Timestamps
 
       # field :payload, type: Hash
-      field :provider_identifier, type: String
-      field :npi, type: String
+      field :provider_gateway_identifier, type: String
       field :coverage_start, type: Date
       field :coverage_end, type: Date
       field :extracted_on, type: Date
@@ -25,9 +24,10 @@ module Api
 
       accepts_nested_attributes_for :transactions
 
-      validates_presence_of :provider_identifier
+      validates_presence_of :provider_gateway_identifier, :coverage_start, :coverage_end, :extracted_on, :file_type,
+                            :transaction_group
 
-      index({ provider_identifier: 1 }, { sparse: true })
+      index({ provider_gateway_identifier: 1 }, { sparse: true })
 
       def coverage_range
         coverage_start..coverage_end
