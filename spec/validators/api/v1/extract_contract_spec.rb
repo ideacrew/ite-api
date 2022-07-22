@@ -71,9 +71,9 @@ RSpec.describe ::Validators::Api::V1::ExtractContract do
 
       context 'with coverage start date more than 12 months greater than end date' do
         it 'should fail validation' do
-          required_params[:coverage_start] = Date.today
-          required_params[:coverage_end] = Date.today - 500
-          expect(subject.call(required_params).errors.to_h).to have_key(:coverage_start)
+          required_params[:coverage_end] = Date.today
+          required_params[:coverage_start] = Date.today - 400
+          expect(subject.call(required_params).errors.to_h).to have_key(:coverage_end)
         end
       end
     end

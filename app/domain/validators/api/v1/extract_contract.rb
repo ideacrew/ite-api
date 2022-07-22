@@ -32,14 +32,14 @@ module Validators
         end
 
         rule(:coverage_end, :coverage_start) do
-          if key && value && value > Date.today
-            key.failure(text: 'invalid coverage end date - Date should be today or in the past.',
+          if key && (values[:coverage_start] && values[:coverage_end]) && ((values[:coverage_end] - values[:coverage_start]) > 365)
+            key.failure(text: 'invalid coverage end date - Date should be within 12 months of start date.',
                         error_level: 'failure')
           end
         end
 
         rule(:coverage_start, :coverage_end) do
-          if key && values[:coverage_start] && values[:coverage_end] && values[:coverage_end] < values[:coverage_start]
+          if key && (values[:coverage_start] && values[:coverage_end]) && (values[:coverage_end] < values[:coverage_start])
             key.failure(text: 'invalid coverage dates - coverage end date should be later than start date.',
                         error_level: 'failure')
           end
