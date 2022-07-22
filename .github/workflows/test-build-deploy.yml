@@ -25,6 +25,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Set up Docker Buildx
+        id: buildx
         uses: docker/setup-buildx-action@v2
         with:
           install: true
@@ -51,7 +52,6 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           file: Dockerfile
           # Set the desired build target here
-          target: deploy
           push: ${{ github.event_name != 'pull_request' }}
           tags: public.ecr.aws/ideacrew/ite-api:latest
           cache-from: type=local,src=/tmp/.buildx-cache
@@ -59,6 +59,10 @@ jobs:
           # More: https://github.com/moby/buildkit#--export-cache-options
           # And: https://github.com/docker/buildx#--cache-tonametypetypekeyvalue
           cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-new
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
         
   deploy-to-heroku:
     needs: [test]

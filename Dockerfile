@@ -30,6 +30,7 @@ ENV BUNDLE_JOBS=4
 ENV BUNDLE_RETRY=3
 ENV LANG=C.UTF-8
 
+ENV HOME=/dbh
 ENV PATH=$HOME/bin:$BUNDLE_BIN:$GEM_HOME/gems/bin:$PATH
 
 RUN gem update --system
@@ -38,7 +39,6 @@ RUN gem install bundler -v 2.2.14
 RUN groupadd --gid 1001 nonroot \
   && useradd --uid 1001 --gid nonroot --shell /bin/bash --create-home nonroot
 
-ENV HOME=/dbh
 
 RUN mkdir $HOME \
   && chown -R nonroot:nonroot $HOME
