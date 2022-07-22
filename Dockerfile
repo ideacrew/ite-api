@@ -38,7 +38,7 @@ LABEL author="IdeaCrew"
 # RUN groupadd --gid 1001 nonroot \
 #   && useradd --uid 1001 --gid nonroot --shell /bin/bash --create-home nonroot
 
-# ENV HOME=/dbh
+ENV HOME=/dbh
 
 RUN mkdir $HOME \
   && chown -R nonroot:nonroot $HOME
