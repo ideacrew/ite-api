@@ -31,9 +31,9 @@ jobs:
       - uses: actions/cache@v3
         with:
           path: /tmp/.buildx-cache
-            key: ${{ runner.os }}-multi-buildx-${{ github.sha }}
-            restore-keys: |
-              ${{ runner.os }}-multi-buildx
+          key: ${{ runner.os }}-multi-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-multi-buildx
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
