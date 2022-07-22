@@ -51,7 +51,6 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           file: Dockerfile
           # Set the desired build target here
-          target: deploy
           push: ${{ github.event_name != 'pull_request' }}
           tags: public.ecr.aws/ideacrew/ite:latest
           cache-from: type=local,src=/tmp/.buildx-cache
