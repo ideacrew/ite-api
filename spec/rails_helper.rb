@@ -35,6 +35,14 @@ RSpec.configure do |config|
   # Mongoid adapter
   config.include Mongoid::Matchers, type: :model
 
+  DatabaseCleaner[:mongoid].strategy = [:deletion]
+
+  config.around(:example, dbclean: :around_each) do |example|
+    DatabaseCleaner[:mongoid].clean
+    example.run
+    DatabaseCleaner[:mongoid].clean
+  end
+
   # If you enable ActiveRecord support you should unncomment these lines,
   # note if you'd prefer not to run each example within a transaction, you
   # should set use_transactional_fixtures to false.

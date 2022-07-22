@@ -7,14 +7,13 @@ module Api
       before_action :permit_params
 
       def ingest
-        result = ::Operations::Api::V1::IngestExtract.new.call(permit_params)
-
+        result = ::Operations::Api::V1::IngestExtract.new.call(permit_params.to_h)
         if result.success?
           render json: { status_text: 'ingested payload', status: 200, content_type: 'application/json',
                          extract_id: result.value!.id }
         else
           render json: { status_text: 'Could not ingested payload', status: 400, content_type: 'application/json',
-                         failures: result }
+                         failures: result.failure&.errors&.map(&:text) }
         end
       end
 

@@ -3,7 +3,7 @@
 require 'spec_helper'
 require './app/domain/validators/api/v1/extract_contract'
 
-RSpec.describe ::Validators::Api::V1::ExtractContract do
+RSpec.describe ::Validators::Api::V1::ExtractContract, dbclean: :after_each do
   let(:required_params) do
     {
       provider_gateway_identifier: '73982',
@@ -23,7 +23,7 @@ RSpec.describe ::Validators::Api::V1::ExtractContract do
           coverage_end: Date.today.to_s,
           extracted_on: Date.today.to_s,
           file_type: 'Initial',
-          transaction_group: 'Admmission'
+          transaction_group: 'Admission'
         }
       end
 

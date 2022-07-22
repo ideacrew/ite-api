@@ -10,6 +10,7 @@ module Api
       field :payload, type: Hash
       field :failures, type: Hash
       field :warnings, type: Hash
+      # Valid or Invalid
       field :status, type: String
 
       embedded_in :extract
