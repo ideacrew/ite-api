@@ -35,7 +35,7 @@ RSpec.configure do |config|
   # Mongoid adapter
   config.include Mongoid::Matchers, type: :model
 
-  DatabaseCleaner[:mongoid].strategy = [:deletion]
+  # DatabaseCleaner[:mongoid].strategy = [:deletion]
 
   config.around(:example, dbclean: :around_each) do |example|
     DatabaseCleaner[:mongoid].clean

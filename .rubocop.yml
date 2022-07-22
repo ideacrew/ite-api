@@ -7,3 +7,12 @@ AllCops:
 
 Metrics/BlockLength:
   Enabled: false
+
+Metrics/AbcSize:
+  Max: 50
+
+Metrics/CyclomaticComplexity:
+  Max: 10
+
+Metrics/MethodLength:
+  Max: 50

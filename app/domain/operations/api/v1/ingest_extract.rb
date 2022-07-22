@@ -16,7 +16,7 @@ module Operations
           validated_extract = yield validate_extract(params)
           extract_entity = yield create_entity(validated_extract)
           extract = create_extract(extract_entity)
-          # _transactions = create_transactions(extract, params)
+          _transactions = create_transactions(extract, params)
         end
 
         private
@@ -40,13 +40,13 @@ module Operations
         end
 
         def create_transactions(extract, params)
-          if params[:csv].present?
-            CSV.foreach(params[:csv], headers: true).with_index do |row, _i|
-              Operations::Api::V1::CreateTransaction.new.call(extract:, payload: row)
-            end
-          else
-            # Operations::Api::V1::CreateTransaction.new.call(extract:, payload: params[:json])
+          # if params[:csv].present?
+          CSV.foreach(params[:csv], headers: true).with_index do |row, _i|
+            Operations::Api::V1::CreateTransaction.new.call(extract:, payload: row, data_type: 'csv')
           end
+          # else
+          # Operations::Api::V1::CreateTransaction.new.call(extract:, payload: params[:json], data_type: 'json')
+          # end
         end
       end
     end

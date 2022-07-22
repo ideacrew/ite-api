@@ -10,9 +10,9 @@ module Entities
         # level (primary/secondar/tertiary)
         attribute :level, Types::String
         # Detailed Drug Code
-        attribute :drug_code, Types::Integer.optional.meta(omittable: true)
+        attribute :drug_code, Types::String.optional.meta(omittable: true)
         # Age at First Use
-        attribute :age_at_first_use, Types::Integer.optional.meta(omittable: true)
+        attribute :age_at_first_use, Types::String.optional.meta(omittable: true)
         # Frequency of Use
         attribute :frequency, Types::String.optional.meta(omittable: true)
         # Route of Administration

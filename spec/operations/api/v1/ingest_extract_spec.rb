@@ -6,9 +6,7 @@ require 'csv'
 describe ::Operations::Api::V1::IngestExtract do
   include Dry::Monads[:result, :do]
 
-  let(:payload) { './spec/test_data/Mar-Discharge.csv' }
-  let(:family_id) { JSON.parse(payload)['family_id'] }
-  let(:operation) { Operations::Api.v1::IngestExtract.new }
+  let(:payload) { './spec/test_data/BHSD_Sample_PRD15-Jan-Admission.csv' }
 
   let(:params) do
     {
@@ -18,8 +16,8 @@ describe ::Operations::Api::V1::IngestExtract do
       extracted_on: '01-01-2022',
       file_name: 'extract_data',
       file_type: 'Initial',
-      transaction_group: 'discharge'
-      # :csv => payload
+      transaction_group: 'discharge',
+      csv: File.new('./spec/test_data/BHSD_Sample_PRD15-Jan-Admission.csv', 'r')
     }
   end
 

@@ -24,9 +24,9 @@ module Entities
         # Date of Birth
         attribute :dob, Types::Date.optional.meta(omittable: true)
         # Gender
-        attribute :gender, Types::Integer.optional.meta(omittable: true)
+        attribute :gender, Types::String.optional.meta(omittable: true)
         # Sexual Orientation
-        attribute :sexual_orientation, Types::Integer.optional.meta(omittable: true)
+        attribute :sexual_orientation, Types::String.optional.meta(omittable: true)
         # Race
         attribute :race, Types::String.optional.meta(omittable: true)
         # Hispanic or Latino Origin (Ethnicity)

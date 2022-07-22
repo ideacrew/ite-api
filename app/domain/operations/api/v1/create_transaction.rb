@@ -12,8 +12,11 @@ module Operations
         send(:include, Dry::Monads[:result, :do, :try])
 
         def call(params)
-          transaction = yield create_entity(params)
-          validated_episode = yield validate_episode(transaction)
+          transaction_entity = yield create_entity(params)
+          transaction = yield create_transaction(transaction_entity)
+          episode = yield structure_episode(transaction, params)
+          validation_result = yield validate_episode(episode)
+          update_transaction(validation_result, transaction)
         end
 
         private
@@ -25,12 +28,35 @@ module Operations
           result.success? ? Success(result.value!) : Failure(result)
         end
 
-        def validate_episode(transaction)
-          binding.pry
+        def create_transaction(transaction_entity)
+          result = Try do
+            ::Api::V1::Transaction.new(transaction_entity.to_h)
+          end
+          result.success? ? Success(result.value!) : Failure(result)
+        end
 
-          result = ::Validators::Api::V1::EpisodeContract.new.call(transaction.payload)
+        def structure_episode(transaction, _params)
+          # add a different operation for json payloads?
+          Transforms::Api::V1::ToEpisode.new.call(transaction)
+        end
 
-          result.success? ? Success(result.to_h) : Failure(result)
+        def validate_episode(episode)
+          Success(::Validators::Api::V1::EpisodeContract.new.call(episode))
+        end
+
+        def update_transaction(result, transaction)
+          transaction.status = result.errors.any? ? 'Invalid' : 'Valid'
+          errors = result.errors.to_h
+          warnings = []
+          errors.select { |_k, v| v.first.instance_of?(Hash) && v.first.key?(:warning) }.each do |warning|
+            warnings << warning
+          end
+          failures = []
+          failures << errors.select { |_k, v| v.first.instance_of?(String) }
+          failures << errors.select { |_k, v| v.first.instance_of?(Hash) && !v.first.key?(:warning) }
+          transaction.failures = failures
+          transaction.warnings = warnings
+          Success(transaction)
         end
       end
     end
