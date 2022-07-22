@@ -44,3 +44,5 @@
 *.xlsx
 *.doc
 *.docx
+
+!/spec/test_data/BHSD_Sample_PRD15-Jan-Admission.csv
