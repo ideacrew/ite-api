@@ -8,6 +8,7 @@ on:
   push:
     branches:
       - trunk
+      
 jobs:
   test:
     runs-on: ubuntu-latest
