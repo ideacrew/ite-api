@@ -21,7 +21,6 @@ module Api
                              '#{k}: #{v}'
                            end
                          end
-          transaction_failure_count
           render json: { status_text: 'Could not ingest payload', status: 400, content_type: 'application/json',
                          failures: failure_text }
         end
