@@ -32,6 +32,18 @@ module Api
       def coverage_range
         coverage_start..coverage_end
       end
+
+      def transaction_failure_count
+        return 0 unless transactions.present?
+
+        transactions&.select { |t| t.failures.any? }&.count
+      end
+
+      def transaction_warning_count
+        return 0 unless transactions.present?
+
+        transactions&.select { |t| t.warnings.any? }&.count
+      end
     end
   end
 end

@@ -20,7 +20,7 @@ describe ::Operations::Api::V1::IngestExtract do
       file_type: 'Initial',
       transaction_group: 'discharge',
       csv: File.new('./spec/test_data/BHSD_Sample_PRD15-Jan-Admission.csv', 'r'),
-      transactions: transactions_array
+      transactions: JSON.parse(transactions_array, symbolize_names: true)
     }
   end
 

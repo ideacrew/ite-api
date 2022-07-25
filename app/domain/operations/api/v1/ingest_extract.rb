@@ -15,7 +15,7 @@ module Operations
         def call(params)
           validated_extract = yield validate_extract(params)
           extract_entity = yield create_entity(validated_extract)
-          extract = create_extract(extract_entity)
+          extract = yield create_extract(extract_entity)
           _transactions = create_transactions(extract, params)
         end
 
@@ -40,8 +40,18 @@ module Operations
         end
 
         def create_transactions(extract, params)
-          JSON.parse(params[:transactions], symbolize_names: true).each do |transaction|
-            Operations::Api::V1::CreateTransaction.new.call(extract:, payload: transaction, data_type: 'json')
+          if params[:transactions]
+            params[:transactions].each do |transaction|
+              result = Operations::Api::V1::CreateTransaction.new.call(extract:, payload: transaction,
+                                                                       data_type: 'json')
+              t = extract.transactions.build
+              t.assign_attributes(result.success.attributes)
+            end
+            extract.status = extract.transactions&.select { |t| t.status == 'Invalid' }&.any? ? 'Invalid' : 'Valid'
+            extract.save!
+            Success(extract)
+          else
+            Success(extract)
           end
         end
       end
