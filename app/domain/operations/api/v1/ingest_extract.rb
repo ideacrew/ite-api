@@ -40,13 +40,9 @@ module Operations
         end
 
         def create_transactions(extract, params)
-          # if params[:csv].present?
-          CSV.foreach(params[:csv], headers: true).with_index do |row, _i|
-            Operations::Api::V1::CreateTransaction.new.call(extract:, payload: row, data_type: 'csv')
+          JSON.parse(params[:transactions], symbolize_names: true).each do |transaction|
+            Operations::Api::V1::CreateTransaction.new.call(extract:, payload: transaction, data_type: 'json')
           end
-          # else
-          # Operations::Api::V1::CreateTransaction.new.call(extract:, payload: params[:json], data_type: 'json')
-          # end
         end
       end
     end
