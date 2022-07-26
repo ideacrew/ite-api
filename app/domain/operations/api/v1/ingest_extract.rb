@@ -16,7 +16,7 @@ module Operations
           validated_extract = yield validate_extract(params)
           extract_entity = yield create_entity(validated_extract)
           extract = yield create_extract(extract_entity)
-          _transactions = create_transactions(extract, params)
+          create_transactions(extract, params)
         end
 
         private
@@ -49,10 +49,8 @@ module Operations
             end
             extract.status = extract.transactions&.select { |t| t.status == 'Invalid' }&.any? ? 'Invalid' : 'Valid'
             extract.save!
-            Success(extract)
-          else
-            Success(extract)
           end
+          Success(extract)
         end
       end
     end

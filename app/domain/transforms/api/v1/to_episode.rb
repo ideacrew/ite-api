@@ -21,16 +21,24 @@ module Transforms
         CLIENT_PROFILE_FIELDS = %i[client_id marital_status veteran_status education employment not_in_labor
                                    income_source pregnant school_attendance legal_status arrests_past_30days
                                    self_help_group_attendance health_insurance].freeze
+        NON_STRING_FIELDS = %i[admission_date service_request_date discharge_date last_contact_date dob].freeze
 
         def call(transaction)
           validated_payload = yield validate_transaction(transaction)
-          construct_episode(validated_payload)
+          stringified_payload = yield stringify_values(validated_payload)
+          construct_episode(stringified_payload)
         end
 
         private
 
         def validate_transaction(transaction)
           transaction.payload.present? ? Success(transaction.payload.symbolize_keys) : Failure('No payload present')
+        end
+
+        def stringify_values(validated_payload)
+          stringified = validated_payload.except(*NON_STRING_FIELDS).transform_values { |v| v&.to_s }
+          dates = validated_payload.slice(*NON_STRING_FIELDS).transform_values { |v| valid_date(v) }
+          Success(dates.merge(stringified))
         end
 
         def construct_episode(payload)
@@ -44,6 +52,15 @@ module Transforms
           client_profile.merge!(payload.slice(*CLIENT_PROFILE_FIELDS))
           clinical_info.merge!(payload.slice(*CLINICAL_INFO_FIELDS))
           Success(episode.merge!(client:, client_profile:, clinical_info:))
+        end
+
+        def valid_date(value)
+          re = Regexp.new('^\d{2}\/\d{2}\/\d{2}$').freeze
+          return Date.strptime(value, '%m/%d/%y') if value.match(re)
+
+          Date.parse(value)
+        rescue ArgumentError
+          value
         end
       end
     end

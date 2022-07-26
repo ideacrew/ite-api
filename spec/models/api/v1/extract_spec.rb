@@ -24,6 +24,13 @@ RSpec.describe Api::V1::Extract, type: :model do
       it 'will have a coverage range' do
         expect(@extract.coverage_range.count).to eq(31)
       end
+
+      it 'will have a transaction failure count' do
+        expect(@extract.transaction_failure_count).to eq(0)
+      end
+      it 'will have a transaction warning count' do
+        expect(@extract.transaction_warning_count).to eq(0)
+      end
     end
   end
 

@@ -36,7 +36,6 @@ module Operations
         end
 
         def structure_episode(transaction, _params)
-          # add a different operation for json payloads?
           Transforms::Api::V1::ToEpisode.new.call(transaction)
         end
 
@@ -54,8 +53,8 @@ module Operations
           failures = []
           failures << errors.select { |_k, v| v.first.instance_of?(String) }
           failures << errors.select { |_k, v| v.first.instance_of?(Hash) && !v.first.key?(:warning) }
-          transaction.failures = failures
-          transaction.warnings = warnings
+          transaction.failures = failures.compact_blank!
+          transaction.warnings = warnings.compact_blank!
           Success(transaction)
         end
       end

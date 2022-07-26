@@ -24,14 +24,65 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
       num_of_prior_episodes: '3',
       referral_source: nil,
       criminal_justice_referral: '1',
-      primary_payment_source: nil
-      # client: client,
-      # client_profile: client_profile,
-      # clinical_info: clinical_info,
+      primary_payment_source: nil,
+      client:,
+      client_profile:,
+      clinical_info:
     }
   end
 
   let(:all_params) { required_params.merge(optional_params) }
+
+  let(:client) do
+    {
+      client_id: '8347ehf',
+      first_name: 'John',
+      middle_name: 'Danger',
+      last_name: 'Doe',
+      last_name_alt: '',
+      alias: 'Johnny',
+      ssn: '999999999',
+      medicaid_id: '3498438978',
+      dob: (Date.today - (20 * 365)).to_s,
+      gender: '01',
+      sexual_orientation: '48',
+      race: '23',
+      ethnicity: '9',
+      primary_language: '3',
+      phone1: '123456700',
+      phone2: '349857674'
+    }
+  end
+
+  let(:client_profile) do
+    {
+      client_id: '8347ehf',
+      marital_status: '01',
+      veteran_status: '01',
+      education: '01',
+      employment: '01',
+      not_in_labor: '01',
+      income_source: '01',
+      pregnant: '01',
+      school_attendance: '01',
+      legal_status: '01',
+      arrests_past_30days: '01',
+      self_help_group_attendance: '01',
+      health_insuranc: '01'
+    }
+  end
+
+  let(:clinical_info) do
+    {
+      gaf_score: '16',
+      smi_sed: '15',
+      co_occurring_sud_mh: '13',
+      opioid_therapy: '12',
+      substance_problems: [{}],
+      sud_diagnostic_codes: ['12'],
+      mh_diagnostic_codes: ['19']
+    }
+  end
 
   context 'invalid parameters' do
     context 'with empty parameters' do

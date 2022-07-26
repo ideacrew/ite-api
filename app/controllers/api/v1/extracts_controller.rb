@@ -18,7 +18,7 @@ module Api
                            result.failure
                          else
                            result.failure.errors.map do |_k, _v|
-                             '#{k}: #{v}'
+                             "#{k}: #{v}"
                            end
                          end
           render json: { status_text: 'Could not ingest payload', status: 400, content_type: 'application/json',
