@@ -8,5 +8,11 @@ FactoryBot.define do
     extracted_on { Date.today }
     file_type { 'Initial' }
     transaction_group { 'admission' }
+
+    trait :with_transactions do
+      transactions do
+        [FactoryBot.build(:transaction)]
+      end
+    end
   end
 end

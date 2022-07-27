@@ -15,7 +15,7 @@ module Operations
           transaction_entity = yield create_entity(params)
           transaction = yield create_transaction(transaction_entity)
           episode = yield structure_episode(transaction, params)
-          validation_result = yield validate_episode(episode)
+          validation_result = yield validate_episode(episode, params[:extract])
           update_transaction(validation_result, transaction)
         end
 
@@ -39,8 +39,9 @@ module Operations
           Transforms::Api::V1::ToEpisode.new.call(transaction)
         end
 
-        def validate_episode(episode)
-          Success(::Validators::Api::V1::EpisodeContract.new.call(episode))
+        def validate_episode(episode, extract)
+          # merge in extract attributes to allow for validation against extract fields
+          Success(::Validators::Api::V1::EpisodeContract.new.call(episode.merge(extract)))
         end
 
         def update_transaction(result, transaction)

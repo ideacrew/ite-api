@@ -10,15 +10,15 @@ module Transforms
       class ToEpisode
         send(:include, Dry::Monads[:result, :do, :try])
 
-        EPISODE_FIELDS = %i[episode_id codepedent admission_type admission_date treatment_type
+        EPISODE_FIELDS = %i[episode_id codepedent record_type admission_type admission_date treatment_type
                             service_request_date discharge_date discharge_type discharge_reason last_contact_date
                             num_of_prior_episodes referral_source criminal_justice_referral primary_payment_source
                             client client_profile clinical_info].freeze
-        CLIENT_FIELDS = %i[client_id first_name middle_name last_name last_name_alt alias ssn medicaid_id
+        CLIENT_FIELDS = %i[first_name middle_name last_name last_name_alt alias ssn medicaid_id
                            dob gender sexual_orientation race ethnicity primary_language phone1 phone2].freeze
         CLINICAL_INFO_FIELDS = %i[gaf_score smi_sed co_occurring_sud_mh opioid_therapy substance_problems
                                   sud_diagnostic_codes mh_diagnostic_codes].freeze
-        CLIENT_PROFILE_FIELDS = %i[client_id marital_status veteran_status education employment not_in_labor
+        CLIENT_PROFILE_FIELDS = %i[marital_status veteran_status education employment not_in_labor
                                    income_source pregnant school_attendance legal_status arrests_past_30days
                                    self_help_group_attendance health_insurance].freeze
         NON_STRING_FIELDS = %i[admission_date service_request_date discharge_date last_contact_date dob].freeze
@@ -48,8 +48,11 @@ module Transforms
           client_profile = {}
           clinical_info = {}
           episode.merge!(payload.slice(*EPISODE_FIELDS))
+          episode.merge!(client_id: payload[:client_id])
           client.merge!(payload.slice(*CLIENT_FIELDS))
+          client.merge!(client_id: payload[:client_id])
           client_profile.merge!(payload.slice(*CLIENT_PROFILE_FIELDS))
+          client_profile.merge!(client_id: payload[:client_id])
           clinical_info.merge!(payload.slice(*CLINICAL_INFO_FIELDS))
           Success(episode.merge!(client:, client_profile:, clinical_info:))
         end

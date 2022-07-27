@@ -6,12 +6,15 @@ module Entities
       # entity to define a service episode for use in payload validation
       class Episode < Dry::Struct
         attribute :episode_id, Types::String.meta(omittable: false)
+        attribute :client_id, Types::String.optional.meta(omittable: true)
         # Codependent or Collateral
         attribute :codepedent, Types::String.optional.meta(omittable: true) # confirm type
         # Admission Type
         attribute :admission_type, Types::String.optional.meta(omittable: true) # confirm type
+        # Record Type
+        attribute :record_type, Types::String.optional.meta(omittable: true) # confirm type
         # Admission Date
-        attribute :admission_date, Types::Date.optional.meta(omittable: true)
+        attribute :admission_date, Types::Date.meta(omittable: false)
         # Treatment Setting or Service Type
         attribute :treatment_type, Types::String.optional.meta(omittable: true)
         # Date of First Contact or Request for Service

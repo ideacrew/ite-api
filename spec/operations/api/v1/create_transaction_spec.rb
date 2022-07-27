@@ -5,7 +5,7 @@ require 'rails_helper'
 describe ::Operations::Api::V1::CreateTransaction do
   include Dry::Monads[:result, :do]
 
-  let(:extract) { FactoryBot.create(:extract) }
+  let(:extract_params) { FactoryBot.create(:extract) }
 
   let(:row) do
     { 'provider_id' => '15',
@@ -23,12 +23,13 @@ describe ::Operations::Api::V1::CreateTransaction do
       'arrests_past_30days' => nil,
       'education' => '12',
       'employment' => '3',
-      'last_contact_date' => '05/11/4002' }
+      'last_contact_date' => '05/11/4002',
+      'record_type' => 'A' }
   end
 
   let(:params) do
     {
-      extract:, payload: row, data_type: 'csv'
+      extract: extract_params.attributes.symbolize_keys, payload: row, data_type: 'csv'
     }
   end
 

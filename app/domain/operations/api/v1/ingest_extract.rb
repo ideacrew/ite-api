@@ -42,8 +42,8 @@ module Operations
         def create_transactions(extract, params)
           if params[:transactions]
             params[:transactions].each do |transaction|
-              result = Operations::Api::V1::CreateTransaction.new.call(extract:, payload: transaction,
-                                                                       data_type: 'json')
+              result = Operations::Api::V1::CreateTransaction.new.call(extract: extract.attributes.symbolize_keys,
+                                                                       payload: transaction)
               t = extract.transactions.build
               t.assign_attributes(result.success.attributes)
             end
