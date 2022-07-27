@@ -20,6 +20,7 @@ module Api
       # field :failures, type: Hash
       field :status, type: String
 
+      # embedded_in :provider
       embeds_many :transactions, cascade_callbacks: true, validate: true
 
       accepts_nested_attributes_for :transactions
