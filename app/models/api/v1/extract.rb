@@ -34,6 +34,12 @@ module Api
         coverage_start..coverage_end
       end
 
+      def transaction_count
+        return 0 unless transactions.present?
+
+        transactions&.count
+      end
+
       def transaction_failure_count
         return 0 unless transactions.present?
 
@@ -44,6 +50,20 @@ module Api
         return 0 unless transactions.present?
 
         transactions&.select { |t| t.warnings.any? }&.count
+      end
+
+      def list_view
+        {
+          id: id.to_s,
+          coverage_end:,
+          coverage_start:,
+          submission_date: created_at,
+          file_type:,
+          transaction_group:,
+          number_of_transactions: transaction_count,
+          transaction_failure_count:,
+          transaction_warning_count:
+        }
       end
     end
   end

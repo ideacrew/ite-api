@@ -27,7 +27,7 @@ module Api
       end
 
       def index
-        render json: Extract.all
+        render json: Api::V1::Extract.all.order(&:created_at).reverse.map(&:list_view)
       end
 
       private

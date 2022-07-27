@@ -31,6 +31,10 @@ RSpec.describe Api::V1::Extract, type: :model do
       it 'will have a transaction warning count' do
         expect(@extract.transaction_warning_count).to eq(0)
       end
+      it 'will have a list_view that contains various fields' do
+        expect(@extract.list_view[:submission_date]).to eq(@extract.created_at)
+        expect(@extract.list_view[:number_of_transactions]).to eq(@extract.transaction_count)
+      end
     end
   end
 
