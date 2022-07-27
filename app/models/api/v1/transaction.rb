@@ -12,7 +12,7 @@ module Api
       field :warnings, type: Array
       # Valid or Invalid
       field :status, type: String
-      feild :provider_location, type: String, default: ''
+      field :provider_location, type: String, default: ''
 
       embedded_in :extract
 
