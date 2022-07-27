@@ -62,6 +62,13 @@ module Validators
                         warning: true)
           end
         end
+
+        rule(:treatment_type) do
+          if key && value && !Types::TREATMENT_TYPE_OPTIONS.keys.map(&:to_s).include?(value)
+            key.failure(text: 'Not in list of accepted values',
+                        warning: true)
+          end
+        end
       end
     end
   end

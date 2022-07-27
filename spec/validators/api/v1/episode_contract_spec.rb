@@ -16,7 +16,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
       codepedent: '2',
       admission_type: '31',
       client_id: '8347ehf',
-      treatment_type: '21',
+      treatment_type: '2',
       service_request_date: Date.today.to_s,
       discharge_date: Date.today.to_s,
       discharge_type: '50',
@@ -183,15 +183,15 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
       # Admission Date cannot be later than the Data Extract Date or Transaction Date of the [Header] information.
     end
 
-    # context 'with invalid treatment_type field it should fail' do
-    # If this field is blank, contains a value that is not recognized a date format, is not a valid calendar
-    # date (e.g., February 30), or is a date before January 1, 1920 in both the [Admission] dataset and [Discharge]
-    # dataset, the record will fail to be processed as a valid record. A fatal error will be displayed in the
-    # validation result.
-    # Admission Date may be the same as Date of Last Contact/Data Update but cannot be later.
-    # Admission Date may be the same as Discharge Date but cannot be later.
-    # Admission Date cannot be later than the Data Extract Date or Transaction Date of the [Header] information.
-    # end
+    context 'with invalid treatment_type field it should fail' do
+      # If this field is blank or contains an invalid value in the [Discharge] dataset, the record will fail
+      # to be processed as a valid record. A fatal error will be displayed in the validation result.
+      # If the Treatment Setting does not correspond to the Record Type, the record will fail to be
+      # processed as a valid record. For example, the Treatment Setting must use codes 01 through 08
+      # if Record Type is either Initial Admission for SU Treatment (A) or Transfer/Change in SU Service (T).
+      # The Treatment Setting must use codes 72 through 76 if Record Type is either Initial Admission for
+      # MH Treatment (M) or Transfer/Change in MH Service (X).
+    end
 
     # context 'with invalid discharge date field it should fail' do
     # If this field contains an invalid value in the [Discharge] dataset, the record will fail to be processed
