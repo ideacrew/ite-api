@@ -7,17 +7,16 @@ module Api
       include Mongoid::Document
       include Mongoid::Timestamps
 
-      embedded_in :provider, class: 'Api::V1::Provider'
+      embedded_in :provider, class_name: 'Api::V1::Provider'
 
       field :is_primary, type: Boolean, default: true
       field :provider_location, type: String
 
       embeds_one :address, class_name: 'Api::V1::Address'
-      embeds_many :phone, class_name: 'Api::V1::Phone'
-      embeds_many :email, class_name: 'Api::V1::Email'
-
+      embeds_many :phones, class_name: 'Api::V1::Phone'
+      embeds_many :emails, class_name: 'Api::V1::Email'
       validates_presence_of :address, class_name: 'Api::V1::Address'
-      validates_presence_of :phone, class_name: 'Api::V1::Phone'
+      validates_presence_of :phones, class_name: 'Api::V1::Phone'
     end
   end
 end

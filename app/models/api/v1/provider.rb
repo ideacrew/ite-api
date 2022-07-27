@@ -17,11 +17,11 @@ module Api
       field :adult_care, type: Boolean
       field :child_care, type: Boolean
 
-      embeds_many :extracts
-      embeds_many :office_locations
+      # embeds_many :extracts
+      embeds_many :office_locations, class_name: 'Api::V1::OfficeLocation', cascade_callbacks: true
 
       validates_presence_of :provider_gateway_identifier, :provider_name, :npi, :is_active, :mh, :sud, :adult_care,
-                            :child_care, :locations
+                            :child_care, :office_locations
 
       index({ provider_gateway_identifier: 1 }, { sparse: true })
     end

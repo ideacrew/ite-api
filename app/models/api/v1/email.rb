@@ -7,11 +7,11 @@ module Api
       include Mongoid::Document
       include Mongoid::Timestamps
 
-      embedded_in :office_location, class: 'Api::V1::OfficeLocation'
+      embedded_in :office_location, class_name: 'Api::V1::OfficeLocation'
 
       field :address, type: String
 
-      validates :address, email: true, allow_blank: false
+      # validates :address, email: true, allow_blank: false
     end
   end
 end

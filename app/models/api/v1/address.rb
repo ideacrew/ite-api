@@ -7,7 +7,7 @@ module Api
       include Mongoid::Document
       include Mongoid::Timestamps
 
-      embedded_in :office_location, class: 'Api::V1::OfficeLocation'
+      embedded_in :office_location, class_name: 'Api::V1::OfficeLocation'
 
       field :address_line1, type: String, default: ''
       field :address_line2, type: String, default: ''
