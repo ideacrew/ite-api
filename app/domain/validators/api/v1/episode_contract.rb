@@ -6,7 +6,7 @@ module Validators
   module Api
     module V1
       # Contract for Episode.
-      class EpisodeContract < Dry::Validation::Contract
+      class EpisodeContract < Dry::Validation::Contract # rubocop:disable Metrics/ClassLength
         params do
           required(:episode_id).filled(:string)
           optional(:codepedent).maybe(:string)
@@ -27,6 +27,10 @@ module Validators
           optional(:client).maybe(:hash)
           optional(:client_profile).maybe(:hash)
           optional(:clinical_info).maybe(:hash)
+
+          # fields from the extract
+          optional(:extracted_on).maybe(:date)
+          optional(:record_group).maybe(:string)
         end
 
         rule(:client_id) do
@@ -62,10 +66,58 @@ module Validators
                         warning: true)
           end
         end
+        rule(:admission_date, :extracted_on) do
+          if key && values[:extracted_on] && values[:admission_date] > values[:extracted_on]
+            key.failure(text: 'Must be later than the extraction date',
+                        warning: true)
+          end
+        end
 
         rule(:treatment_type) do
           if key && value && !Types::TREATMENT_TYPE_OPTIONS.keys.map(&:to_s).include?(value)
-            key.failure(text: 'Not in list of accepted values',
+            key.failure('Not in list of accepted values')
+          end
+        end
+        rule(:treatment_type, :record_group) do
+          if key && values[:record_group] == 'discharge' && !values[:treatment_type]
+            key.failure(text: 'Must be included if is a discharge record')
+          end
+        end
+
+        rule(:discharge_date, :extracted_on) do
+          if key && (values[:extracted_on] && values[:discharge_date]) &&
+             values[:discharge_date] > values[:extracted_on]
+            key.failure(text: 'Must be later than the extraction date',
+                        warning: true)
+          end
+        end
+        rule(:discharge_date, :last_contact_date) do
+          if key && (values[:last_contact_date] && values[:discharge_date]) &&
+             values[:discharge_date] > values[:last_contact_date]
+            key.failure(text: 'Must be later than the date of last contact',
+                        warning: true)
+          end
+        end
+        rule(:discharge_date, :record_type) do
+          if key && values[:record_type] == 'U' && values[:discharge_date]
+            key.failure(text: 'Must be blank if record type is Data Update for SU/MH Service (U)',
+                        warning: true)
+          end
+        end
+
+        rule(:last_contact_date, :record_group) do
+          if key && values[:record_group]
+            if values[:record_group] == 'update' && !values[:last_contact_date]
+              key.failure(text: 'Must be included if is an update record')
+            elsif values[:record_group] != 'update' && !values[:last_contact_date]
+              key.failure(text: 'Should be included', warning: true)
+            end
+          end
+        end
+        rule(:last_contact_date, :extracted_on) do
+          if key && (values[:last_contact_date] && values[:extracted_on]) &&
+             values[:last_contact_date] > values[:extracted_on]
+            key.failure(text: 'Must be later than the extraction date',
                         warning: true)
           end
         end

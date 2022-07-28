@@ -6,6 +6,12 @@ module Api
     class ExtractsController < ApplicationController
       before_action :permit_params
 
+      def show
+        @extract = Api::V1::Extract.find(params[:id])
+
+        render json: @extract if @extract
+      end
+
       def ingest
         result = ::Operations::Api::V1::IngestExtract.new.call(permit_params.to_h)
         if result.success?

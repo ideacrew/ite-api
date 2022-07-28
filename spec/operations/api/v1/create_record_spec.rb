@@ -23,13 +23,13 @@ describe ::Operations::Api::V1::CreateRecord do
       'arrests_past_30days' => nil,
       'education' => '12',
       'employment' => '3',
-      'last_contact_date' => '05/11/4002',
+      'last_contact_date' => Date.today.to_s,
       'record_type' => 'A' }
   end
 
   let(:params) do
     {
-      extract: extract_params.attributes.symbolize_keys, payload: row, data_type: 'csv'
+      extract: extract_params.attributes_before_type_cast.symbolize_keys, payload: row
     }
   end
 
