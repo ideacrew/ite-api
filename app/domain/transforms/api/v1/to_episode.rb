@@ -6,7 +6,7 @@ require 'dry/monads/do'
 module Transforms
   module Api
     module V1
-      # Take a transaction payload and structure it into an episode for validation
+      # Take a record payload and structure it into an episode for validation
       class ToEpisode
         send(:include, Dry::Monads[:result, :do, :try])
 
@@ -23,16 +23,16 @@ module Transforms
                                    self_help_group_attendance health_insurance].freeze
         NON_STRING_FIELDS = %i[admission_date service_request_date discharge_date last_contact_date dob].freeze
 
-        def call(transaction)
-          validated_payload = yield validate_transaction(transaction)
+        def call(record)
+          validated_payload = yield validate_record(record)
           stringified_payload = yield stringify_values(validated_payload)
           construct_episode(stringified_payload)
         end
 
         private
 
-        def validate_transaction(transaction)
-          transaction.payload.present? ? Success(transaction.payload.symbolize_keys) : Failure('No payload present')
+        def validate_record(record)
+          record.payload.present? ? Success(record.payload.symbolize_keys) : Failure('No payload present')
         end
 
         def stringify_values(validated_payload)

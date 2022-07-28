@@ -3,8 +3,8 @@
 module Entities
   module Api
     module V1
-      # entity for transaction for use in validations
-      class Transaction < Dry::Struct
+      # entity for record for use in validations
+      class Record < Dry::Struct
         attribute :payload, Types::Hash.meta(omittable: false)
       end
     end

@@ -6,7 +6,7 @@ require 'csv'
 describe ::Operations::Api::V1::IngestExtract, dbclean: :after_each do
   include Dry::Monads[:result, :do]
 
-  let(:transactions_array) { File.read('./spec/test_data/BHSD_Sample_PRD15-Jan-Admission.json') }
+  let(:records_array) { File.read('./spec/test_data/BHSD_Sample_PRD15-Jan-Admission.json') }
 
   let(:params) do
     {
@@ -16,8 +16,8 @@ describe ::Operations::Api::V1::IngestExtract, dbclean: :after_each do
       extracted_on: '01-01-2022',
       file_name: 'extract_data',
       file_type: 'Initial',
-      transaction_group: 'discharge',
-      transactions: JSON.parse(transactions_array, symbolize_names: true)
+      record_group: 'discharge',
+      records: JSON.parse(records_array, symbolize_names: true)
     }
   end
 
@@ -32,8 +32,8 @@ describe ::Operations::Api::V1::IngestExtract, dbclean: :after_each do
     it 'should create extract' do
       expect(@extract).to be_a(::Api::V1::Extract)
     end
-    it 'extract should have transactions' do
-      expect(@extract.transactions.count).to be > 0
+    it 'extract should have records' do
+      expect(@extract.records.count).to be > 0
     end
     it 'extract should have a status of "valid"' do
       expect(@extract.status).to eq('Valid')
@@ -48,14 +48,14 @@ describe ::Operations::Api::V1::IngestExtract, dbclean: :after_each do
       it 'should be a failure' do
         expect(described_class.new.call(params)).to be_failure
       end
-      it 'should not create a transaction' do
+      it 'should not create a record' do
         expect(described_class.new.call(params).failure).to_not be_a(::Api::V1::Extract)
       end
     end
 
-    context 'invalid transactions' do
+    context 'invalid records' do
       before do
-        params[:transactions].first[:episode_id] = nil
+        params[:records].first[:episode_id] = nil
         @result = described_class.new.call(params)
         @extract = @result.value!
       end
@@ -65,8 +65,8 @@ describe ::Operations::Api::V1::IngestExtract, dbclean: :after_each do
       it 'should create extract' do
         expect(@extract).to be_a(::Api::V1::Extract)
       end
-      it 'extract should have transactions' do
-        expect(@extract.transactions.count).to be > 0
+      it 'extract should have records' do
+        expect(@extract.records.count).to be > 0
       end
       it 'extract should have a status of "invalid"' do
         expect(@extract.status).to eq('Invalid')

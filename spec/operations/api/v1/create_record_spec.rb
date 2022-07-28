@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe ::Operations::Api::V1::CreateTransaction do
+describe ::Operations::Api::V1::CreateRecord do
   include Dry::Monads[:result, :do]
 
   let(:extract_params) { FactoryBot.create(:extract) }
@@ -36,24 +36,24 @@ describe ::Operations::Api::V1::CreateTransaction do
   context 'valid params' do
     before do
       @result = described_class.new.call(params)
-      @transaction = @result.value!
+      @record = @result.value!
     end
 
     it 'should be a success' do
       expect(@result).to be_success
     end
 
-    it 'Should create transaction' do
-      expect(@transaction).to be_a(::Api::V1::Transaction)
+    it 'Should create record' do
+      expect(@record).to be_a(::Api::V1::Record)
     end
 
     it 'Should have no failures or warnings' do
-      expect(@transaction.failures).to eq([])
-      expect(@transaction.warnings).to eq([])
+      expect(@record.failures).to eq([])
+      expect(@record.warnings).to eq([])
     end
 
     it 'should have a status of Valid' do
-      expect(@transaction.status).to eq('Valid')
+      expect(@record.status).to eq('Valid')
     end
   end
 
@@ -65,8 +65,8 @@ describe ::Operations::Api::V1::CreateTransaction do
       it 'should be a failure' do
         expect(described_class.new.call(params)).to be_failure
       end
-      it 'should not create a transaction' do
-        expect(described_class.new.call(params).failure).to_not be_a(::Api::V1::Transaction)
+      it 'should not create a record' do
+        expect(described_class.new.call(params).failure).to_not be_a(::Api::V1::Record)
       end
     end
 
@@ -74,14 +74,14 @@ describe ::Operations::Api::V1::CreateTransaction do
       before do
         params[:payload][:episode_id] = nil
         @result = described_class.new.call(params)
-        @transaction = @result.value!
+        @record = @result.value!
       end
-      it 'should create a transaction with a failure' do
-        expect(@transaction.failures).to_not eq([])
+      it 'should create a record with a failure' do
+        expect(@record.failures).to_not eq([])
       end
 
       it 'should have a status of Invalid' do
-        expect(@transaction.status).to eq('Invalid')
+        expect(@record.status).to eq('Invalid')
       end
     end
   end

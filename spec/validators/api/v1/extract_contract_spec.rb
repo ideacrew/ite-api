@@ -11,7 +11,7 @@ RSpec.describe ::Validators::Api::V1::ExtractContract, dbclean: :after_each do
       coverage_end: Date.today.to_s,
       extracted_on: Date.today.to_s,
       file_type: 'Initial',
-      transaction_group: 'admission'
+      record_group: 'admission'
     }
   end
 
@@ -23,7 +23,7 @@ RSpec.describe ::Validators::Api::V1::ExtractContract, dbclean: :after_each do
           coverage_end: Date.today.to_s,
           extracted_on: Date.today.to_s,
           file_type: 'Initial',
-          transaction_group: 'Admission'
+          record_group: 'Admission'
         }
       end
 
@@ -87,11 +87,11 @@ RSpec.describe ::Validators::Api::V1::ExtractContract, dbclean: :after_each do
       end
     end
 
-    context 'invalid transaction group' do
-      context 'with transaction group not from list' do
+    context 'invalid record group' do
+      context 'with record group not from list' do
         it 'should fail validation' do
-          required_params[:transaction_group] = 'WrongOption'
-          expect(subject.call(required_params).errors.to_h).to have_key(:transaction_group)
+          required_params[:record_group] = 'WrongOption'
+          expect(subject.call(required_params).errors.to_h).to have_key(:record_group)
         end
       end
     end

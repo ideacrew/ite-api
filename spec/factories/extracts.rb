@@ -7,11 +7,11 @@ FactoryBot.define do
     coverage_end { Date.today }
     extracted_on { Date.today }
     file_type { 'Initial' }
-    transaction_group { 'admission' }
+    record_group { 'admission' }
 
-    trait :with_transactions do
-      transactions do
-        [FactoryBot.build(:transaction)]
+    trait :with_records do
+      records do
+        [FactoryBot.build(:record)]
       end
     end
   end

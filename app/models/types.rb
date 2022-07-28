@@ -9,7 +9,7 @@ module Types
   include Dry.Types
   include Dry::Logic
 
-  TransactionGroups =
+  RecordGroups =
     Types::String.enum('admission', 'discharge', 'update').freeze
 
   CODEPEDENT_OPTIONS = {

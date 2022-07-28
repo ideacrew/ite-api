@@ -25,15 +25,15 @@ RSpec.describe Api::V1::Extract, type: :model do
         expect(@extract.coverage_range.count).to eq(31)
       end
 
-      it 'will have a transaction failure count' do
-        expect(@extract.transaction_failure_count).to eq(0)
+      it 'will have a record failure count' do
+        expect(@extract.failed_record_count).to eq(0)
       end
-      it 'will have a transaction warning count' do
-        expect(@extract.transaction_warning_count).to eq(0)
+      it 'will have a record warning count' do
+        expect(@extract.warned_record_count).to eq(0)
       end
       it 'will have a list_view that contains various fields' do
         expect(@extract.list_view[:submission_date]).to eq(@extract.created_at)
-        expect(@extract.list_view[:number_of_transactions]).to eq(@extract.transaction_count)
+        expect(@extract.list_view[:number_of_records]).to eq(@extract.record_count)
       end
     end
   end

@@ -7,36 +7,36 @@ require 'dry/monads/try'
 module Operations
   module Api
     module V1
-      # operation to create transaction
-      class CreateTransaction
+      # operation to create record
+      class CreateRecord
         send(:include, Dry::Monads[:result, :do, :try])
 
         def call(params)
-          transaction_entity = yield create_entity(params)
-          transaction = yield create_transaction(transaction_entity)
-          episode = yield structure_episode(transaction, params)
+          record_entity = yield create_entity(params)
+          record = yield create_record(record_entity)
+          episode = yield structure_episode(record)
           validation_result = yield validate_episode(episode, params[:extract])
-          update_transaction(validation_result, transaction)
+          update_record(validation_result, record)
         end
 
         private
 
         def create_entity(params)
           result = Try do
-            ::Entities::Api::V1::Transaction.new(payload: params[:payload].to_h)
+            ::Entities::Api::V1::Record.new(payload: params[:payload].to_h)
           end
           result.success? ? Success(result.value!) : Failure(result)
         end
 
-        def create_transaction(transaction_entity)
+        def create_record(record_entity)
           result = Try do
-            ::Api::V1::Transaction.new(transaction_entity.to_h)
+            ::Api::V1::Record.new(record_entity.to_h)
           end
           result.success? ? Success(result.value!) : Failure(result)
         end
 
-        def structure_episode(transaction, _params)
-          Transforms::Api::V1::ToEpisode.new.call(transaction)
+        def structure_episode(record)
+          Transforms::Api::V1::ToEpisode.new.call(record)
         end
 
         def validate_episode(episode, extract)
@@ -44,8 +44,8 @@ module Operations
           Success(::Validators::Api::V1::EpisodeContract.new.call(episode.merge(extract)))
         end
 
-        def update_transaction(result, transaction)
-          transaction.status = result.errors.any? ? 'Invalid' : 'Valid'
+        def update_record(result, record)
+          record.status = result.errors.any? ? 'Invalid' : 'Valid'
           errors = result.errors.to_h
           warnings = []
           errors.select { |_k, v| v.first.instance_of?(Hash) && v.first.key?(:warning) }.each do |warning|
@@ -54,9 +54,9 @@ module Operations
           failures = []
           failures << errors.select { |_k, v| v.first.instance_of?(String) }
           failures << errors.select { |_k, v| v.first.instance_of?(Hash) && !v.first.key?(:warning) }
-          transaction.failures = failures.compact_blank!
-          transaction.warnings = warnings.compact_blank!
-          Success(transaction)
+          record.failures = failures.compact_blank!
+          record.warnings = warnings.compact_blank!
+          Success(record)
         end
       end
     end

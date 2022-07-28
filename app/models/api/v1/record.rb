@@ -2,8 +2,8 @@
 
 module Api
   module V1
-    # transaction model
-    class Transaction
+    # record model
+    class Record
       include Mongoid::Document
       include Mongoid::Timestamps
 
@@ -19,8 +19,6 @@ module Api
       validates_presence_of :payload
 
       index({ status: 1 })
-
-      # add validation to identify the warnings as opposed to the failures -> need to know what those fields are
     end
   end
 end

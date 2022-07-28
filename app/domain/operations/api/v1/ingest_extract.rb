@@ -16,7 +16,7 @@ module Operations
           validated_extract = yield validate_extract(params)
           extract_entity = yield create_entity(validated_extract)
           extract = yield create_extract(extract_entity)
-          create_transactions(extract, params)
+          create_records(extract, params)
         end
 
         private
@@ -39,15 +39,15 @@ module Operations
           extract.save ? Success(extract) : Failure('Failed to save extract')
         end
 
-        def create_transactions(extract, params)
-          if params[:transactions]
-            params[:transactions].each do |transaction|
-              result = Operations::Api::V1::CreateTransaction.new.call(extract: extract.attributes.symbolize_keys,
-                                                                       payload: transaction)
-              t = extract.transactions.build
-              t.assign_attributes(result.success.attributes)
+        def create_records(extract, params)
+          if params[:records]
+            params[:records].each do |record|
+              result = Operations::Api::V1::CreateRecord.new.call(extract: extract.attributes.symbolize_keys,
+                                                                  payload: record)
+              record_object = extract.records.build
+              record_object.assign_attributes(result.success.attributes)
             end
-            extract.status = extract.transactions&.select { |t| t.status == 'Invalid' }&.any? ? 'Invalid' : 'Valid'
+            extract.status = extract.records&.select { |t| t.status == 'Invalid' }&.any? ? 'Invalid' : 'Valid'
             extract.save!
           end
           Success(extract)

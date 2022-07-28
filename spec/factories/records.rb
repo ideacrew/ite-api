@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :transaction, class: '::Api::V1::Transaction' do
+  factory :record, class: '::Api::V1::Record' do
     extract
 
     payload do

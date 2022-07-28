@@ -14,7 +14,7 @@ module Validators
           required(:extracted_on).filled(:date)
           optional(:file_name).maybe(:string)
           required(:file_type).filled(:string)
-          required(:transaction_group).filled(::Types::TransactionGroups)
+          required(:record_group).filled(::Types::RecordGroups)
         end
 
         rule(:coverage_start) do
