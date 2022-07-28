@@ -38,21 +38,15 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
   let(:client_params) do
     {
       client_id: '8347ehf',
-      first_name: 'John',
-      middle_name: 'Danger',
-      last_name: 'Doe',
-      last_name_alt: '',
-      alias: 'Johnny',
-      ssn: '999999999',
-      medicaid_id: '3498438978',
-      dob: (Date.today - (20 * 365)).to_s,
-      gender: '01',
-      sexual_orientation: '48',
-      race: '23',
-      ethnicity: '9',
-      primary_language: '3',
-      phone1: '123456700',
-      phone2: '349857674'
+      first_name: 'test',
+      last_name: 'test',
+      ssn: '000000000',
+      medicaid_id: '162738',
+      dob: Date.today,
+      gender: '1',
+      sexual_orientation: '2',
+      race: '3',
+      ethnicity: '4'
     }
   end
 
@@ -128,8 +122,9 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
     context 'codepedent field it should fail' do
       it 'with a value outside of accepted values' do
         all_params[:codepedent] = '304'
-        expect(subject.call(all_params).errors.to_h).to have_key(:codepedent)
-        expect(subject.call(all_params).errors.to_h[:codepedent].first[:text]).to eq('Not in list of accepted values')
+        result = subject.call(all_params)
+        expect(result.errors.to_h).to have_key(:codepedent)
+        expect(result.errors.to_h[:codepedent].first).to eq('must be one of: 1, 2')
       end
       # A record of Codependent/Collateral requires Client ID and Admission Date information and reporting of
       # the remaining fields is optional.
@@ -201,7 +196,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         all_params[:treatment_type] = 'Invalid'
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:treatment_type)
-        expect(errors.to_h[:treatment_type].first).to eq('Not in list of accepted values')
+        expect(errors.to_h[:treatment_type].first).to eq('must be one of: 1, 2, 3, 4, 5, 6, 7, 8, 72, 73, 74, 75, 76, 77, 96')
       end
       # if record type is 'M' or 'X' treatment_type should be 72-76
       # if record type is 'A' or 'T' treatment should be 01-08

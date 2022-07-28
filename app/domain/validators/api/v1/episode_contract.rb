@@ -1,20 +1,21 @@
 # frozen_string_literal: true
 
 require './app/models/types'
+require './app/domain/validators/api/v1/client_contract'
 
 module Validators
   module Api
     module V1
       # Contract for Episode.
-      class EpisodeContract < Dry::Validation::Contract # rubocop:disable Metrics/ClassLength
+      class EpisodeContract < Dry::Validation::Contract
         params do
           required(:episode_id).filled(:string)
-          optional(:codepedent).maybe(:string)
+          optional(:codepedent).maybe(Types::CODEPEDENT_OPTIONS)
           optional(:client_id).maybe(:string)
           optional(:record_type).maybe(:string)
           optional(:admission_type).maybe(:date)
           required(:admission_date).filled(:date)
-          optional(:treatment_type).maybe(:string)
+          optional(:treatment_type).maybe(Types::TREATMENT_TYPE_OPTIONS)
           optional(:service_request_date).maybe(:date)
           optional(:discharge_date).maybe(:date)
           optional(:discharge_type).maybe(:string)
@@ -24,7 +25,7 @@ module Validators
           optional(:referral_source).maybe(:string)
           optional(:criminal_justice_referral).maybe(:string)
           optional(:primary_payment_source).maybe(:string)
-          optional(:client).maybe(:hash)
+          optional(:client).hash(Validators::Api::V1::ClientContract.params)
           optional(:client_profile).maybe(:hash)
           optional(:clinical_info).maybe(:hash)
 
@@ -34,25 +35,14 @@ module Validators
         end
 
         rule(:client_id) do
-          if key && value && value.match(/[^a-zA-Z\d-]/)
-            key.failure(text: 'Field cannot contain special characters', warning: true)
-          end
+          key.failure(text: 'Field cannot contain special characters', warning: true) if key && value && value.match(/[^a-zA-Z\d-]/)
           key.failure(text: 'Needs to be less than 16 digits', warning: true) if key && value && value.length > 16
           key.failure(text: 'Cannot be all 0s', warning: true) if key && value && value.chars.to_a.uniq == ['0']
         end
 
-        rule(:codepedent) do
-          if key && value && !Types::CODEPEDENT_OPTIONS.keys.map(&:to_s).include?(value)
-            key.failure(text: 'Not in list of accepted values',
-                        warning: true)
-          end
-        end
-
         rule(:admission_date) do
           key.failure(text: 'Must be a valid date', warning: true) if key && value && value.class != Date
-          if key && value && value < Date.new(1920, 0o1, 0o1)
-            key.failure(text: 'Must be after January 1, 1920', warning: true)
-          end
+          key.failure(text: 'Must be after January 1, 1920', warning: true) if key && value && value < Date.new(1920, 0o1, 0o1)
         end
         rule(:admission_date, :last_contact_date) do
           if key && values[:last_contact_date] && values[:admission_date] > values[:last_contact_date]
@@ -73,15 +63,8 @@ module Validators
           end
         end
 
-        rule(:treatment_type) do
-          if key && value && !Types::TREATMENT_TYPE_OPTIONS.keys.map(&:to_s).include?(value)
-            key.failure('Not in list of accepted values')
-          end
-        end
         rule(:treatment_type, :record_group) do
-          if key && values[:record_group] == 'discharge' && !values[:treatment_type]
-            key.failure(text: 'Must be included if is a discharge record')
-          end
+          key.failure(text: 'Must be included if is a discharge record') if key && values[:record_group] == 'discharge' && !values[:treatment_type]
         end
 
         rule(:discharge_date, :extracted_on) do
