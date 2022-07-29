@@ -30,12 +30,12 @@ module Validators
           optional(:clinical_info).maybe(:hash)
 
           # fields from the extract
-          optional(:extracted_on).maybe(:date)
+          optional(:extracted_on)
           optional(:record_group).maybe(:string)
         end
 
         rule(:client_id) do
-          key.failure(text: 'Field cannot contain special characters', warning: true) if key && value && value.match(/[^a-zA-Z\d-]/)
+          key(:client_id).failure(text: 'Field cannot contain special characters', warning: true) if key && value && value.match(/[^a-zA-Z\d-]/)
           key.failure(text: 'Needs to be less than 16 digits', warning: true) if key && value && value.length > 16
           key.failure(text: 'Cannot be all 0s', warning: true) if key && value && value.chars.to_a.uniq == ['0']
         end
@@ -57,7 +57,7 @@ module Validators
           end
         end
         rule(:admission_date, :extracted_on) do
-          if key && values[:extracted_on] && values[:admission_date] > values[:extracted_on]
+          if key && values[:extracted_on] && values[:admission_date] > Date.parse(values[:extracted_on].to_s)
             key.failure(text: 'Must be later than the extraction date',
                         warning: true)
           end
@@ -72,7 +72,7 @@ module Validators
 
         rule(:discharge_date, :extracted_on) do
           if key && (values[:extracted_on] && values[:discharge_date]) &&
-             values[:discharge_date] > values[:extracted_on]
+             values[:discharge_date] > Date.parse(values[:extracted_on].to_s)
             key.failure(text: 'Must be later than the extraction date',
                         warning: true)
           end
@@ -102,7 +102,7 @@ module Validators
         end
         rule(:last_contact_date, :extracted_on) do
           if key && (values[:last_contact_date] && values[:extracted_on]) &&
-             values[:last_contact_date] > values[:extracted_on]
+             values[:last_contact_date] > Date.parse(values[:extracted_on].to_s)
             key.failure(text: 'Must be later than the extraction date',
                         warning: true)
           end

@@ -10,11 +10,11 @@ describe ::Operations::Api::V1::CreateRecord do
   let(:row) do
     { 'provider_id' => '15',
       'episode_id' => '194062',
-      'admission_date' => '01/04/22',
+      'admission_date' => Date.today.to_s,
       'treatment_type' => '4',
       'client_id' => 'LEVN46410511921',
       'codependent' => '2',
-      'dob' => '05/11/4002',
+      'dob' => (Date.today - 3000).to_s,
       'num_of_prior_admissions' => '2',
       'arrests_past_30days' => nil,
       'education' => '12',
@@ -31,7 +31,7 @@ describe ::Operations::Api::V1::CreateRecord do
 
   let(:params) do
     {
-      extract: extract_params.attributes_before_type_cast.symbolize_keys, payload: row
+      extract: extract_params.attributes.symbolize_keys, payload: row
     }
   end
 

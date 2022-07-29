@@ -10,7 +10,6 @@ RSpec.describe ::Validators::Api::V1::ExtractContract, dbclean: :after_each do
       coverage_start: Date.today.to_s,
       coverage_end: Date.today.to_s,
       extracted_on: Date.today.to_s,
-      file_type: 'Initial',
       record_group: 'admission'
     }
   end
@@ -22,7 +21,6 @@ RSpec.describe ::Validators::Api::V1::ExtractContract, dbclean: :after_each do
           coverage_start: Date.today.to_s,
           coverage_end: Date.today.to_s,
           extracted_on: Date.today.to_s,
-          file_type: 'Initial',
           record_group: 'Admission'
         }
       end

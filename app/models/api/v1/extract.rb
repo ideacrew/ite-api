@@ -13,11 +13,7 @@ module Api
       field :coverage_end, type: Date
       field :extracted_on, type: Date
       field :file_name, type: String
-      # Initial, Resubmission, Update
-      field :file_type, type: String
-      # Should be admission, discharge and update?
       field :record_group, type: String
-      # field :failures, type: Hash
       field :status, type: String
 
       # embedded_in :provider
@@ -25,7 +21,7 @@ module Api
 
       accepts_nested_attributes_for :records
 
-      validates_presence_of :provider_gateway_identifier, :coverage_start, :coverage_end, :extracted_on, :file_type,
+      validates_presence_of :provider_gateway_identifier, :coverage_start, :coverage_end, :extracted_on,
                             :record_group
 
       index({ provider_gateway_identifier: 1 }, { sparse: true })
@@ -58,7 +54,6 @@ module Api
           coverage_end:,
           coverage_start:,
           submission_date: created_at,
-          file_type:,
           record_group:,
           number_of_records: record_count,
           record_failure_count: failed_record_count,

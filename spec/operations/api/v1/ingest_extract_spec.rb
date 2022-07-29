@@ -15,7 +15,6 @@ describe ::Operations::Api::V1::IngestExtract, dbclean: :after_each do
       coverage_end: '01-01-2022',
       extracted_on: '01-01-2022',
       file_name: 'extract_data',
-      file_type: 'Initial',
       record_group: 'discharge',
       records: JSON.parse(records_array, symbolize_names: true)
     }

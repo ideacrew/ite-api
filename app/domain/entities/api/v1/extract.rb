@@ -10,7 +10,6 @@ module Entities
         attribute :coverage_end, Types::Date.meta(omittable: false)
         attribute :extracted_on, Types::Date.meta(omittable: false)
         attribute :file_name, Types::String.optional.meta(omittable: true)
-        attribute :file_type, Types::String.meta(omittable: false)
         attribute :record_group, Types::String.meta(omittable: false)
       end
     end

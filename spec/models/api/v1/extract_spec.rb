@@ -6,7 +6,6 @@ require 'rails_helper'
 RSpec.describe Api::V1::Extract, type: :model do
   let(:extract_params) do
     { "provider_gateway_identifier": 'all_fields',
-      "file_type": 'Admission',
       "coverage_start": Date.new(2022, 0o1, 0o1),
       "coverage_end": Date.new(2022, 0o1, 31) }
   end

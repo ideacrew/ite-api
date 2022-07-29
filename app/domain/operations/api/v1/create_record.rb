@@ -46,16 +46,9 @@ module Operations
         end
 
         def structure_errors(result)
-          warnings = []
-          failures = []
-          result.errors.messages.each do |message|
-            error = { message.path.last => message.text }
-            if message.meta[:warning]
-              warnings << error
-            else
-              failures << error
-            end
-          end
+          # flatten errors and separate into warnings and failures
+          warnings = result.errors.messages.select { |message| message.meta[:warning] }.map { |message| { message.path.last => message.text } }
+          failures = result.errors.messages.reject { |message| message.meta[:warning] }.map { |message| { message.path.last => message.text } }
           Success(warnings:, failures:)
         end
 
