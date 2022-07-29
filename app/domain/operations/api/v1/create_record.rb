@@ -16,7 +16,8 @@ module Operations
           record = yield create_record(record_entity)
           episode = yield structure_episode(record)
           validation_result = yield validate_episode(episode, params[:extract])
-          update_record(validation_result, record)
+          errors = yield structure_errors(validation_result)
+          update_record(errors, record)
         end
 
         private
@@ -44,17 +45,24 @@ module Operations
           Success(::Validators::Api::V1::EpisodeContract.new.call(episode.merge(extract)))
         end
 
-        def update_record(result, record)
-          record.status = result.errors.any? ? 'Invalid' : 'Valid'
-          errors = result.errors.to_h
+        def structure_errors(result)
           warnings = []
-          errors.select { |_k, v| v.first.instance_of?(Hash) && v.first.key?(:warning) }.each do |warning|
-            warnings << warning
-          end
           failures = []
-          failures << errors.except(warnings)
-          record.failures = failures.compact_blank!
-          record.warnings = warnings.compact_blank!
+          result.errors.messages.each do |message|
+            error = { message.path.last => message.text }
+            if message.meta[:warning]
+              warnings << error
+            else
+              failures << error
+            end
+          end
+          Success(warnings:, failures:)
+        end
+
+        def update_record(errors, record)
+          record.status = errors.compact_blank.any? ? 'Invalid' : 'Valid'
+          record.failures = errors[:failures].compact_blank!
+          record.warnings = errors[:warnings].compact_blank!
           Success(record)
         end
       end
