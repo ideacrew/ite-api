@@ -62,7 +62,8 @@ module Api
           record_group:,
           number_of_records: record_count,
           record_failure_count: failed_record_count,
-          record_warning_count: warned_record_count
+          record_warning_count: warned_record_count,
+          status:
         }
       end
     end

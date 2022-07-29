@@ -15,23 +15,18 @@ describe ::Operations::Api::V1::CreateRecord do
       'client_id' => 'LEVN46410511921',
       'codependent' => '2',
       'dob' => '05/11/4002',
-      'gender' => '2',
-      'race' => nil,
-      'ethnicity' => '9',
-      'primary_language' => '-1',
       'num_of_prior_admissions' => '2',
       'arrests_past_30days' => nil,
       'education' => '12',
       'employment' => '3',
       'last_contact_date' => Date.today.to_s,
       'record_type' => 'A',
-
+      'gender' => '1',
       'first_name' => 'George',
       'last_name' => 'Bluth',
       'race' => '1',
       'ethnicity' => '97',
-      'primary_language' => '01'
-       }
+      'primary_language' => '01' }
   end
 
   let(:params) do
