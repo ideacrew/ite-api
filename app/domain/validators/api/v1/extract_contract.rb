@@ -18,15 +18,11 @@ module Validators
         end
 
         rule(:coverage_start) do
-          if key && value && value > Date.today
-            key.failure(text: 'invalid coverage start date - Date should be today or in the past.')
-          end
+          key.failure(text: 'invalid coverage start date - Date should be today or in the past.') if key && value && value > Date.today
         end
 
         rule(:coverage_end) do
-          if key && value && value > Date.today
-            key.failure(text: 'invalid coverage end date - Date should be today or in the past.')
-          end
+          key.failure(text: 'invalid coverage end date - Date should be today or in the past.') if key && value && value > Date.today
         end
 
         rule(:coverage_end, :coverage_start) do
@@ -44,9 +40,7 @@ module Validators
         end
 
         rule(:extracted_on) do
-          if key && value && value > Date.today
-            key.failure(text: 'invalid extraction date - Date should be today or in the past.')
-          end
+          key.failure(text: 'invalid extraction date - Date should be today or in the past.') if key && value && value > Date.today
         end
       end
     end

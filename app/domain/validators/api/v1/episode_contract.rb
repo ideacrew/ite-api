@@ -15,7 +15,7 @@ module Validators
           optional(:record_type).maybe(:string)
           optional(:admission_type).maybe(:date)
           required(:admission_date).filled(:date)
-          optional(:treatment_type).maybe(Types::TREATMENT_TYPE_OPTIONS)
+          required(:treatment_type).filled(Types::TREATMENT_TYPE_OPTIONS)
           optional(:service_request_date).maybe(:date)
           optional(:discharge_date).maybe(:date)
           optional(:discharge_type).maybe(:string)
@@ -63,8 +63,11 @@ module Validators
           end
         end
 
-        rule(:treatment_type, :record_group) do
-          key.failure(text: 'Must be included if is a discharge record') if key && values[:record_group] == 'discharge' && !values[:treatment_type]
+        rule(:treatment_type, :record_type) do
+          record_group1 = %w[M E X]
+          record_group2 = %w[A T D]
+          key.failure(text: 'must correspond to record_type') if key && record_group1.include?(values[:record_type]) && values[:treatment_type].to_i < 70
+          key.failure(text: 'must correspond to record_type') if key && record_group2.include?(values[:record_type]) && values[:treatment_type].to_i > 8
         end
 
         rule(:discharge_date, :extracted_on) do
@@ -90,9 +93,9 @@ module Validators
 
         rule(:last_contact_date, :record_group) do
           if key && values[:record_group]
-            if values[:record_group] == 'update' && !values[:last_contact_date]
-              key.failure(text: 'Must be included if is an update record')
-            elsif values[:record_group] != 'update' && !values[:last_contact_date]
+            if values[:record_group] == 'active' && !values[:last_contact_date]
+              key.failure(text: 'Must be included if is an active record')
+            elsif values[:record_group] != 'active' && !values[:last_contact_date]
               key.failure(text: 'Should be included', warning: true)
             end
           end

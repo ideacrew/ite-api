@@ -7,7 +7,8 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
   let(:required_params) do
     {
       episode_id: 'fbgadfs7fgdy',
-      admission_date: Date.today.to_s
+      admission_date: Date.today.to_s,
+      treatment_type: '2'
     }
   end
 
@@ -16,7 +17,6 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
       codepedent: '2',
       admission_type: '31',
       client_id: '8347ehf',
-      treatment_type: '2',
       service_request_date: Date.today.to_s,
       discharge_date: Date.today.to_s,
       discharge_type: '50',
@@ -109,22 +109,24 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
       end
       it 'with all 00s' do
         all_params[:client_id] = '000000'
-        expect(subject.call(all_params).errors.to_h).to have_key(:client_id)
-        expect(subject.call(all_params).errors.to_h[:client_id].first[:text]).to eq('Cannot be all 0s')
+        errors = subject.call(all_params).errors.to_h
+        expect(errors).to have_key(:client_id)
+        expect(errors[:client_id].first[:text]).to eq('Cannot be all 0s')
       end
       it 'when longer than 15 characters' do
         all_params[:client_id] = '0000004389hfiugh4839g89righudhgdfhgj'
-        expect(subject.call(all_params).errors.to_h).to have_key(:client_id)
-        expect(subject.call(all_params).errors.to_h[:client_id].first[:text]).to eq('Needs to be less than 16 digits')
+        errors = subject.call(all_params).errors.to_h
+        expect(errors).to have_key(:client_id)
+        expect(errors[:client_id].first[:text]).to eq('Needs to be less than 16 digits')
       end
     end
 
     context 'codepedent field it should fail' do
       it 'with a value outside of accepted values' do
         all_params[:codepedent] = '304'
-        result = subject.call(all_params)
-        expect(result.errors.to_h).to have_key(:codepedent)
-        expect(result.errors.to_h[:codepedent].first).to eq('must be one of: 1, 2')
+        errors = subject.call(all_params).errors.to_h
+        expect(errors).to have_key(:codepedent)
+        expect(errors[:codepedent].first).to eq('must be one of: 1, 2')
       end
       # A record of Codependent/Collateral requires Client ID and Admission Date information and reporting of
       # the remaining fields is optional.
@@ -133,7 +135,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
 
     # context 'with invalid record_type field it should fail' do
     # If this field is blank or contains a value that is not appropriate for the respective dataset
-    # (A, T, M or X for [Admission] dataset, D, S or E for [Discharge] dataset, and U for [Update]
+    # (A, T, M or X for [Admission] dataset, D, S or E for [Discharge] dataset, and U for [Active]
     # dataset), the record will fail to be processed as a valid record. A fatal error will be displayed
     # in the validation result.
     # The value of this field is related to the Treatment Setting and data in both fields need to
@@ -147,13 +149,15 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
     context 'with invalid admission_date field it should fail if' do
       it 'is not a date' do
         all_params[:admission_date] = 'twelve'
-        expect(subject.call(all_params).errors.to_h).to have_key(:admission_date)
-        expect(subject.call(all_params).errors.to_h[:admission_date]).to eq(['must be a date'])
+        errors = subject.call(all_params).errors.to_h
+        expect(errors).to have_key(:admission_date)
+        expect(errors[:admission_date]).to eq(['must be a date'])
       end
       it 'is not a valid date' do
         all_params[:admission_date] = 'February 30'
-        expect(subject.call(all_params).errors.to_h).to have_key(:admission_date)
-        expect(subject.call(all_params).errors.to_h[:admission_date]).to eq(['must be a date'])
+        errors = subject.call(all_params).errors.to_h
+        expect(errors).to have_key(:admission_date)
+        expect(errors[:admission_date]).to eq(['must be a date'])
       end
       it 'is a date before January 1, 1920' do
         all_params[:admission_date] = Date.new(1919, 0o1, 0o1).to_s
@@ -190,7 +194,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         all_params[:record_group] = 'discharge'
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:treatment_type)
-        expect(errors.to_h[:treatment_type].first).to eq('Must be included if is a discharge record')
+        expect(errors.to_h[:treatment_type].first).to eq('must be filled')
       end
       it 'contains an invalid value' do
         all_params[:treatment_type] = 'Invalid'
@@ -198,14 +202,18 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         expect(errors).to have_key(:treatment_type)
         expect(errors.to_h[:treatment_type].first).to eq('must be one of: 1, 2, 3, 4, 5, 6, 7, 8, 72, 73, 74, 75, 76, 77, 96')
       end
-      # if record type is 'M' or 'X' treatment_type should be 72-76
-      # if record type is 'A' or 'T' treatment should be 01-08
-      # Need logic for D and E
-      # If the Treatment Setting does not correspond to the Record Type, the record will fail to be
-      # processed as a valid record. For example, the Treatment Setting must use codes 01 through 08
-      # if Record Type is either Initial Admission for SU Treatment (A) or Transfer/Change in SU Service (T).
-      # The Treatment Setting must use codes 72 through 76 if Record Type is either Initial Admission for
-      # MH Treatment (M) or Transfer/Change in MH Service (X).
+      it 'does not correspond to the record_type' do
+        all_params[:record_type] = 'M'
+        all_params[:treatment_type] = '1'
+        errors = subject.call(all_params).errors.to_h
+        expect(errors).to have_key(:treatment_type)
+        expect(errors.to_h[:treatment_type].first).to eq('must correspond to record_type')
+        all_params[:record_type] = 'A'
+        all_params[:treatment_type] = '72'
+        errors = subject.call(all_params).errors.to_h
+        expect(errors).to have_key(:treatment_type)
+        expect(errors.to_h[:treatment_type].first).to eq('must correspond to record_type')
+      end
     end
 
     context 'with invalid discharge date field it should fail' do
@@ -248,12 +256,12 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
     end
 
     context 'with invalid last contact date field it should fail' do
-      it 'is blank when the record_group is update' do
-        all_params[:record_group] = 'update'
+      it 'is blank when the record_group is active' do
+        all_params[:record_group] = 'active'
         all_params[:last_contact_date] = nil
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:last_contact_date)
-        expect(errors.to_h[:last_contact_date].first).to eq('Must be included if is an update record')
+        expect(errors.to_h[:last_contact_date].first).to eq('Must be included if is an active record')
       end
       it 'is blank when the record_group is admission or discharge with a warning' do
         all_params[:record_group] = 'admission'

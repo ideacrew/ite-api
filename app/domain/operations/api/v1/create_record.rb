@@ -52,8 +52,7 @@ module Operations
             warnings << warning
           end
           failures = []
-          failures << errors.select { |_k, v| v.first.instance_of?(String) }
-          failures << errors.select { |_k, v| v.first.instance_of?(Hash) && !v.first.key?(:warning) }
+          failures << errors.except(warnings)
           record.failures = failures.compact_blank!
           record.warnings = warnings.compact_blank!
           Success(record)

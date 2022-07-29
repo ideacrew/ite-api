@@ -24,7 +24,14 @@ describe ::Operations::Api::V1::CreateRecord do
       'education' => '12',
       'employment' => '3',
       'last_contact_date' => Date.today.to_s,
-      'record_type' => 'A' }
+      'record_type' => 'A',
+
+      'first_name' => 'George',
+      'last_name' => 'Bluth',
+      'race' => '1',
+      'ethnicity' => '97',
+      'primary_language' => '01'
+       }
   end
 
   let(:params) do
