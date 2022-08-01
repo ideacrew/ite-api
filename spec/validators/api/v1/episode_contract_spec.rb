@@ -8,7 +8,8 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
     {
       episode_id: 'fbgadfs7fgdy',
       admission_date: Date.today.to_s,
-      treatment_type: '2'
+      treatment_type: '2',
+      record_type: 'A'
     }
   end
 
@@ -26,7 +27,6 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
       referral_source: nil,
       criminal_justice_referral: '1',
       primary_payment_source: nil,
-      record_type: 'A',
       client: client_params,
       client_profile: client_profile_params,
       clinical_info: clinical_info_params
@@ -96,7 +96,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
     context 'Keys with missing values' do
       it 'should return failure' do
         all_params.merge!(episode_id: nil)
-        expect(subject.call(all_params).errors.to_h).to eq({ episode_id: ['must be filled'] })
+        expect(subject.call(all_params).errors.to_h[:episode_id]).to eq(['must be filled'])
       end
     end
 
@@ -133,18 +133,35 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
       # For all items not reported, the data field should be coded with Not collected or Not applicable code.
     end
 
-    # context 'with invalid record_type field it should fail' do
-    # If this field is blank or contains a value that is not appropriate for the respective dataset
-    # (A, T, M or X for [Admission] dataset, D, S or E for [Discharge] dataset, and U for [Active]
-    # dataset), the record will fail to be processed as a valid record. A fatal error will be displayed
-    # in the validation result.
-    # The value of this field is related to the Treatment Setting and data in both fields need to
-    # be consistent. For example, the record of a person with co-occurring mental illness admitted to a substance
-    # use treatment must contain any of the codes 1-8 for Treatment Setting to assign a value of Initial Admission
-    # for SU Treatment (A).
-    # Each Initial Admission (A or M) and Transfer (T or X) record should have an associated Discharge record for
-    #  the same reporting period or in the subsequent period.
-    # end
+    context 'with invalid record_type field it should fail' do
+      it 'is not present' do
+        all_params[:record_type] = nil
+        errors = subject.call(all_params).errors.to_h
+        expect(errors).to have_key(:record_type)
+        expect(errors[:record_type]).to eq(['must be filled'])
+      end
+      it 'is not in the list of accepted values' do
+        all_params[:record_type] = '29'
+        errors = subject.call(all_params).errors.to_h
+        expect(errors).to have_key(:record_type)
+        expect(errors[:record_type]).to eq(['must be one of: A, T, D, M, X, E, U'])
+      end
+      it 'does not correctly correspond to the record_group' do
+        all_params[:record_type] = 'U'
+        all_params[:record_group] = 'admission'
+        errors = subject.call(all_params).errors.to_h
+        expect(errors).to have_key(:record_type)
+        expect(errors[:record_type]).to eq(['must correspond to record group'])
+      end
+      # If this field is blank or contains a value that is not appropriate for the respective dataset
+      # (A, T, M or X for [Admission] dataset, D, S or E for [Discharge] dataset, and U for [Active]
+      # dataset), the record will fail to be processed as a valid record. A fatal error will be displayed
+      # in the validation result.
+      # The value of this field is related to the Treatment Setting and data in both fields need to
+      # be consistent. For example, the record of a person with co-occurring mental illness admitted to a substance
+      # use treatment must contain any of the codes 1-8 for Treatment Setting to assign a value of Initial Admission
+      # for SU Treatment (A).
+    end
 
     context 'with invalid admission_date field it should fail if' do
       it 'is not a date' do
@@ -217,18 +234,13 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
     end
 
     context 'with invalid discharge date field it should fail' do
-      # If this field contains an invalid value in the [Discharge] dataset, the record will fail to be processed
-      # as a valid record. A fatal error will be displayed in the validation result.
-      # Each record in the [Discharge] should have an associated admission record based on Client ID, Admission Date,
-      # Admission Type, and Treatment Setting.
-      # The value of this field is related to the Discharge Type and value in both fields should be consistent.
-      # For example, the record of a person with a MH treatment  co-occurring mental illness admitted to a substance
-      # use treatment must contain any of the codes 01-08 for Treatment Setting to assign a value of Discharge from
-      # SU Treatment (D).
-      # Discharge Date may be the same as Admission Date but cannot be earlier.
-
-      # Discharge Date may be the same as Data Extract Date or Record (Submission) Date of the [Header] information
-      # but cannot be later.
+      it 'is not present in a Discharge record_group' do
+        all_params[:discharge_date] = nil
+        all_params[:record_group] = 'discharge'
+        errors = subject.call(all_params).errors.to_h
+        expect(errors).to have_key(:discharge_date)
+        expect(errors.to_h[:discharge_date].first).to eq('Must be included for discharge records')
+      end
       it 'is later than the extract_on date' do
         all_params[:extracted_on] = (Date.today - 10).to_s
         all_params[:discharge_date] = Date.today.to_s

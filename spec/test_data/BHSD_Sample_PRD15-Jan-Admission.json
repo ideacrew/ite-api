@@ -14,7 +14,8 @@
     "num_of_prior_admissions": 2,
     "arrests_past_30days": "",
     "education": 12,
-    "employment": 3
+    "employment": 3,
+    "record_type": "A"
   },
   {
     "provider_id": 15,
@@ -31,7 +32,8 @@
     "num_of_prior_admissions": 0,
     "arrests_past_30days": "",
     "education": 12,
-    "employment": 3
+    "employment": 3,
+    "record_type": "A"
   },
   {
     "provider_id": 15,

@@ -12,7 +12,7 @@ module Validators
           required(:episode_id).filled(:string)
           optional(:codepedent).maybe(Types::CODEPEDENT_OPTIONS)
           optional(:client_id).maybe(:string)
-          optional(:record_type).maybe(:string)
+          required(:record_type).filled(Types::RECORD_TYPE_OPTIONS)
           optional(:admission_type).maybe(:date)
           required(:admission_date).filled(:date)
           required(:treatment_type).filled(Types::TREATMENT_TYPE_OPTIONS)
@@ -63,6 +63,17 @@ module Validators
           end
         end
 
+        rule(:record_type, :record_group) do
+          admission_types = %w[A T M X]
+          discharge_types = %w[D S E]
+          active_types = %w[U]
+          if values[:record_group]
+            key.failure(text: 'must correspond to record group') if key && admission_types.include?(values[:record_type]) && values[:record_group] != 'admission'
+            key.failure(text: 'must correspond to record group') if key && discharge_types.include?(values[:record_type]) && values[:record_group] != 'discharge'
+            key.failure(text: 'must correspond to record group') if key && active_types.include?(values[:record_type]) && values[:record_group] != 'active'
+          end
+        end
+
         rule(:treatment_type, :record_type) do
           record_group1 = %w[M E X]
           record_group2 = %w[A T D]
@@ -70,6 +81,9 @@ module Validators
           key.failure(text: 'must correspond to record_type') if key && record_group2.include?(values[:record_type]) && values[:treatment_type].to_i > 8
         end
 
+        rule(:discharge_date, :record_group) do
+          key.failure(text: 'Must be included for discharge records') if key && values[:record_group] && values[:record_group] == 'discharge' && !values[:discharge_date]
+        end
         rule(:discharge_date, :extracted_on) do
           if key && (values[:extracted_on] && values[:discharge_date]) &&
              values[:discharge_date] > Date.parse(values[:extracted_on].to_s)

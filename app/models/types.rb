@@ -11,7 +11,7 @@ module Types
 
   RecordGroups = Types::String.enum('admission', 'discharge', 'active').freeze
   CODEPEDENT_OPTIONS = Types::String.enum('1', '2').freeze
-  RECORD_TYPE_OPTIONS = Types::String.enum('A', 'T', 'D', 'M', 'X', 'E').freeze
+  RECORD_TYPE_OPTIONS = Types::String.enum('A', 'T', 'D', 'M', 'X', 'E', 'U').freeze
   TREATMENT_TYPE_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '6', '7', '8', '72', '73', '74', '75', '76', '77',
                                               '96').freeze
   DISCHARGE_REASON_OPTIONS = Types::String.enum('1', '2', '3', '4', '14', '24', '5', '6', '7', '34', '35', '36', '37', '95', '96',
