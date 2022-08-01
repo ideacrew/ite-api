@@ -117,7 +117,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         all_params[:client_id] = '0000004389hfiugh4839g89righudhgdfhgj'
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:client_id)
-        expect(errors[:client_id].first[:text]).to eq('Needs to be less than 16 digits')
+        expect(errors[:client_id].first[:text]).to eq('Needs to be 15 or less characters')
       end
     end
 

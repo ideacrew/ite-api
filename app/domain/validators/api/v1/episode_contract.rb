@@ -36,7 +36,7 @@ module Validators
 
         rule(:client_id) do
           key(:client_id).failure(text: 'Field cannot contain special characters', warning: true) if key && value && value.match(/[^a-zA-Z\d-]/)
-          key.failure(text: 'Needs to be less than 16 digits', warning: true) if key && value && value.length > 16
+          key.failure(text: 'Needs to be 15 or less characters', warning: true) if key && value && value.length > 15
           key.failure(text: 'Cannot be all 0s', warning: true) if key && value && value.chars.to_a.uniq == ['0']
         end
 
