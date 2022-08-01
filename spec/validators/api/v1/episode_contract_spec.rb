@@ -121,12 +121,12 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
       end
     end
 
-    context 'codepedent field it should fail' do
+    context 'codepedent/collateral field it should fail' do
       it 'with a value outside of accepted values' do
-        all_params[:codepedent] = '304'
+        all_params[:collateral] = '0'
         errors = subject.call(all_params).errors.to_h
-        expect(errors).to have_key(:codepedent)
-        expect(errors[:codepedent].first).to eq('must be one of: 1, 2')
+        expect(errors).to have_key(:collateral)
+        expect(errors[:collateral].first).to eq('must be one of: 1, 2')
       end
       # A record of Codependent/Collateral requires Client ID and Admission Date information and reporting of
       # the remaining fields is optional.
@@ -225,7 +225,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
       end
       it 'uses code 96 and codepedent is false' do
         all_params[:treatment_type] = '96'
-        all_params[:codepedent] = '1'
+        all_params[:collateral] = '1'
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:treatment_type)
         expect(errors.to_h[:treatment_type]).to include('can only specify 96 if client is Collateral/Codependent')

@@ -13,7 +13,7 @@ describe ::Operations::Api::V1::CreateRecord do
       'admission_date' => Date.today.to_s,
       'treatment_type' => '4',
       'client_id' => 'LEVN46410511921',
-      'codependent' => '2',
+      'collateral' => '1',
       'dob' => (Date.today - 3000).to_s,
       'num_of_prior_admissions' => '2',
       'arrests_past_30days' => nil,

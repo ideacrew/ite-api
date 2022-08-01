@@ -10,7 +10,7 @@ module Validators
       class EpisodeContract < Dry::Validation::Contract
         params do
           required(:episode_id).filled(:string)
-          optional(:codepedent).maybe(Types::CODEPEDENT_OPTIONS)
+          optional(:collateral).maybe(Types::CODEPEDENT_OPTIONS)
           optional(:client_id).maybe(:string)
           required(:record_type).filled(Types::RECORD_TYPE_OPTIONS)
           optional(:admission_type).maybe(:date)
@@ -80,8 +80,8 @@ module Validators
           key.failure(text: 'must correspond to record_type') if key && record_group1.include?(values[:record_type]) && values[:treatment_type].to_i < 70
           key.failure(text: 'must correspond to record_type') if key && record_group2.include?(values[:record_type]) && values[:treatment_type].to_i > 8
         end
-        rule(:treatment_type, :codepedent) do
-          key.failure(text: 'can only specify 96 if client is Collateral/Codependent') if key && values[:treatment_type] && values[:codepedent] && values[:codepedent] != '2' && values[:treatment_type] == '96'
+        rule(:treatment_type, :collateral) do
+          key.failure(text: 'can only specify 96 if client is Collateral/Codependent') if key && values[:treatment_type] && values[:collateral] && values[:collateral] != '2' && values[:treatment_type] == '96'
         end
 
         rule(:discharge_date, :record_group) do
