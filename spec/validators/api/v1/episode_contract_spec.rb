@@ -153,14 +153,6 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         expect(errors).to have_key(:record_type)
         expect(errors[:record_type]).to eq(['must correspond to record group'])
       end
-      # If this field is blank or contains a value that is not appropriate for the respective dataset
-      # (A, T, M or X for [Admission] dataset, D, S or E for [Discharge] dataset, and U for [Active]
-      # dataset), the record will fail to be processed as a valid record. A fatal error will be displayed
-      # in the validation result.
-      # The value of this field is related to the Treatment Setting and data in both fields need to
-      # be consistent. For example, the record of a person with co-occurring mental illness admitted to a substance
-      # use treatment must contain any of the codes 1-8 for Treatment Setting to assign a value of Initial Admission
-      # for SU Treatment (A).
     end
 
     context 'with invalid admission_date field it should fail if' do
@@ -230,6 +222,13 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:treatment_type)
         expect(errors.to_h[:treatment_type].first).to eq('must correspond to record_type')
+      end
+      it 'uses code 96 and codepedent is false' do
+        all_params[:treatment_type] = '96'
+        all_params[:codepedent] = '1'
+        errors = subject.call(all_params).errors.to_h
+        expect(errors).to have_key(:treatment_type)
+        expect(errors.to_h[:treatment_type]).to include('can only specify 96 if client is Collateral/Codependent')
       end
     end
 

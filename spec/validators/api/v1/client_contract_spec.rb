@@ -9,7 +9,7 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       client_id: '8347ehf',
       first_name: 'test',
       last_name: 'test',
-      ssn: '000000000',
+      ssn: '223456789',
       medicaid_id: '162738',
       dob: Date.today,
       gender: '1',
@@ -92,6 +92,70 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       expect(result.errors.to_h[:ssn].first).to eq 'Length should be 9 digits'
     end
 
+    it 'ssn all the same digits' do
+      valid_params[:ssn] = '111111111'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:ssn)
+      expect(result.errors.to_h[:ssn]).to include 'Cannot be all the same digits'
+    end
+
+    it 'ssn in sequential ascending order' do
+      valid_params[:ssn] = '123456789'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:ssn)
+      expect(result.errors.to_h[:ssn]).to include 'Cannot be in sequential ascending order'
+    end
+
+    it 'ssn in sequential descending order' do
+      valid_params[:ssn] = '987654321'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:ssn)
+      expect(result.errors.to_h[:ssn]).to include 'Cannot be in sequential descending order'
+    end
+
+    it 'ssn starts with a 9' do
+      valid_params[:ssn] = '997654321'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:ssn)
+      expect(result.errors.to_h[:ssn].first).to eq 'Cannot start with a 9'
+    end
+
+    it 'ssn ends with 0000' do
+      valid_params[:ssn] = '217650000'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:ssn)
+      expect(result.errors.to_h[:ssn].first).to eq 'Cannot end with 0000'
+    end
+
+    it 'ssn starts with 666' do
+      valid_params[:ssn] = '666650001'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:ssn)
+      expect(result.errors.to_h[:ssn].first).to eq 'Cannot start with 666'
+    end
+
+    it 'ssn starts with 000' do
+      valid_params[:ssn] = '000650001'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:ssn)
+      expect(result.errors.to_h[:ssn].first).to eq 'Cannot start with 000'
+    end
+
+    it 'ssn has 00 as the middle section' do
+      valid_params[:ssn] = '123009999'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:ssn)
+      expect(result.errors.to_h[:ssn].first).to eq 'the 5th and 6th numbers from the right cannot be 00'
+    end
+
     it 'medicaid_id more than 8 characters' do
       valid_params[:medicaid_id] = '0123456789'
       result = subject.call(valid_params)
@@ -113,8 +177,10 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:gender)
-      expect(result.errors.to_h[:gender].first).to eq 'must be one of: 1, 2, 97, 98'
+      expect(result.errors.to_h[:gender].first).to eq 'must be one of: 1, 2, 3, 4, 5, 6, 95, 97, 98'
     end
+
+    # If Gender is Male (1), then Pregnant at Admission must be Not Applicable (96)
 
     it 'without race' do
       valid_params[:race] = nil
@@ -155,6 +221,28 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       expect(result.errors.to_h).to have_key(:sexual_orientation)
       expect(result.errors.to_h[:sexual_orientation].first).to eq 'must be one of: 1, 2, 3, 4, 95, 97, 98'
     end
+
+    it 'dob is more than 95 years ago' do
+      valid_params[:dob] = (Date.today - 35_500).to_s
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:dob)
+      expect(result.errors.to_h[:dob].first[:text]).to eq 'Verify age over 95'
+      expect(result.errors.to_h[:dob].first[:warning]).to eq true
+    end
+
+    it 'dob is greater than today' do
+      valid_params[:dob] = (Date.today + 35).to_s
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:dob)
+      expect(result.errors.to_h[:dob].first[:text]).to eq 'Should not be in the future'
+      expect(result.errors.to_h[:dob].first[:warning]).to eq true
+    end
+
+    # Date of Birth is used to calculate Age at Admission, which must be equal to or greater than Age at First Use (Primary, Secondary, and Tertiary).
+    # If not, a warning error will be generated. The Date of Birth will be stored as reported but the state is expected to verify this value together
+    # with the Age at First Use since it cannot be determined which one is incorrect.
   end
 
   context 'Passed with valid required params' do

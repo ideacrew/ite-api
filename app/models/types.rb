@@ -16,7 +16,7 @@ module Types
                                               '96').freeze
   DISCHARGE_REASON_OPTIONS = Types::String.enum('1', '2', '3', '4', '14', '24', '5', '6', '7', '34', '35', '36', '37', '95', '96',
                                                 '97', '98').freeze
-  GENDER_OPTIONS = Types::String.enum('1', '2', '97', '98').freeze
+  GENDER_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '6', '95', '97', '98').freeze
   SEXUAL_ORIENTATION_OPTIONS = Types::String.enum('1', '2', '3', '4', '95', '97', '98').freeze
   RACE_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '13', '20', '21', '23', '97', '98').freeze
   ETHNICITY_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '6', '97', '98').freeze

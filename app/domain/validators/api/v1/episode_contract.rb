@@ -80,6 +80,9 @@ module Validators
           key.failure(text: 'must correspond to record_type') if key && record_group1.include?(values[:record_type]) && values[:treatment_type].to_i < 70
           key.failure(text: 'must correspond to record_type') if key && record_group2.include?(values[:record_type]) && values[:treatment_type].to_i > 8
         end
+        rule(:treatment_type, :codepedent) do
+          key.failure(text: 'can only specify 96 if client is Collateral/Codependent') if key && values[:treatment_type] && values[:codepedent] && values[:codepedent] != '2' && values[:treatment_type] == '96'
+        end
 
         rule(:discharge_date, :record_group) do
           key.failure(text: 'Must be included for discharge records') if key && values[:record_group] && values[:record_group] == 'discharge' && !values[:discharge_date]

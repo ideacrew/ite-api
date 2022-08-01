@@ -33,7 +33,8 @@ module Api
       end
 
       def index
-        render json: Api::V1::Extract.all.order(&:created_at).reverse.map(&:list_view)
+        extracts = Api::V1::Extract.all
+        render json: extracts.order(&:created_at).reverse.map(&:list_view)
       end
 
       private
