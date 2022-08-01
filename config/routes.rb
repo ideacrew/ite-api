@@ -9,6 +9,8 @@ Rails.application.routes.draw do
           post 'ingest'
         end
       end
+
+      resources :providers, only: %i[index create update]
     end
   end
 end

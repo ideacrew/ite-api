@@ -11,7 +11,7 @@ module Api
 
       field :address, type: String
 
-      # validates :address, email: true, allow_blank: false
+      validates :address, email: true, allow_blank: false
     end
   end
 end

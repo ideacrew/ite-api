@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe ::Operations::Api::V1::CreateRecord do
+describe ::Operations::Api::V1::CreateRecord, dbclean: :after_each do
   include Dry::Monads[:result, :do]
 
   let(:extract_params) { FactoryBot.create(:extract) }

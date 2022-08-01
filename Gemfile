@@ -49,6 +49,7 @@ gem 'fhir_models', '~> 4.2', '>= 4.2.1'
 gem 'bootsnap', '>= 1.4.4', require: false
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
+gem 'email_validator', '~> 2.2', '>= 2.2.3'
 gem 'rack-cors'
 
 group :development, :test do

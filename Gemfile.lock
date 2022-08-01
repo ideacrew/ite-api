@@ -132,6 +132,8 @@ GEM
       dry-core (~> 0.5, >= 0.5)
       dry-initializer (~> 3.0)
       dry-schema (~> 1.8, >= 1.8.0)
+    email_validator (2.2.3)
+      activemodel
     erubi (1.10.0)
     factory_bot (6.2.1)
       activesupport (>= 5.0.0)
@@ -199,6 +201,8 @@ GEM
       net-protocol
       timeout
     nio4r (2.5.8)
+    nokogiri (1.13.7-arm64-darwin)
+      racc (~> 1.4)
     nokogiri (1.13.7-x86_64-darwin)
       racc (~> 1.4)
     nokogiri (1.13.7-x86_64-linux)
@@ -312,6 +316,7 @@ GEM
     zeitwerk (2.6.0)
 
 PLATFORMS
+  arm64-darwin-21
   x86_64-darwin-20
   x86_64-linux
 
@@ -326,6 +331,7 @@ DEPENDENCIES
   dry-transformer (~> 0.1.1)
   dry-types (~> 1.5, >= 1.5.1)
   dry-validation (~> 1.8)
+  email_validator (~> 2.2, >= 2.2.3)
   factory_bot_rails (~> 6.2)
   faker (~> 2.20)
   fhir_models (~> 4.2, >= 4.2.1)

@@ -3,7 +3,7 @@
 require 'rails_helper'
 # require 'types'
 
-RSpec.describe Api::V1::Extract, type: :model do
+RSpec.describe Api::V1::Extract, type: :model, dbclean: :after_each do
   let(:extract_params) do
     { "provider_gateway_identifier": 'all_fields',
       "coverage_start": Date.new(2022, 0o1, 0o1),

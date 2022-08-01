@@ -16,17 +16,15 @@ module Api
 
       before_save :set_full_phone_number
 
-      # validates_presence_of :area_code, :number
+      validates :area_code,
+                numericality: true,
+                length: { minimum: 3, maximum: 3, message: '%<value>s is not a valid area code' },
+                allow_blank: false
 
-      # validates :area_code,
-      #           numericality: true,
-      #           length: { minimum: 3, maximum: 3, message: '%<value>s is not a valid area code' },
-      #           allow_blank: true
-
-      # validates :number,
-      #           numericality: true,
-      #           length: { minimum: 7, maximum: 7, message: '%<value>s is not a valid phone number' },
-      #           allow_blank: true
+      validates :number,
+                numericality: true,
+                length: { minimum: 7, maximum: 7, message: '%<value>s is not a valid phone number' },
+                allow_blank: false
 
       def to_s
         full_number = (area_code + number).to_i
