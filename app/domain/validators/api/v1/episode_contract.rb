@@ -10,8 +10,8 @@ module Validators
       class EpisodeContract < Dry::Validation::Contract
         params do
           required(:episode_id).filled(:string)
-          optional(:collateral).maybe(Types::CODEPEDENT_OPTIONS)
-          optional(:client_id).maybe(:string)
+          required(:collateral).filled(Types::CODEPEDENT_OPTIONS)
+          required(:client_id).filled(:string)
           required(:record_type).filled(Types::RECORD_TYPE_OPTIONS)
           optional(:admission_type).maybe(:date)
           required(:admission_date).filled(:date)
@@ -19,7 +19,7 @@ module Validators
           optional(:service_request_date).maybe(:date)
           optional(:discharge_date).maybe(:date)
           optional(:discharge_type).maybe(:string)
-          optional(:discharge_reason).maybe(:string)
+          optional(:discharge_reason).maybe(Types::DISCHARGE_REASON_OPTIONS)
           optional(:last_contact_date).maybe(:date)
           optional(:num_of_prior_episodes).maybe(:string)
           optional(:referral_source).maybe(:string)
@@ -84,8 +84,10 @@ module Validators
           key.failure(text: 'can only specify 96 if client is Collateral/Codependent') if key && values[:treatment_type] && values[:collateral] && values[:collateral] != '2' && values[:treatment_type] == '96'
         end
 
-        rule(:discharge_date, :record_group) do
-          key.failure(text: 'Must be included for discharge records') if key && values[:record_group] && values[:record_group] == 'discharge' && !values[:discharge_date]
+        %i[discharge_date discharge_reason].each do |field|
+          rule(field) do
+            key.failure(text: 'Must be included for discharge records') if key && values[:record_group] && values[:record_group] == 'discharge' && !values[field]
+          end
         end
         rule(:discharge_date, :extracted_on) do
           if key && (values[:extracted_on] && values[:discharge_date]) &&

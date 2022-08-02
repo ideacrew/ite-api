@@ -13,7 +13,7 @@ module Transforms
         EPISODE_FIELDS = %i[episode_id collateral record_type admission_type admission_date treatment_type
                             service_request_date discharge_date discharge_type discharge_reason last_contact_date
                             num_of_prior_episodes referral_source criminal_justice_referral primary_payment_source
-                            client client_profile clinical_info].freeze
+                            client client_profile clinical_info treatment_location].freeze
         CLIENT_FIELDS = %i[first_name middle_name last_name last_name_alt alias ssn medicaid_id
                            dob gender sexual_orientation race ethnicity primary_language phone1 phone2].freeze
         CLINICAL_INFO_FIELDS = %i[gaf_score smi_sed co_occurring_sud_mh opioid_therapy substance_problems

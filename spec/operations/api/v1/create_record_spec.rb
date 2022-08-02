@@ -26,7 +26,7 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :after_each do
       'last_name' => 'Bluth',
       'race' => '1',
       'ethnicity' => '97',
-      'primary_language' => '01' }
+      'primary_language' => '1' }
   end
 
   let(:params) do

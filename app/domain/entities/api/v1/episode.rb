@@ -8,7 +8,7 @@ module Entities
         attribute :episode_id, Types::String.meta(omittable: false)
         attribute :client_id, Types::String.optional.meta(omittable: true)
         # Codependent or Collateral
-        attribute :codepedent, Types::String.optional.meta(omittable: true) # confirm type
+        attribute :collateral, Types::String.optional.meta(omittable: true) # confirm type
         # Admission Type
         attribute :admission_type, Types::String.optional.meta(omittable: true) # confirm type
         # Record Type
@@ -35,6 +35,8 @@ module Entities
         attribute :criminal_justice_referral, Types::String.optional.meta(omittable: true) # confirm type
         # Payment Source, Primary (Expected or Actual)
         attribute :primary_payment_source, Types::String.optional.meta(omittable: true)
+        # treatment location
+        attribute :treatment_location, Types::String.optional.meta(omittable: true)
         attribute :client, Client
         attribute :client_profile, ClientProfile
         attribute :clinical_info, ClinicalInfo

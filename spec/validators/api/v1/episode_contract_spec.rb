@@ -9,15 +9,15 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
       episode_id: 'fbgadfs7fgdy',
       admission_date: Date.today.to_s,
       treatment_type: '2',
+      collateral: '2',
+      client_id: '8347ehf',
       record_type: 'A'
     }
   end
 
   let(:optional_params) do
     {
-      codepedent: '2',
       admission_type: '31',
-      client_id: '8347ehf',
       service_request_date: Date.today.to_s,
       discharge_date: Date.today.to_s,
       discharge_type: '50',
@@ -119,6 +119,12 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         expect(errors).to have_key(:client_id)
         expect(errors[:client_id].first[:text]).to eq('Needs to be 15 or less characters')
       end
+      it 'when not present' do
+        all_params[:client_id] = nil
+        errors = subject.call(all_params).errors.to_h
+        expect(errors).to have_key(:client_id)
+        expect(errors[:client_id]).to include('must be filled')
+      end
     end
 
     context 'codepedent/collateral field it should fail' do
@@ -127,6 +133,12 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:collateral)
         expect(errors[:collateral].first).to eq('must be one of: 1, 2')
+      end
+      it 'is not present' do
+        all_params[:collateral] = nil
+        errors = subject.call(all_params).errors.to_h
+        expect(errors).to have_key(:collateral)
+        expect(errors[:collateral].first).to eq('must be filled')
       end
       # A record of Codependent/Collateral requires Client ID and Admission Date information and reporting of
       # the remaining fields is optional.
@@ -288,6 +300,21 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:last_contact_date)
         expect(errors.to_h[:last_contact_date].first[:text]).to eq('Must be later than the extraction date')
+      end
+    end
+    context 'with invalid discharge reason field it should fail' do
+      it 'is not present when the record group is discharge' do
+        all_params[:discharge_reason] = nil
+        all_params[:record_group] = 'discharge'
+        errors = subject.call(all_params).errors.to_h
+        expect(errors).to have_key(:discharge_reason)
+        expect(errors.to_h[:discharge_reason].first).to eq('Must be included for discharge records')
+      end
+      it 'is not a valid discharge reason' do
+        all_params[:discharge_reason] = '22'
+        errors = subject.call(all_params).errors.to_h
+        expect(errors).to have_key(:discharge_reason)
+        expect(errors.to_h[:discharge_reason].first).to eq('must be one of: 1, 2, 3, 4, 14, 24, 5, 6, 7, 34, 35, 36, 37, 95, 96, 97, 98')
       end
     end
   end
