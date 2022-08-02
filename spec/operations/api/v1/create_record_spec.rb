@@ -18,6 +18,7 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :after_each do
       'num_of_prior_admissions' => '2',
       'num_of_prior_episodes' => '2',
       'arrests_past_30days' => nil,
+      'treatment_location' => '123 main',
       'education' => '12',
       'employment' => '3',
       'last_contact_date' => Date.today.to_s,

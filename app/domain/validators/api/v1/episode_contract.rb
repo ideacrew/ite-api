@@ -16,6 +16,7 @@ module Validators
           optional(:admission_type).maybe(:date)
           required(:admission_date).filled(:date)
           required(:treatment_type).filled(Types::TREATMENT_TYPE_OPTIONS)
+          optional(:treatment_location).maybe(:string)
           optional(:service_request_date).maybe(:date)
           optional(:discharge_date).maybe(:date)
           optional(:discharge_type).maybe(:string)
@@ -136,6 +137,10 @@ module Validators
 
         rule(:num_of_prior_episodes, :record_group) do
           key.failure('Must be included for admission or active records') if key && values[:record_group] && values[:record_group] != 'discharge' && !values[:num_of_prior_episodes]
+        end
+
+        rule(:treatment_location) do
+          key.failure(text: 'must be filled', warning: true) if key && !value
         end
       end
     end

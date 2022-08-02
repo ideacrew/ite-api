@@ -10,6 +10,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
       treatment_type: '2',
       collateral: '2',
       client_id: '8347ehf',
+      treatment_location: '123 main',
       record_type: 'A'
     }
   end
@@ -338,6 +339,16 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:num_of_prior_episodes)
         expect(errors.to_h[:num_of_prior_episodes].first).to eq('must be one of: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 97, 98')
+      end
+    end
+    context 'with invalid treatment location' do
+      it 'without treatment location' do
+        all_params[:treatment_location] = nil
+        result = subject.call(all_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:treatment_location)
+        expect(result.errors.to_h[:treatment_location].first[:text]).to eq 'must be filled'
+        expect(result.errors.to_h[:treatment_location].first[:warning]).to eq true
       end
     end
   end
