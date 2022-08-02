@@ -9,9 +9,9 @@ module Validators
       class ClientContract < Dry::Validation::Contract
         params do
           required(:client_id).filled(:string)
-          required(:first_name).filled(:string)
+          optional(:first_name).maybe(:string)
           optional(:middle_name).maybe(:string)
-          required(:last_name).filled(:string)
+          optional(:last_name).maybe(:string)
           optional(:alt_first_name).maybe(:string)
           optional(:alt_last_name).maybe(:string)
           optional(:ssn).maybe(:string)
@@ -27,6 +27,12 @@ module Validators
         %i[first_name middle_name last_name alt_first_name alt_last_name].each do |field|
           rule(field) do
             key.failure('Length cannot be more than 30 characters') if key && value && value.length > 30
+          end
+        end
+
+        %i[first_name last_name].each do |field|
+          rule(field) do
+            key.failure(text: 'must be filled', warning: true) if key && !value
           end
         end
 
@@ -55,7 +61,10 @@ module Validators
         end
 
         rule(:medicaid_id) do
-          key.failure('Length cannot be more than 8 characters') if key && value && value.length > 8
+          if key && value
+            key.failure('Length cannot be more than 8 characters') if value.length > 8
+            key.failure(text: 'Cannot be all 0s') if value.chars.to_a.uniq == ['0']
+          end
         end
       end
     end

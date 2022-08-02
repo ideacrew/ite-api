@@ -32,4 +32,5 @@ module Types
   EMPLOYMENT_OPTIONS = Types::String.enum('01', '02', '03', '04', '05', '97', '98').freeze
   LEGAL_STATUS_OPTIONS = Types::String.enum('01', '02', '03', '04', '05', '06', '96', '97', '98').freeze
   ROUTE_OF_ADMINISTRATION_OPTIONS = Types::String.enum('01', '02', '03', '04', '20', '96', '97', '98').freeze
+  PRIOR_SU_EPISODE_OPTIONS = Types::String.enum('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '97', '98').freeze
 end

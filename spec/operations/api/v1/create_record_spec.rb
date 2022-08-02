@@ -16,6 +16,7 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :after_each do
       'collateral' => '1',
       'dob' => (Date.today - 3000).to_s,
       'num_of_prior_admissions' => '2',
+      'num_of_prior_episodes' => '2',
       'arrests_past_30days' => nil,
       'education' => '12',
       'employment' => '3',
@@ -74,7 +75,7 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :after_each do
 
     context 'with invalid payload' do
       before do
-        params[:payload][:episode_id] = nil
+        params[:payload][:admission_date] = nil
         @result = described_class.new.call(params)
         @record = @result.value!
       end

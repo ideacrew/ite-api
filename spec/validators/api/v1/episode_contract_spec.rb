@@ -6,7 +6,6 @@ require './app/domain/validators/api/v1/episode_contract'
 RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
   let(:required_params) do
     {
-      episode_id: 'fbgadfs7fgdy',
       admission_date: Date.today.to_s,
       treatment_type: '2',
       collateral: '2',
@@ -18,6 +17,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
   let(:optional_params) do
     {
       admission_type: '31',
+      episode_id: 'fbgadfs7fgdy',
       service_request_date: Date.today.to_s,
       discharge_date: Date.today.to_s,
       discharge_type: '50',
@@ -95,8 +95,8 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
 
     context 'Keys with missing values' do
       it 'should return failure' do
-        all_params.merge!(episode_id: nil)
-        expect(subject.call(all_params).errors.to_h[:episode_id]).to eq(['must be filled'])
+        all_params.merge!(admission_date: nil)
+        expect(subject.call(all_params).errors.to_h[:admission_date]).to eq(['must be filled'])
       end
     end
 
@@ -315,6 +315,29 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:discharge_reason)
         expect(errors.to_h[:discharge_reason].first).to eq('must be one of: 1, 2, 3, 4, 14, 24, 5, 6, 7, 34, 35, 36, 37, 95, 96, 97, 98')
+      end
+    end
+    context 'with invalid episode_id it should fail' do
+      it 'is more than 15 characters' do
+        all_params[:episode_id] = '3478657436574865783465873465386gfueyg78r'
+        errors = subject.call(all_params).errors.to_h
+        expect(errors).to have_key(:episode_id)
+        expect(errors.to_h[:episode_id]).to include('Needs to be 15 or less characters')
+      end
+    end
+    context 'with invalud num_of_prior_episodes it should fail' do
+      it 'is not present and the record group is not discharge' do
+        all_params[:num_of_prior_episodes] = nil
+        all_params[:record_group] = 'admission'
+        errors = subject.call(all_params).errors.to_h
+        expect(errors).to have_key(:num_of_prior_episodes)
+        expect(errors.to_h[:num_of_prior_episodes].first).to eq('Must be included for admission or active records')
+      end
+      it 'is not a valid option' do
+        all_params[:num_of_prior_episodes] = '22'
+        errors = subject.call(all_params).errors.to_h
+        expect(errors).to have_key(:num_of_prior_episodes)
+        expect(errors.to_h[:num_of_prior_episodes].first).to eq('must be one of: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 97, 98')
       end
     end
   end

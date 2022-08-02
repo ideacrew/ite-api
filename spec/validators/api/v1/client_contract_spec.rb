@@ -10,7 +10,7 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       first_name: 'test',
       last_name: 'test',
       ssn: '223456789',
-      medicaid_id: '162738',
+      medicaid_id: '12345678',
       dob: Date.today,
       gender: '1',
       sexual_orientation: '2',
@@ -33,7 +33,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:first_name)
-      expect(result.errors.to_h[:first_name].first).to eq 'must be filled'
+      expect(result.errors.to_h[:first_name].first[:text]).to eq 'must be filled'
+      expect(result.errors.to_h[:first_name].first[:warning]).to eq true
     end
 
     it 'First name more than 30 characters' do
@@ -49,7 +50,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:last_name)
-      expect(result.errors.to_h[:last_name].first).to eq 'must be filled'
+      expect(result.errors.to_h[:last_name].first[:text]).to eq 'must be filled'
+      expect(result.errors.to_h[:last_name].first[:warning]).to eq true
     end
 
     it 'Last name more than 30 characters' do
@@ -162,6 +164,14 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:medicaid_id)
       expect(result.errors.to_h[:medicaid_id].first).to eq 'Length cannot be more than 8 characters'
+    end
+
+    it 'medicaid_id is all 0s' do
+      valid_params[:medicaid_id] = '00000000'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:medicaid_id)
+      expect(result.errors.to_h[:medicaid_id].first).to eq 'Cannot be all 0s'
     end
 
     it 'without gender' do

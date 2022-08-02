@@ -9,7 +9,7 @@ module Validators
       # Contract for Episode.
       class EpisodeContract < Dry::Validation::Contract
         params do
-          required(:episode_id).filled(:string)
+          optional(:episode_id).maybe(:string)
           required(:collateral).filled(Types::CODEPEDENT_OPTIONS)
           required(:client_id).filled(:string)
           required(:record_type).filled(Types::RECORD_TYPE_OPTIONS)
@@ -21,7 +21,7 @@ module Validators
           optional(:discharge_type).maybe(:string)
           optional(:discharge_reason).maybe(Types::DISCHARGE_REASON_OPTIONS)
           optional(:last_contact_date).maybe(:date)
-          optional(:num_of_prior_episodes).maybe(:string)
+          optional(:num_of_prior_episodes).maybe(Types::PRIOR_SU_EPISODE_OPTIONS)
           optional(:referral_source).maybe(:string)
           optional(:criminal_justice_referral).maybe(:string)
           optional(:primary_payment_source).maybe(:string)
@@ -125,6 +125,17 @@ module Validators
             key.failure(text: 'Must be later than the extraction date',
                         warning: true)
           end
+        end
+
+        rule(:episode_id) do
+          if key && value
+            key.failure(text: 'Field cannot contain special characters', warning: true) if value.match(/[^a-zA-Z\d-]/)
+            key.failure('Needs to be 15 or less characters') if value.length > 15
+          end
+        end
+
+        rule(:num_of_prior_episodes, :record_group) do
+          key.failure('Must be included for admission or active records') if key && values[:record_group] && values[:record_group] != 'discharge' && !values[:num_of_prior_episodes]
         end
       end
     end
