@@ -11,6 +11,8 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
       collateral: '2',
       client_id: '8347ehf',
       treatment_location: '123 main',
+      referral_source: '2',
+      criminal_justice_referral: '96',
       record_type: 'A'
     }
   end
@@ -25,8 +27,6 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
       discharge_reason: '34',
       last_contact_date: Date.today.to_s,
       num_of_prior_episodes: '3',
-      referral_source: nil,
-      criminal_justice_referral: '1',
       primary_payment_source: nil,
       client: client_params,
       client_profile: client_profile_params,
@@ -157,10 +157,10 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         all_params[:record_type] = '29'
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:record_type)
-        expect(errors[:record_type]).to eq(['must be one of: A, T, D, M, X, E, U'])
+        expect(errors[:record_type]).to eq(['must be one of: A, T, D, M, X, E'])
       end
       it 'does not correctly correspond to the record_group' do
-        all_params[:record_type] = 'U'
+        all_params[:record_type] = 'D'
         all_params[:record_group] = 'admission'
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:record_type)
@@ -269,12 +269,12 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         expect(errors.to_h[:discharge_date].first[:text]).to eq('Must be later than the date of last contact')
       end
 
-      it 'has a value when the record type is U' do
-        all_params[:record_type] = 'U'
+      it 'has a value when the record type is Active' do
+        all_params[:record_group] = 'active'
         all_params[:discharge_date] = Date.today.to_s
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:discharge_date)
-        error_text = 'Must be blank if record type is Data Update for SU/MH Service (U)'
+        error_text = 'Must be blank if record group is active'
         expect(errors.to_h[:discharge_date].first[:text]).to eq(error_text)
       end
     end
@@ -349,6 +349,56 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         expect(result.errors.to_h).to have_key(:treatment_location)
         expect(result.errors.to_h[:treatment_location].first[:text]).to eq 'must be filled'
         expect(result.errors.to_h[:treatment_location].first[:warning]).to eq true
+      end
+    end
+    context 'with invalid referral source' do
+      it 'without referral source it should warn' do
+        all_params[:referral_source] = nil
+        result = subject.call(all_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:referral_source)
+        expect(result.errors.to_h[:referral_source].first[:text]).to eq 'must be filled'
+        expect(result.errors.to_h[:referral_source].first[:warning]).to eq true
+      end
+      it 'is not a valid option it should fail' do
+        all_params[:referral_source] = '22'
+        errors = subject.call(all_params).errors.to_h
+        expect(errors).to have_key(:referral_source)
+        expect(errors.to_h[:referral_source].first).to eq('must be one of: 1, 2, 3, 4, 5, 6, 7, 97, 98')
+      end
+    end
+    context 'with invalid criminal justice referral' do
+      it 'is not a valid option it should fail' do
+        all_params[:criminal_justice_referral] = '22'
+        errors = subject.call(all_params).errors.to_h
+        expect(errors).to have_key(:criminal_justice_referral)
+        expect(errors.to_h[:criminal_justice_referral].first).to eq('must be one of: 1, 2, 3, 4, 5, 6, 7, 8, 96, 97, 98')
+      end
+      it 'without criminal justice referral it should warn' do
+        all_params[:criminal_justice_referral] = nil
+        result = subject.call(all_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:criminal_justice_referral)
+        expect(result.errors.to_h[:criminal_justice_referral].first[:text]).to eq 'must be filled'
+        expect(result.errors.to_h[:criminal_justice_referral].first[:warning]).to eq true
+      end
+      it 'without criminal_justice_referral  of 96 but with referral_source of 7 it should fail' do
+        all_params[:criminal_justice_referral] = '96'
+        all_params[:referral_source] = '7'
+        result = subject.call(all_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:criminal_justice_referral)
+        expect(result.errors.to_h[:criminal_justice_referral].first[:text]).to eq 'must be filled with a valid option if referral source is 7'
+        expect(result.errors.to_h[:criminal_justice_referral].first[:warning]).to eq true
+      end
+      it 'referral_source is not 7, then criminal_justice_referral should be 96' do
+        all_params[:criminal_justice_referral] = '1'
+        all_params[:referral_source] = '1'
+        result = subject.call(all_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:criminal_justice_referral)
+        expect(result.errors.to_h[:criminal_justice_referral].first[:text]).to eq 'must be filled with 96 if referral source is not 7'
+        expect(result.errors.to_h[:criminal_justice_referral].first[:warning]).to eq true
       end
     end
   end

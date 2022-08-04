@@ -23,6 +23,8 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :after_each do
       'employment' => '3',
       'last_contact_date' => Date.today.to_s,
       'record_type' => 'A',
+      'referral_source' => '2',
+      'criminal_justice_referral' => '96',
       'gender' => '1',
       'first_name' => 'George',
       'last_name' => 'Bluth',

@@ -12,6 +12,7 @@ module Validators
           optional(:first_name).maybe(:string)
           optional(:middle_name).maybe(:string)
           optional(:last_name).maybe(:string)
+          optional(:suffix).maybe(:string)
           optional(:alt_first_name).maybe(:string)
           optional(:alt_last_name).maybe(:string)
           optional(:ssn).maybe(:string)

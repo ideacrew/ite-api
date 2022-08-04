@@ -23,8 +23,8 @@ module Validators
           optional(:discharge_reason).maybe(Types::DISCHARGE_REASON_OPTIONS)
           optional(:last_contact_date).maybe(:date)
           optional(:num_of_prior_episodes).maybe(Types::PRIOR_SU_EPISODE_OPTIONS)
-          optional(:referral_source).maybe(:string)
-          optional(:criminal_justice_referral).maybe(:string)
+          optional(:referral_source).maybe(Types::REFERRAL_SOURCE_OPTIONS)
+          optional(:criminal_justice_referral).maybe(Types::CRIMINAL_JUSTICE_REFERRAL_OPTIONS)
           optional(:primary_payment_source).maybe(:string)
           optional(:client).hash(Validators::Api::V1::ClientContract.params)
           optional(:client_profile).maybe(:hash)
@@ -67,11 +67,11 @@ module Validators
         rule(:record_type, :record_group) do
           admission_types = %w[A T M X]
           discharge_types = %w[D S E]
-          active_types = %w[U]
+          # active_types = %w[U]
           if values[:record_group]
             key.failure(text: 'must correspond to record group') if key && admission_types.include?(values[:record_type]) && values[:record_group] != 'admission'
             key.failure(text: 'must correspond to record group') if key && discharge_types.include?(values[:record_type]) && values[:record_group] != 'discharge'
-            key.failure(text: 'must correspond to record group') if key && active_types.include?(values[:record_type]) && values[:record_group] != 'active'
+            # key.failure(text: 'must correspond to record group') if key && active_types.include?(values[:record_type]) && values[:record_group] != 'active'
           end
         end
 
@@ -104,9 +104,9 @@ module Validators
                         warning: true)
           end
         end
-        rule(:discharge_date, :record_type) do
-          if key && values[:record_type] == 'U' && values[:discharge_date]
-            key.failure(text: 'Must be blank if record type is Data Update for SU/MH Service (U)',
+        rule(:discharge_date, :record_group) do
+          if key && values[:record_group] == 'active' && values[:discharge_date]
+            key.failure(text: 'Must be blank if record group is active',
                         warning: true)
           end
         end
@@ -141,6 +141,18 @@ module Validators
 
         rule(:treatment_location) do
           key.failure(text: 'must be filled', warning: true) if key && !value
+        end
+
+        rule(:referral_source) do
+          key.failure(text: 'must be filled', warning: true) if key && !value
+        end
+
+        rule(:criminal_justice_referral, :referral_source) do
+          key.failure(text: 'must be filled', warning: true) if key && !value
+          if key && values[:criminal_justice_referral] && values[:referral_source]
+            key.failure(text: 'must be filled with a valid option if referral source is 7', warning: true) if values[:criminal_justice_referral] == '96' && values[:referral_source] == '7'
+            key.failure(text: 'must be filled with 96 if referral source is not 7', warning: true) if values[:criminal_justice_referral] != '96' && values[:referral_source] != '7'
+          end
         end
       end
     end

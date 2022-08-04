@@ -54,8 +54,8 @@ module Operations
 
         def update_record(errors, record)
           record.status = errors.compact_blank.any? ? 'Invalid' : 'Valid'
-          record.failures = errors[:failures].compact_blank!
-          record.warnings = errors[:warnings].compact_blank!
+          record.failures = errors[:failures].uniq.compact_blank!
+          record.warnings = errors[:warnings].uniq.compact_blank!
           Success(record)
         end
       end
