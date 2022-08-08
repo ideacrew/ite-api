@@ -14,9 +14,9 @@ module Entities
         # Last Name
         attribute :last_name, Types::String.optional.meta(omittable: true)
         # Alternate Last Name
-        attribute :last_name_alt, Types::String.optional.meta(omittable: true)
+        attribute :alt_last_name, Types::String.optional.meta(omittable: true)
         # Alias
-        attribute :alias, Types::String.optional.meta(omittable: true)
+        attribute :alt_first_name, Types::String.optional.meta(omittable: true)
         # Social Security Number
         attribute :ssn, Types::String.optional.meta(omittable: true)
         # Medicaid ID

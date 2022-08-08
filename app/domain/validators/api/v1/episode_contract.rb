@@ -153,6 +153,15 @@ module Validators
           end
         end
 
+        rule(:client) do
+          if key? && value && value.is_a?(Hash)
+            result = Validators::Api::V1::ClientContract.new.call(value)
+            result.errors.to_a.each do |error|
+              key(error.path.last).failure(error.text)
+            end
+          end
+        end
+
         # rule("client.dob", "client_profile.pregnant") do
         #   if key && (values[:admission_date] && values.dig(:client, :dob)) &&
         #      values[:client][:dob] > values[:admission_date]
