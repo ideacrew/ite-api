@@ -47,19 +47,19 @@ module Validators
         end
         rule(:admission_date, :last_contact_date) do
           if key && values[:last_contact_date] && values[:admission_date] > values[:last_contact_date]
-            key.failure(text: 'Must be later than the date of last contact',
+            key.failure(text: 'Cannot be later than the date of last contact',
                         warning: true)
           end
         end
         rule(:admission_date, :discharge_date) do
           if key && values[:discharge_date] && values[:admission_date] > values[:discharge_date]
-            key.failure(text: 'Must be later than the date of discharge',
+            key.failure(text: 'Cannot be later than the date of discharge',
                         warning: true)
           end
         end
         rule(:admission_date, :extracted_on) do
           if key && values[:extracted_on] && values[:admission_date] > Date.parse(values[:extracted_on].to_s)
-            key.failure(text: 'Must be later than the extraction date',
+            key.failure(text: 'Cannot be later than the extraction date',
                         warning: true)
           end
         end
@@ -78,11 +78,11 @@ module Validators
         rule(:treatment_type, :record_type) do
           record_group1 = %w[M E X]
           record_group2 = %w[A T D]
-          key.failure(text: 'must correspond to record_type') if key && record_group1.include?(values[:record_type]) && values[:treatment_type].to_i < 70
-          key.failure(text: 'must correspond to record_type') if key && record_group2.include?(values[:record_type]) && values[:treatment_type].to_i > 8
+          key.failure(text: 'must correspond to record_type') if key && record_group1.include?(values[:record_type]) && (values[:treatment_type].to_i < 72 || values[:treatment_type].to_i > 77)
+          key.failure(text: 'must correspond to record_type') if key && record_group2.include?(values[:record_type]) && values[:treatment_type].to_i > 9
         end
         rule(:treatment_type, :collateral) do
-          key.failure(text: 'can only specify 96 if client is Collateral/Codependent') if key && values[:treatment_type] && values[:collateral] && values[:collateral] != '2' && values[:treatment_type] == '96'
+          key.failure(text: 'can only specify 96 if client is Collateral/Codependent') if key && values[:treatment_type] && values[:collateral] && values[:collateral] != '1' && values[:treatment_type] == '96'
         end
 
         %i[discharge_date discharge_reason].each do |field|

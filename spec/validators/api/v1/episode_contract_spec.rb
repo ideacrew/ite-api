@@ -192,21 +192,21 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         all_params[:last_contact_date] = (Date.today - 10)
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:admission_date)
-        expect(errors[:admission_date].first[:text]).to eq('Must be later than the date of last contact')
+        expect(errors[:admission_date].first[:text]).to eq('Cannot be later than the date of last contact')
       end
       it 'is after the date of discharge' do
         all_params[:admission_date] = Date.today.to_s
         all_params[:discharge_date] = (Date.today - 10).to_s
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:admission_date)
-        expect(errors.to_h[:admission_date].first[:text]).to eq('Must be later than the date of discharge')
+        expect(errors.to_h[:admission_date].first[:text]).to eq('Cannot be later than the date of discharge')
       end
       it 'is later than the extract_on date' do
         all_params[:extracted_on] = (Date.today - 10).to_s
         all_params[:admission_date] = Date.today.to_s
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:admission_date)
-        expect(errors.to_h[:admission_date].first[:text]).to eq('Must be later than the extraction date')
+        expect(errors.to_h[:admission_date].first[:text]).to eq('Cannot be later than the extraction date')
       end
     end
 
@@ -238,7 +238,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
       end
       it 'uses code 96 and codepedent is false' do
         all_params[:treatment_type] = '96'
-        all_params[:collateral] = '1'
+        all_params[:collateral] = '2'
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:treatment_type)
         expect(errors.to_h[:treatment_type]).to include('can only specify 96 if client is Collateral/Codependent')
