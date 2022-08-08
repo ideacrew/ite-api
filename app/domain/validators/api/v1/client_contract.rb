@@ -27,13 +27,17 @@ module Validators
 
         %i[first_name middle_name last_name alt_first_name alt_last_name].each do |field|
           rule(field) do
-            key.failure('Length cannot be more than 30 characters') if key && value && value.length > 30
+            if key && value
+              key.failure('Length cannot be more than 30 characters') if value.length > 30
+              pattern = Regexp.new('^[a-zA-Z\d\s\-\'\ ]*$').freeze
+              key.failure('Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters') unless pattern.match(value)
+            end
           end
         end
 
         %i[first_name last_name].each do |field|
           rule(field) do
-            key.failure(text: 'must be filled', warning: true) if key && !value
+            key.failure('must be filled') if key && !value
           end
         end
 
@@ -56,15 +60,15 @@ module Validators
           if key && value
             now = Time.now.utc.to_date
             age = now.year - value.year - (now.month > value.month || (now.month == value.month && now.day >= value.day) ? 0 : 1)
-            key.failure(text: 'Verify age over 95', warning: true) if age > 95
-            key.failure(text: 'Should not be in the future', warning: true) if value > now
+            key.failure('Verify age over 95') if age > 95
+            key.failure('Should not be in the future') if value > now
           end
         end
 
         rule(:medicaid_id) do
           if key && value
-            key.failure('Length cannot be more than 8 characters') if value.length > 8
-            key.failure(text: 'Cannot be all 0s') if value.chars.to_a.uniq == ['0']
+            key.failure('Length must be 8 characters') if value.length != 8
+            key.failure('Cannot be all 0s') if value.chars.to_a.uniq == ['0']
           end
         end
       end

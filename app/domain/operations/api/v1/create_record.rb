@@ -16,7 +16,7 @@ module Operations
           record = yield create_record(record_entity)
           episode = yield structure_episode(record)
           validation_result = yield validate_episode(episode, params[:extract])
-          errors = yield structure_errors(validation_result)
+          errors = yield structure_errors(validation_result, params[:extract])
           update_record(errors, record)
         end
 
@@ -45,10 +45,15 @@ module Operations
           Success(::Validators::Api::V1::EpisodeContract.new.call(episode.merge(extract)))
         end
 
-        def structure_errors(result)
+        def structure_errors(result, extract)
           # flatten errors and separate into warnings and failures
-          warnings = result.errors.messages.select { |message| message.meta[:warning] }.map { |message| { message.path.last => message.text } }
-          failures = result.errors.messages.reject { |message| message.meta[:warning] }.map { |message| { message.path.last => message.text } }
+          key_fields = %i[client_id collateral record_type admission_date treatment_type]
+          key_fields << :discharge_date if extract[:record_group] == 'discharge'
+          key_fields << :last_contact_date if extract[:record_group] == 'active'
+
+          errors = result.errors.messages.map { |message| { message.path.last => message.text } }
+          warnings = errors.reject { |error| key_fields.include? error.keys.first }
+          failures = errors.select { |error| key_fields.include? error.keys.first }
           Success(warnings:, failures:)
         end
 

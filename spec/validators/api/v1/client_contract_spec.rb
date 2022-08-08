@@ -33,8 +33,7 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:first_name)
-      expect(result.errors.to_h[:first_name].first[:text]).to eq 'must be filled'
-      expect(result.errors.to_h[:first_name].first[:warning]).to eq true
+      expect(result.errors.to_h[:first_name].first).to eq 'must be filled'
     end
 
     it 'First name more than 30 characters' do
@@ -45,13 +44,20 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       expect(result.errors.to_h[:first_name].first).to eq 'Length cannot be more than 30 characters'
     end
 
+    it 'first name contains special characters other than \' \' \' or -' do
+      valid_params[:first_name] = 'testinghs!'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:first_name)
+      expect(result.errors.to_h[:first_name].first).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
+    end
+
     it 'without last name' do
       valid_params[:last_name] = nil
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:last_name)
-      expect(result.errors.to_h[:last_name].first[:text]).to eq 'must be filled'
-      expect(result.errors.to_h[:last_name].first[:warning]).to eq true
+      expect(result.errors.to_h[:last_name].first).to eq 'must be filled'
     end
 
     it 'Last name more than 30 characters' do
@@ -62,12 +68,28 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       expect(result.errors.to_h[:last_name].first).to eq 'Length cannot be more than 30 characters'
     end
 
+    it 'last name contains special characters other than \' \' \' or -' do
+      valid_params[:last_name] = 'testinghs!'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:last_name)
+      expect(result.errors.to_h[:last_name].first).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
+    end
+
     it 'Middle name more than 30 characters' do
       valid_params[:middle_name] = 'testinghsbdkabcakdsbdsidnakbciaksbd'
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:middle_name)
       expect(result.errors.to_h[:middle_name].first).to eq 'Length cannot be more than 30 characters'
+    end
+
+    it 'middle name contains special characters other than \' \' \' or -' do
+      valid_params[:middle_name] = 'testinghs!'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:middle_name)
+      expect(result.errors.to_h[:middle_name].first).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
     end
 
     it 'alt_first_name more than 30 characters' do
@@ -78,12 +100,28 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       expect(result.errors.to_h[:alt_first_name].first).to eq 'Length cannot be more than 30 characters'
     end
 
+    it 'alt first name contains special characters other than \' \' \' or -' do
+      valid_params[:alt_first_name] = 'testinghs!'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:alt_first_name)
+      expect(result.errors.to_h[:alt_first_name].first).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
+    end
+
     it 'alt_last_name more than 30 characters' do
       valid_params[:alt_last_name] = 'testinghsbdkabcakdsbdsidnakbciaksbd'
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:alt_last_name)
       expect(result.errors.to_h[:alt_last_name].first).to eq 'Length cannot be more than 30 characters'
+    end
+
+    it 'alt last name contains special characters other than \' \' \' or -' do
+      valid_params[:alt_last_name] = 'testinghs!'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:alt_last_name)
+      expect(result.errors.to_h[:alt_last_name].first).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
     end
 
     it 'ssn more than 9 characters' do
@@ -163,7 +201,15 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:medicaid_id)
-      expect(result.errors.to_h[:medicaid_id].first).to eq 'Length cannot be more than 8 characters'
+      expect(result.errors.to_h[:medicaid_id].first).to eq 'Length must be 8 characters'
+    end
+
+    it 'medicaid_id less than 8 characters' do
+      valid_params[:medicaid_id] = '01234'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:medicaid_id)
+      expect(result.errors.to_h[:medicaid_id].first).to eq 'Length must be 8 characters'
     end
 
     it 'medicaid_id is all 0s' do
@@ -189,8 +235,6 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       expect(result.errors.to_h).to have_key(:gender)
       expect(result.errors.to_h[:gender].first).to eq 'must be one of: 1, 2, 3, 4, 5, 6, 95, 97, 98'
     end
-
-    # If Gender is Male (1), then Pregnant at Admission must be Not Applicable (96)
 
     it 'without race' do
       valid_params[:race] = nil
@@ -237,8 +281,7 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:dob)
-      expect(result.errors.to_h[:dob].first[:text]).to eq 'Verify age over 95'
-      expect(result.errors.to_h[:dob].first[:warning]).to eq true
+      expect(result.errors.to_h[:dob].first).to eq 'Verify age over 95'
     end
 
     it 'dob is greater than today' do
@@ -246,13 +289,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:dob)
-      expect(result.errors.to_h[:dob].first[:text]).to eq 'Should not be in the future'
-      expect(result.errors.to_h[:dob].first[:warning]).to eq true
+      expect(result.errors.to_h[:dob].first).to eq 'Should not be in the future'
     end
-
-    # Date of Birth is used to calculate Age at Admission, which must be equal to or greater than Age at First Use (Primary, Secondary, and Tertiary).
-    # If not, a warning error will be generated. The Date of Birth will be stored as reported but the state is expected to verify this value together
-    # with the Age at First Use since it cannot be determined which one is incorrect.
   end
 
   context 'Passed with valid required params' do

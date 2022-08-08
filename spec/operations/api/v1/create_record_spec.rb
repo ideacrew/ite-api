@@ -76,7 +76,7 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :after_each do
       end
     end
 
-    context 'with invalid payload' do
+    context 'with invalid key field' do
       before do
         params[:payload][:admission_date] = nil
         @result = described_class.new.call(params)
@@ -85,7 +85,60 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :after_each do
       it 'should create a record with a failure' do
         expect(@record.failures).to_not eq([])
       end
+      it 'should create a record without a warning' do
+        expect(@record.warnings).to eq([])
+      end
 
+      it 'should have a status of Invalid' do
+        expect(@record.status).to eq('Invalid')
+      end
+    end
+
+    context 'with a missing discharge date' do
+      it 'should create a record with a failure if the admission group is "discharge"' do
+        params[:extract][:record_group] = 'discharge'
+        params[:payload][:discharge_date] = nil
+        record = described_class.new.call(params).value!
+        expect(record.failures.map(&:keys).flatten).to include(:discharge_date)
+        expect(record.warnings.map(&:keys).flatten).to_not include(:discharge_date)
+      end
+      it 'should create a record with a warnings if the admission group is not "discharge"' do
+        params[:extract][:record_group] = 'admission'
+        params[:payload][:discharge_date] = nil
+        record = described_class.new.call(params).value!
+        expect(record.failures.map(&:keys).flatten).to_not include(:discharge_date)
+      end
+    end
+
+    context 'with a missing last_contact_date date' do
+      it 'should create a record with a failure if the admission group is "active"' do
+        params[:extract][:record_group] = 'active'
+        params[:payload][:last_contact_date] = nil
+        record = described_class.new.call(params).value!
+        expect(record.failures.map(&:keys).flatten).to include(:last_contact_date)
+        expect(record.warnings.map(&:keys).flatten).to_not include(:last_contact_date)
+      end
+      it 'should create a record with a warnings if the admission group is not "discharge"' do
+        params[:extract][:record_group] = 'admission'
+        params[:payload][:last_contact_date] = nil
+        record = described_class.new.call(params).value!
+        expect(record.failures.map(&:keys).flatten).to_not include(:last_contact_date)
+        expect(record.warnings.map(&:keys).flatten).to include(:last_contact_date)
+      end
+    end
+
+    context 'with invalid non-key field' do
+      before do
+        params[:payload][:dob] = 'NotaDate'
+        @result = described_class.new.call(params)
+        @record = @result.value!
+      end
+      it 'should create a record with a failure' do
+        expect(@record.failures).to eq([])
+      end
+      it 'should create a record without a warning' do
+        expect(@record.warnings).to_not eq([])
+      end
       it 'should have a status of Invalid' do
         expect(@record.status).to eq('Invalid')
       end

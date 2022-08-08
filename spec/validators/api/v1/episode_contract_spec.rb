@@ -106,19 +106,19 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         all_params[:client_id] = '237$!!'
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:client_id)
-        expect(errors[:client_id].first[:text]).to eq('Field cannot contain special characters')
+        expect(errors[:client_id].first).to eq('Field cannot contain special characters')
       end
       it 'with all 00s' do
         all_params[:client_id] = '000000'
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:client_id)
-        expect(errors[:client_id].first[:text]).to eq('Cannot be all 0s')
+        expect(errors[:client_id].first).to eq('Cannot be all 0s')
       end
       it 'when longer than 15 characters' do
         all_params[:client_id] = '0000004389hfiugh4839g89righudhgdfhgj'
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:client_id)
-        expect(errors[:client_id].first[:text]).to eq('Needs to be 15 or less characters')
+        expect(errors[:client_id].first).to eq('Needs to be 15 or less characters')
       end
       it 'when not present' do
         all_params[:client_id] = nil
@@ -185,28 +185,28 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         all_params[:admission_date] = Date.new(1919, 0o1, 0o1).to_s
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:admission_date)
-        expect(errors[:admission_date].first[:text]).to eq('Must be after January 1, 1920')
+        expect(errors[:admission_date].first).to eq('Must be after January 1, 1920')
       end
       it 'is after the date of last contact' do
         all_params[:admission_date] = Date.today.to_s
         all_params[:last_contact_date] = (Date.today - 10)
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:admission_date)
-        expect(errors[:admission_date].first[:text]).to eq('Cannot be later than the date of last contact')
+        expect(errors[:admission_date].first).to eq('Cannot be later than the date of last contact')
       end
       it 'is after the date of discharge' do
         all_params[:admission_date] = Date.today.to_s
         all_params[:discharge_date] = (Date.today - 10).to_s
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:admission_date)
-        expect(errors.to_h[:admission_date].first[:text]).to eq('Cannot be later than the date of discharge')
+        expect(errors.to_h[:admission_date].first).to eq('Cannot be later than the date of discharge')
       end
       it 'is later than the extract_on date' do
         all_params[:extracted_on] = (Date.today - 10).to_s
         all_params[:admission_date] = Date.today.to_s
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:admission_date)
-        expect(errors.to_h[:admission_date].first[:text]).to eq('Cannot be later than the extraction date')
+        expect(errors.to_h[:admission_date].first).to eq('Cannot be later than the extraction date')
       end
     end
 
@@ -258,7 +258,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         all_params[:discharge_date] = Date.today.to_s
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:discharge_date)
-        expect(errors.to_h[:discharge_date].first[:text]).to eq('Must be later than the extraction date')
+        expect(errors.to_h[:discharge_date].first).to eq('Must be later than the extraction date')
       end
 
       it 'is later than the date of last contact' do
@@ -266,7 +266,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         all_params[:discharge_date] = Date.today.to_s
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:discharge_date)
-        expect(errors.to_h[:discharge_date].first[:text]).to eq('Must be later than the date of last contact')
+        expect(errors.to_h[:discharge_date].first).to eq('Must be later than the date of last contact')
       end
 
       it 'has a value when the record type is Active' do
@@ -275,7 +275,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:discharge_date)
         error_text = 'Must be blank if record group is active'
-        expect(errors.to_h[:discharge_date].first[:text]).to eq(error_text)
+        expect(errors.to_h[:discharge_date].first).to eq(error_text)
       end
     end
 
@@ -287,20 +287,19 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         expect(errors).to have_key(:last_contact_date)
         expect(errors.to_h[:last_contact_date].first).to eq('Must be included if is an active record')
       end
-      it 'is blank when the record_group is admission or discharge with a warning' do
+      it 'is blank when the record_group is admission or discharge' do
         all_params[:record_group] = 'admission'
         all_params[:last_contact_date] = nil
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:last_contact_date)
-        expect(errors.to_h[:last_contact_date].first[:text]).to eq('Should be included')
-        expect(errors.to_h[:last_contact_date].first[:warning]).to eq(true)
+        expect(errors.to_h[:last_contact_date].first).to eq('Should be included')
       end
       it 'is later than the extract_on date' do
         all_params[:extracted_on] = (Date.today - 10).to_s
         all_params[:last_contact_date] = Date.today.to_s
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:last_contact_date)
-        expect(errors.to_h[:last_contact_date].first[:text]).to eq('Must be later than the extraction date')
+        expect(errors.to_h[:last_contact_date].first).to eq('Must be later than the extraction date')
       end
     end
     context 'with invalid discharge reason field it should fail' do
@@ -326,7 +325,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         expect(errors.to_h[:episode_id]).to include('Needs to be 15 or less characters')
       end
     end
-    context 'with invalud num_of_prior_episodes it should fail' do
+    context 'with invalid num_of_prior_episodes it should fail' do
       it 'is not present and the record group is not discharge' do
         all_params[:num_of_prior_episodes] = nil
         all_params[:record_group] = 'admission'
@@ -347,8 +346,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         result = subject.call(all_params)
         expect(result.failure?).to be_truthy
         expect(result.errors.to_h).to have_key(:treatment_location)
-        expect(result.errors.to_h[:treatment_location].first[:text]).to eq 'must be filled'
-        expect(result.errors.to_h[:treatment_location].first[:warning]).to eq true
+        expect(result.errors.to_h[:treatment_location].first).to eq 'must be filled'
       end
     end
     context 'with invalid referral source' do
@@ -357,8 +355,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         result = subject.call(all_params)
         expect(result.failure?).to be_truthy
         expect(result.errors.to_h).to have_key(:referral_source)
-        expect(result.errors.to_h[:referral_source].first[:text]).to eq 'must be filled'
-        expect(result.errors.to_h[:referral_source].first[:warning]).to eq true
+        expect(result.errors.to_h[:referral_source].first).to eq 'must be filled'
       end
       it 'is not a valid option it should fail' do
         all_params[:referral_source] = '22'
@@ -379,8 +376,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         result = subject.call(all_params)
         expect(result.failure?).to be_truthy
         expect(result.errors.to_h).to have_key(:criminal_justice_referral)
-        expect(result.errors.to_h[:criminal_justice_referral].first[:text]).to eq 'must be filled'
-        expect(result.errors.to_h[:criminal_justice_referral].first[:warning]).to eq true
+        expect(result.errors.to_h[:criminal_justice_referral].first).to eq 'must be filled'
       end
       it 'without criminal_justice_referral  of 96 but with referral_source of 7 it should fail' do
         all_params[:criminal_justice_referral] = '96'
@@ -388,8 +384,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         result = subject.call(all_params)
         expect(result.failure?).to be_truthy
         expect(result.errors.to_h).to have_key(:criminal_justice_referral)
-        expect(result.errors.to_h[:criminal_justice_referral].first[:text]).to eq 'must be filled with a valid option if referral source is 7'
-        expect(result.errors.to_h[:criminal_justice_referral].first[:warning]).to eq true
+        expect(result.errors.to_h[:criminal_justice_referral].first).to eq 'must be filled with a valid option if referral source is 7'
       end
       it 'referral_source is not 7, then criminal_justice_referral should be 96' do
         all_params[:criminal_justice_referral] = '1'
@@ -397,10 +392,37 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         result = subject.call(all_params)
         expect(result.failure?).to be_truthy
         expect(result.errors.to_h).to have_key(:criminal_justice_referral)
-        expect(result.errors.to_h[:criminal_justice_referral].first[:text]).to eq 'must be filled with 96 if referral source is not 7'
-        expect(result.errors.to_h[:criminal_justice_referral].first[:warning]).to eq true
+        expect(result.errors.to_h[:criminal_justice_referral].first).to eq 'must be filled with 96 if referral source is not 7'
       end
     end
+    context 'with invalid dob' do
+      it 'fails if dob is after the admission date' do
+        all_params[:client][:dob] = Date.today.to_s
+        all_params[:admission_date] = (Date.today - 10).to_s
+        result = subject.call(all_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:dob)
+        expect(result.errors.to_h[:dob].first).to eq 'Must be later than the admission date'
+      end
+      it 'fails if dob is after the current date' do
+        all_params[:client][:dob] = (Date.today + 10).to_s
+        all_params[:admission_date] = (Date.today + 10).to_s
+        result = subject.call(all_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:dob)
+        expect(result.errors.to_h[:dob]).to include 'Must be later than the current date'
+      end
+    end
+    # context 'with invalid gender' do
+    #  it 'fails if male and pregnant' do
+    #    all_params[:client][:gender] = '1'
+    #    all_params[:client_profile][:pregnant] = '01'
+    #    result = subject.call(all_params)
+    #    expect(result.failure?).to be_truthy
+    #    expect(result.errors.to_h).to have_key(:pregnant)
+    #    expect(result.errors.to_h[:pregnant].first).to eq 'Gender is male, pregnancy is true'
+    #  end
+    # end
   end
 
   context 'valid parameters' do
