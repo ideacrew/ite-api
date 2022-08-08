@@ -8,7 +8,7 @@ module Validators
       # Contract for Episode.
       class ClientContract < Dry::Validation::Contract
         params do
-          required(:client_id).filled(:string)
+          optional(:client_id).maybe(:string)
           optional(:first_name).maybe(:string)
           optional(:middle_name).maybe(:string)
           optional(:last_name).maybe(:string)
@@ -18,11 +18,11 @@ module Validators
           optional(:ssn).maybe(:string)
           optional(:medicaid_id).maybe(:string)
           optional(:dob).maybe(:date)
-          required(:gender).filled(Types::GENDER_OPTIONS)
-          optional(:sexual_orientation).filled(Types::SEXUAL_ORIENTATION_OPTIONS)
-          required(:race).filled(Types::RACE_OPTIONS)
-          required(:ethnicity).filled(Types::ETHNICITY_OPTIONS)
-          optional(:primary_language).maybe(Types::LANGUAGE_OPTIONS)
+          optional(:gender).maybe(:string)
+          optional(:sexual_orientation).maybe(:string)
+          optional(:race).maybe(:string)
+          optional(:ethnicity).maybe(:string)
+          optional(:primary_language).maybe(:string)
         end
 
         %i[first_name middle_name last_name alt_first_name alt_last_name].each do |field|
@@ -35,10 +35,30 @@ module Validators
           end
         end
 
-        %i[first_name last_name].each do |field|
+        %i[first_name last_name client_id gender race ethnicity].each do |field|
           rule(field) do
             key.failure('must be filled') if key && !value
           end
+        end
+
+        rule(:gender) do
+          key.failure("must be one of: #{Types::GENDER_OPTIONS.values.join(', ')}") if key && value && !Types::GENDER_OPTIONS.include?(value)
+        end
+
+        rule(:sexual_orientation) do
+          key.failure("must be one of: #{Types::SEXUAL_ORIENTATION_OPTIONS.values.join(', ')}") if key && value && !Types::SEXUAL_ORIENTATION_OPTIONS.include?(value)
+        end
+
+        rule(:race) do
+          key.failure("must be one of: #{Types::RACE_OPTIONS.values.join(', ')}") if key && value && !Types::RACE_OPTIONS.include?(value)
+        end
+
+        rule(:ethnicity) do
+          key.failure("must be one of: #{Types::ETHNICITY_OPTIONS.values.join(', ')}") if key && value && !Types::ETHNICITY_OPTIONS.include?(value)
+        end
+
+        rule(:primary_language) do
+          key.failure("must be one of: #{Types::LANGUAGE_OPTIONS.values.join(', ')}") if key && value && !Types::LANGUAGE_OPTIONS.include?(value)
         end
 
         rule(:ssn) do

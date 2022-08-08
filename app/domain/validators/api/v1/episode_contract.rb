@@ -26,7 +26,7 @@ module Validators
           optional(:referral_source).maybe(Types::REFERRAL_SOURCE_OPTIONS)
           optional(:criminal_justice_referral).maybe(Types::CRIMINAL_JUSTICE_REFERRAL_OPTIONS)
           optional(:primary_payment_source).maybe(:string)
-          optional(:client).hash(Validators::Api::V1::ClientContract.params)
+          optional(:client).maybe(Validators::Api::V1::ClientContract.params)
           optional(:client_profile).maybe(:hash)
           optional(:clinical_info).maybe(:hash)
 
@@ -154,7 +154,8 @@ module Validators
         end
 
         rule(:client) do
-          if key? && value && value.is_a?(Hash)
+          if key && value
+            # binding.pry
             result = Validators::Api::V1::ClientContract.new.call(value)
             result.errors.to_a.each do |error|
               key(error.path.last).failure(error.text)

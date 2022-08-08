@@ -50,7 +50,6 @@ module Operations
           key_fields = %i[client_id collateral record_type admission_date treatment_type]
           key_fields << :discharge_date if extract[:record_group] == 'discharge'
           key_fields << :last_contact_date if extract[:record_group] == 'active'
-
           errors = result.errors.messages.map { |message| { message.path.last => message.text } }
           warnings = errors.reject { |error| key_fields.include? error.keys.first }
           failures = errors.select { |error| key_fields.include? error.keys.first }
