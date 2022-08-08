@@ -10,7 +10,6 @@ module Api
       embedded_in :provider, class_name: 'Api::V1::Provider'
 
       field :is_primary, type: Boolean, default: false
-      field :provider_location, type: String, default: ''
 
       embeds_one :address, class_name: 'Api::V1::Address'
       embeds_many :phones, class_name: 'Api::V1::Phone'

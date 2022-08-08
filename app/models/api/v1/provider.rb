@@ -9,8 +9,8 @@ module Api
 
       field :provider_name, type: String
       field :provider_nick_name, type: String
-      field :npi, type: String # always length 10-digits
-      field :provider_gateway_identifier, type: String # unique length->3 digits
+      field :npi, type: String
+      field :provider_gateway_identifier, type: String
       field :is_active, type: Boolean
       field :mh, type: Boolean
       field :sud, type: Boolean
@@ -19,6 +19,8 @@ module Api
 
       # embeds_many :extracts
       embeds_many :office_locations, class_name: 'Api::V1::OfficeLocation', cascade_callbacks: true
+
+      accepts_nested_attributes_for :office_locations
 
       validates :npi,
                 numericality: true,
