@@ -94,7 +94,7 @@ module Validators
           end
         end
         rule(:discharge_date, :record_group) do
-          key.failure('Must be blank if record group is active') if key && values[:record_group] == 'active' && values[:discharge_date]
+          key.failure('Must be blank if record group is admission or active') if key && values[:record_group] != 'discharge' && values[:discharge_date]
         end
 
         rule(:last_contact_date, :record_group) do
@@ -155,7 +155,6 @@ module Validators
 
         rule(:client) do
           if key && value
-            # binding.pry
             result = Validators::Api::V1::ClientContract.new.call(value)
             result.errors.to_a.each do |error|
               key(error.path.last).failure(error.text)

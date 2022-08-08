@@ -22,7 +22,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
       admission_type: '31',
       episode_id: 'fbgadfs7fgdy',
       service_request_date: Date.today.to_s,
-      discharge_date: Date.today.to_s,
+      # discharge_date: Date.today.to_s,
       discharge_type: '50',
       discharge_reason: '34',
       last_contact_date: Date.today.to_s,
@@ -141,9 +141,6 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         expect(errors).to have_key(:collateral)
         expect(errors[:collateral].first).to eq('must be filled')
       end
-      # A record of Codependent/Collateral requires Client ID and Admission Date information and reporting of
-      # the remaining fields is optional.
-      # For all items not reported, the data field should be coded with Not collected or Not applicable code.
     end
 
     context 'with invalid record_type field it should fail' do
@@ -253,6 +250,13 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         expect(errors).to have_key(:discharge_date)
         expect(errors.to_h[:discharge_date].first).to eq('Must be included for discharge records')
       end
+      it 'is present in an Admission or Active record_group' do
+        all_params[:discharge_date] = Date.today.to_s
+        all_params[:record_group] = 'admission'
+        errors = subject.call(all_params).errors.to_h
+        expect(errors).to have_key(:discharge_date)
+        expect(errors.to_h[:discharge_date].first).to eq('Must be blank if record group is admission or active')
+      end
       it 'is later than the extract_on date' do
         all_params[:extracted_on] = (Date.today - 10).to_s
         all_params[:discharge_date] = Date.today.to_s
@@ -274,7 +278,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         all_params[:discharge_date] = Date.today.to_s
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:discharge_date)
-        error_text = 'Must be blank if record group is active'
+        error_text = 'Must be blank if record group is admission or active'
         expect(errors.to_h[:discharge_date].first).to eq(error_text)
       end
     end

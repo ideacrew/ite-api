@@ -41,24 +41,10 @@ module Validators
           end
         end
 
-        rule(:gender) do
-          key.failure("must be one of: #{Types::GENDER_OPTIONS.values.join(', ')}") if key && value && !Types::GENDER_OPTIONS.include?(value)
-        end
-
-        rule(:sexual_orientation) do
-          key.failure("must be one of: #{Types::SEXUAL_ORIENTATION_OPTIONS.values.join(', ')}") if key && value && !Types::SEXUAL_ORIENTATION_OPTIONS.include?(value)
-        end
-
-        rule(:race) do
-          key.failure("must be one of: #{Types::RACE_OPTIONS.values.join(', ')}") if key && value && !Types::RACE_OPTIONS.include?(value)
-        end
-
-        rule(:ethnicity) do
-          key.failure("must be one of: #{Types::ETHNICITY_OPTIONS.values.join(', ')}") if key && value && !Types::ETHNICITY_OPTIONS.include?(value)
-        end
-
-        rule(:primary_language) do
-          key.failure("must be one of: #{Types::LANGUAGE_OPTIONS.values.join(', ')}") if key && value && !Types::LANGUAGE_OPTIONS.include?(value)
+        { gender: Types::GENDER_OPTIONS, sexual_orientation: Types::SEXUAL_ORIENTATION_OPTIONS, race: Types::RACE_OPTIONS, ethnicity: Types::ETHNICITY_OPTIONS, primary_language: Types::LANGUAGE_OPTIONS }.each do |field, types|
+          rule(field) do
+            key.failure("must be one of: #{types.values.join(', ')}") if key && value && !types.include?(value)
+          end
         end
 
         rule(:ssn) do
