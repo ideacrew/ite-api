@@ -54,10 +54,10 @@ module Validators
           key.failure('Cannot be later than the extraction date') if key && values[:extracted_on] && values[:admission_date] > Date.parse(values[:extracted_on].to_s)
         end
         rule(:admission_date, :coverage_start) do
-          key.failure('Cannot be earlier than the coverage start date') if key && values[:coverage_start] && values[:admission_date] < Date.parse(values[:coverage_start].to_s)
+          key.failure('Must be within the coverage period of the dataset') if key && values[:coverage_start] && values[:admission_date] < Date.parse(values[:coverage_start].to_s)
         end
         rule(:admission_date, :coverage_end) do
-          key.failure('Cannot be later than the coverage end date') if key && values[:coverage_end] && values[:admission_date] > Date.parse(values[:coverage_end].to_s)
+          key.failure('Must be within the coverage period of the dataset') if key && values[:coverage_end] && values[:admission_date] > Date.parse(values[:coverage_end].to_s)
         end
 
         rule(:record_type, :record_group) do
