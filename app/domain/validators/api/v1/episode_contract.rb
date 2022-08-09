@@ -74,8 +74,10 @@ module Validators
         rule(:treatment_type, :record_type) do
           record_group1 = %w[M E X]
           record_group2 = %w[A T D]
-          key.failure('must correspond to record_type') if key && record_group1.include?(values[:record_type]) && (values[:treatment_type].to_i < 72 || values[:treatment_type].to_i > 77)
-          key.failure('must correspond to record_type') if key && record_group2.include?(values[:record_type]) && values[:treatment_type].to_i > 9
+          unless values[:treatment_type] == '96' 
+            key.failure('must correspond to record_type') if key && record_group1.include?(values[:record_type]) && (values[:treatment_type].to_i < 72 || values[:treatment_type].to_i > 77)
+            key.failure('must correspond to record_type') if key && record_group2.include?(values[:record_type]) && values[:treatment_type].to_i > 9
+          end
         end
         rule(:treatment_type, :collateral) do
           key.failure('can only specify 96 if client is Collateral/Codependent') if key && values[:treatment_type] && values[:collateral] && values[:collateral] != '1' && values[:treatment_type] == '96'
@@ -99,10 +101,10 @@ module Validators
           end
         end
         rule(:discharge_date, :record_group) do
-          key.failure('Must be blank if record group is admission or active') if key && values[:record_group] != 'discharge' && values[:discharge_date]
+          key.failure('Should not be included for active or admission records') if key && values[:record_group] != 'discharge' && values[:discharge_date]
         end
         rule(:discharge_date, :admission_date) do
-          key.failure('Cannot be earlier than than the date of admission') if key && values[:discharge_date] && values[:admission_date] && values[:admission_date] > values[:discharge_date]
+          key.failure('Cannot be earlier than the date of admission') if key && values[:discharge_date] && values[:admission_date] && values[:admission_date] > values[:discharge_date]
         end
 
         rule(:last_contact_date, :record_group) do

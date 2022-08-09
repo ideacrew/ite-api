@@ -240,6 +240,13 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         expect(errors).to have_key(:treatment_type)
         expect(errors.to_h[:treatment_type].first).to eq('must correspond to record_type')
       end
+      it 'uses code 96 and codepedent is true' do
+        all_params[:record_type] = 'A'
+        all_params[:treatment_type] = '96'
+        all_params[:collateral] = '1'
+        errors = subject.call(all_params).errors.to_h
+        expect(errors).to_not have_key(:treatment_type)
+      end
       it 'uses code 96 and codepedent is false' do
         all_params[:treatment_type] = '96'
         all_params[:collateral] = '2'
@@ -268,7 +275,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         all_params[:record_group] = 'admission'
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:discharge_date)
-        expect(errors.to_h[:discharge_date].first).to eq('Must be blank if record group is admission or active')
+        expect(errors.to_h[:discharge_date].first).to eq('Should not be included for active or admission records')
       end
       it 'is later than the extract_on date' do
         all_params[:extracted_on] = (Date.today - 10).to_s
@@ -291,7 +298,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         all_params[:discharge_date] = (Date.today - 10).to_s
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:discharge_date)
-        expect(errors.to_h[:discharge_date]).to include('Cannot be earlier than than the date of admission')
+        expect(errors.to_h[:discharge_date]).to include('Cannot be earlier than the date of admission')
       end
     end
 
