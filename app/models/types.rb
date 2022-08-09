@@ -23,7 +23,7 @@ module Types
   LANGUAGE_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '97',
                                         '98').freeze
   REFERRAL_SOURCE_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '6', '7', '97', '98').freeze
-  PAYMENT_SOURCE_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '6', '7', '8', '9', '96', '97',
+  PAYMENT_SOURCE_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '6', '7', '8', '9', '97',
                                               '98').freeze
   LIVING_ARRANGEMENT_OPTIONS = Types::String.enum('1', '3', '11', '12', '13', '14', '15', '16', '17', '97',
                                                   '98').freeze

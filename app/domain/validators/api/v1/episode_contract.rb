@@ -25,7 +25,7 @@ module Validators
           optional(:num_of_prior_episodes).maybe(Types::PRIOR_SU_EPISODE_OPTIONS)
           optional(:referral_source).maybe(Types::REFERRAL_SOURCE_OPTIONS)
           optional(:criminal_justice_referral).maybe(Types::CRIMINAL_JUSTICE_REFERRAL_OPTIONS)
-          optional(:primary_payment_source).maybe(:string)
+          optional(:primary_payment_source).maybe(Types::PAYMENT_SOURCE_OPTIONS)
           optional(:client).maybe(Validators::Api::V1::ClientContract.params)
           optional(:client_profile).maybe(:hash)
           optional(:clinical_info).maybe(:hash)
@@ -153,6 +153,10 @@ module Validators
              values[:service_request_date] > Date.parse(values[:admission_date].to_s)
             key.failure('Cannot be later than the date of admission')
           end
+        end
+
+        rule(:primary_payment_source) do
+          key.failure('must be filled') if key && !value
         end
 
         rule(:admission_date, client: :dob) do

@@ -12,6 +12,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
       client_id: '8347ehf',
       treatment_location: '123 main',
       referral_source: '2',
+      primary_payment_source: '1',
       criminal_justice_referral: '96',
       record_type: 'A'
     }
@@ -27,7 +28,6 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
       discharge_reason: '2',
       last_contact_date: Date.today.to_s,
       num_of_prior_episodes: '3',
-      primary_payment_source: nil,
       client: client_params,
       client_profile: client_profile_params,
       clinical_info: clinical_info_params
@@ -430,6 +430,21 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:service_request_date)
         expect(errors.to_h[:service_request_date].first).to eq('Cannot be later than the date of admission')
+      end
+    end
+
+    context 'with invalid primary_payment_source' do
+      it 'is not present' do
+        all_params[:primary_payment_source] = nil
+        errors = subject.call(all_params).errors.to_h
+        expect(errors).to have_key(:primary_payment_source)
+        expect(errors.to_h[:primary_payment_source].first).to eq('must be filled')
+      end
+      it 'is an invalid value' do
+        all_params[:primary_payment_source] = (Date.today - 10).to_s
+        errors = subject.call(all_params).errors.to_h
+        expect(errors).to have_key(:primary_payment_source)
+        expect(errors.to_h[:primary_payment_source].first).to eq('must be one of: 1, 2, 3, 4, 5, 6, 7, 8, 9, 97, 98')
       end
     end
 
