@@ -32,6 +32,8 @@ module Validators
 
           # fields from the extract
           optional(:extracted_on)
+          optional(:coverage_start)
+          optional(:coverage_end)
           optional(:record_group).maybe(:string)
         end
 
@@ -50,6 +52,12 @@ module Validators
         end
         rule(:admission_date, :extracted_on) do
           key.failure('Cannot be later than the extraction date') if key && values[:extracted_on] && values[:admission_date] > Date.parse(values[:extracted_on].to_s)
+        end
+        rule(:admission_date, :coverage_start) do
+          key.failure('Cannot be earlier than the coverage start date') if key && values[:coverage_start] && values[:admission_date] < Date.parse(values[:coverage_start].to_s)
+        end
+        rule(:admission_date, :coverage_end) do
+          key.failure('Cannot be later than the coverage end date') if key && values[:coverage_end] && values[:admission_date] > Date.parse(values[:coverage_end].to_s)
         end
 
         rule(:record_type, :record_group) do
@@ -98,7 +106,7 @@ module Validators
         end
 
         rule(:last_contact_date, :record_group) do
-          key.failure('Must be included if is an active record') if key && values[:record_group] && (values[:record_group] == 'active' && !values[:last_contact_date])
+          key.failure('must be included') if key && values[:record_group] && (values[:record_group] == 'active' && !values[:last_contact_date])
         end
         rule(:last_contact_date, :extracted_on) do
           if key && (values[:last_contact_date] && values[:extracted_on]) &&
