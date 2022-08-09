@@ -74,7 +74,7 @@ module Validators
         rule(:treatment_type, :record_type) do
           record_group1 = %w[M E X]
           record_group2 = %w[A T D]
-          unless values[:treatment_type] == '96' 
+          unless values[:treatment_type] == '96'
             key.failure('must correspond to record_type') if key && record_group1.include?(values[:record_type]) && (values[:treatment_type].to_i < 72 || values[:treatment_type].to_i > 77)
             key.failure('must correspond to record_type') if key && record_group2.include?(values[:record_type]) && values[:treatment_type].to_i > 9
           end
