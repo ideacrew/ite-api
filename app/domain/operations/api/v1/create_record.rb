@@ -67,7 +67,7 @@ module Operations
         def check_episode_ids(errors, dups, episode)
           return Success(errors) unless dups
 
-          duplicate = dups.include?(episode[:episode_id].to_i)
+          duplicate = dups.map(&:to_s).include?(episode[:episode_id])
           return Success(errors) unless duplicate
 
           failure = { episode_id: 'must be a unique identifier for admission episodes' }
