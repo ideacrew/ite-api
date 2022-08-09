@@ -14,7 +14,7 @@ module Types
   RECORD_TYPE_OPTIONS = Types::String.enum('A', 'T', 'D', 'M', 'X', 'E').freeze
   TREATMENT_TYPE_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '6', '7', '8', '72', '73', '74', '75', '76', '77',
                                               '96').freeze
-  DISCHARGE_REASON_OPTIONS = Types::String.enum('1', '2', '3', '4', '14', '24', '5', '6', '7', '34', '35', '36', '37', '95', '96',
+  DISCHARGE_REASON_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '95',
                                                 '97', '98').freeze
   GENDER_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '6', '95', '97', '98').freeze
   SEXUAL_ORIENTATION_OPTIONS = Types::String.enum('1', '2', '3', '4', '95', '97', '98').freeze

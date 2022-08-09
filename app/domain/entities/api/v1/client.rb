@@ -33,9 +33,15 @@ module Entities
         attribute :ethnicity, Types::String.optional.meta(omittable: true)
         # Primary Language
         attribute :primary_language, Types::String.optional.meta(omittable: true)
-        # attribute :address, Types::Array.of(Address)
         attribute :phone1, Types::String.optional.meta(omittable: true)
         attribute :phone2, Types::String.optional.meta(omittable: true)
+        attribute :living_arrangement, Types::String.optional.meta(omittable: true)
+        attribute :address_line1, Types::String.optional.meta(omittable: true)
+        attribute :address_line2, Types::String.optional.meta(omittable: true)
+        attribute :address_ward, Types::String.optional.meta(omittable: true)
+        attribute :address_city, Types::String.optional.meta(omittable: true)
+        attribute :address_state, Types::String.optional.meta(omittable: true)
+        attribute :address_zipcode, Types::String.optional.meta(omittable: true)
       end
     end
   end

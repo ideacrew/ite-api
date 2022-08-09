@@ -17,7 +17,8 @@ module Operations
           episode = yield structure_episode(record)
           validation_result = yield validate_episode(episode, params[:extract])
           errors = yield structure_errors(validation_result, params[:extract])
-          update_record(errors, record)
+          cross_record_errors = yield check_episode_ids(errors, params[:dups], episode)
+          update_record(cross_record_errors, record)
         end
 
         private
@@ -61,6 +62,17 @@ module Operations
           record.failures = errors[:failures].uniq.compact_blank!
           record.warnings = errors[:warnings].uniq.compact_blank!
           Success(record)
+        end
+
+        def check_episode_ids(errors, dups, episode)
+          return Success(errors) unless dups
+
+          duplicate = dups.include?(episode[:episode_id].to_i)
+          return Success(errors) unless duplicate
+
+          failure = { episode_id: 'must be a unique identifier for admission episodes' }
+          errors[:failures] << failure
+          Success(errors)
         end
       end
     end

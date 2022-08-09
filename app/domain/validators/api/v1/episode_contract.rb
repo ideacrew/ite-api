@@ -48,9 +48,6 @@ module Validators
         rule(:admission_date, :last_contact_date) do
           key.failure('Cannot be later than the date of last contact') if key && values[:last_contact_date] && values[:admission_date] > values[:last_contact_date]
         end
-        rule(:admission_date, :discharge_date) do
-          key.failure('Cannot be later than the date of discharge') if key && values[:discharge_date] && values[:admission_date] > values[:discharge_date]
-        end
         rule(:admission_date, :extracted_on) do
           key.failure('Cannot be later than the extraction date') if key && values[:extracted_on] && values[:admission_date] > Date.parse(values[:extracted_on].to_s)
         end
@@ -73,7 +70,7 @@ module Validators
           key.failure('must correspond to record_type') if key && record_group2.include?(values[:record_type]) && values[:treatment_type].to_i > 9
         end
         rule(:treatment_type, :collateral) do
-          key.failure('can only specify 96 if client is Collateral/Codependent') if key && values[:treatment_type] && values[:collateral] && values[:collateral] == '1' && values[:treatment_type] == '96'
+          key.failure('can only specify 96 if client is Collateral/Codependent') if key && values[:treatment_type] && values[:collateral] && values[:collateral] != '1' && values[:treatment_type] == '96'
         end
 
         %i[discharge_date discharge_reason].each do |field|
@@ -84,32 +81,35 @@ module Validators
         rule(:discharge_date, :extracted_on) do
           if key && (values[:extracted_on] && values[:discharge_date]) &&
              values[:discharge_date] > Date.parse(values[:extracted_on].to_s)
-            key.failure('Must be later than the extraction date')
+            key.failure('Must be earlier than the extraction date')
           end
         end
         rule(:discharge_date, :last_contact_date) do
           if key && (values[:last_contact_date] && values[:discharge_date]) &&
              values[:discharge_date] > values[:last_contact_date]
-            key.failure('Must be later than the date of last contact')
+            key.failure('Must be earlier than the date of last contact')
           end
         end
         rule(:discharge_date, :record_group) do
           key.failure('Must be blank if record group is admission or active') if key && values[:record_group] != 'discharge' && values[:discharge_date]
         end
+        rule(:discharge_date, :admission_date) do
+          key.failure('Cannot be earlier than than the date of admission') if key && values[:discharge_date] && values[:admission_date] && values[:admission_date] > values[:discharge_date]
+        end
 
         rule(:last_contact_date, :record_group) do
-          if key && values[:record_group]
-            if values[:record_group] == 'active' && !values[:last_contact_date]
-              key.failure('Must be included if is an active record')
-            elsif values[:record_group] != 'active' && !values[:last_contact_date]
-              key.failure('Should be included', warning: true)
-            end
-          end
+          key.failure('Must be included if is an active record') if key && values[:record_group] && (values[:record_group] == 'active' && !values[:last_contact_date])
         end
         rule(:last_contact_date, :extracted_on) do
           if key && (values[:last_contact_date] && values[:extracted_on]) &&
              values[:last_contact_date] > Date.parse(values[:extracted_on].to_s)
-            key.failure('Must be later than the extraction date')
+            key.failure('Must be earlier than the data extraction date')
+          end
+        end
+        rule(:last_contact_date, :admission_date) do
+          if key && (values[:last_contact_date] && values[:admission_date]) &&
+             values[:last_contact_date] < Date.parse(values[:admission_date].to_s)
+            key.failure('Cannot be earlier than the date of admission')
           end
         end
 
@@ -137,6 +137,13 @@ module Validators
           if key && values[:criminal_justice_referral] && values[:referral_source]
             key.failure('must be filled with a valid option if referral source is 7') if values[:criminal_justice_referral] == '96' && values[:referral_source] == '7'
             key.failure('must be filled with 96 if referral source is not 7') if values[:criminal_justice_referral] != '96' && values[:referral_source] != '7'
+          end
+        end
+
+        rule(:service_request_date, :admission_date) do
+          if key && (values[:service_request_date] && values[:admission_date]) &&
+             values[:service_request_date] > Date.parse(values[:admission_date].to_s)
+            key.failure('Cannot be later than the date of admission')
           end
         end
 

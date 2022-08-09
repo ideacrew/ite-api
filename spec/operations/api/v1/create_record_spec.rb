@@ -33,9 +33,11 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :after_each do
       'primary_language' => '1' }
   end
 
+  let(:dups) { [1234] }
+
   let(:params) do
     {
-      extract: extract_params.attributes.symbolize_keys, payload: row
+      extract: extract_params.attributes.symbolize_keys, payload: row, dups:
     }
   end
 
@@ -110,17 +112,26 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :after_each do
       end
     end
 
-    context 'with a missing last_contact_date date' do
+    context 'with duplicate episode id' do
+      it 'should add an episode_id id failure' do
+        params[:payload][:episode_id] = '1234'
+        record = described_class.new.call(params).value!
+        expect(record.failures.map(&:keys).flatten).to include(:episode_id)
+        expect(record.failures.first[:episode_id]).to eq 'must be a unique identifier for admission episodes'
+      end
+    end
+
+    context 'with an invalid last_contact_date date' do
       it 'should create a record with a failure if the admission group is "active"' do
         params[:extract][:record_group] = 'active'
-        params[:payload][:last_contact_date] = nil
+        params[:payload][:last_contact_date] = 'not a date'
         record = described_class.new.call(params).value!
         expect(record.failures.map(&:keys).flatten).to include(:last_contact_date)
         expect(record.warnings.map(&:keys).flatten).to_not include(:last_contact_date)
       end
       it 'should create a record with a warnings if the admission group is not "discharge"' do
         params[:extract][:record_group] = 'admission'
-        params[:payload][:last_contact_date] = nil
+        params[:payload][:last_contact_date] = 'not a date'
         record = described_class.new.call(params).value!
         expect(record.failures.map(&:keys).flatten).to_not include(:last_contact_date)
         expect(record.warnings.map(&:keys).flatten).to include(:last_contact_date)
