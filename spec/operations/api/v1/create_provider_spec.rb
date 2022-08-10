@@ -62,7 +62,7 @@ describe ::Operations::Api::V1::CreateProvider, dbclean: :after_each do
     it 'should create provider' do
       expect(@provider).to be_a(::Api::V1::Provider)
     end
-    it 'extract should have a 3 digit provider gateway identifier' do
+    it 'extract should have a provider gateway identifier' do
       expect(@provider.provider_gateway_identifier).to_not be_nil
       expect(@provider.provider_gateway_identifier.length).to eq 3
     end
