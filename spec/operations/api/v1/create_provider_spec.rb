@@ -62,43 +62,23 @@ describe ::Operations::Api::V1::CreateProvider, dbclean: :after_each do
     it 'should create provider' do
       expect(@provider).to be_a(::Api::V1::Provider)
     end
-    it 'extract should have a 3 digit provider gateway identifier' do
+    it 'extract should have a provider gateway identifier' do
       expect(@provider.provider_gateway_identifier).to_not be_nil
       expect(@provider.provider_gateway_identifier.length).to eq 3
     end
   end
 
-  # context 'invalid params' do
-  #   context 'invalid extract' do
-  #     before do
-  #       params[:provider_gateway_identifier] = nil
-  #     end
-  #     it 'should be a failure' do
-  #       expect(described_class.new.call(params)).to be_failure
-  #     end
-  #     it 'should not create a record' do
-  #       expect(described_class.new.call(params).failure).to_not be_a(::Api::V1::Extract)
-  #     end
-  #   end
-
-  #   context 'invalid records' do
-  #     before do
-  #       params[:records].first[:episode_id] = nil
-  #       @result = described_class.new.call(params)
-  #       @extract = @result.value!
-  #     end
-  #     it 'should be a success' do
-  #       expect(@result).to be_success
-  #     end
-  #     it 'should create extract' do
-  #       expect(@extract).to be_a(::Api::V1::Extract)
-  #     end
-  #     it 'extract should have records' do
-  #       expect(@extract.records.count).to be > 0
-  #     end
-  #     it 'extract should have a status of "invalid"' do
-  #       expect(@extract.status).to eq('Invalid')
-  #     end
-  #   end
-  # end
+  context 'invalid params' do
+    context 'invalid extract' do
+      before do
+        params[:provider_name] = nil
+      end
+      it 'should be a failure' do
+        expect(described_class.new.call(params)).to be_failure
+      end
+      it 'should not create a provider' do
+        expect(described_class.new.call(params).failure).to_not be_a(::Api::V1::Provider)
+      end
+    end
+  end
 end

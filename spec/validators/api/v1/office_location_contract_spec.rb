@@ -1,22 +1,40 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require './app/domain/validators/api/v1/office_location_contract'
 require './app/domain/validators/api/v1/address_contract'
 
-RSpec.describe ::Validators::Api::V1::AddressContract, dbclean: :after_each do
+RSpec.describe ::Validators::Api::V1::OfficeLocationContract, dbclean: :after_each do
   let(:required_params) do
     {
-      address_line1: '123 main',
-      city: 'Houlton',
-      state: 'ME',
-      zip: '04730'
+      address:,
+      phones: [phone],
+      emails: [email]
     }
   end
 
   let(:optional_params) do
     {
-      address_line2: 'Apt 2',
-      dc_ward: 'Ward 1'
+      is_primary: true
+    }
+  end
+
+  let(:email) { { address: 'test123@test.com' } }
+
+  let(:phone) do
+    {
+      area_code: '101',
+      number: '1234567',
+      extension: '111'
+    }
+  end
+
+  let(:address) do
+    {
+      address_line1: '123 main',
+      city: 'Houlton',
+      state: 'ME',
+      zip: '04730'
     }
   end
 
@@ -37,19 +55,8 @@ RSpec.describe ::Validators::Api::V1::AddressContract, dbclean: :after_each do
 
     context 'Keys with missing values' do
       it 'should return failure' do
-        all_params.merge!(city: nil)
-        expect(subject.call(all_params).errors.to_h[:city]).to eq(['must be filled'])
-      end
-    end
-
-    context 'invalid zip code length' do
-      it 'should fail if more than 5 characters' do
-        all_params.merge!(zip: '23876487365743657843')
-        expect(subject.call(all_params).errors.to_h[:zip]).to eq(['invalid zip with length not equal to 5 digits'])
-      end
-      it 'should fail if less than 5 characters' do
-        all_params.merge!(zip: '2383')
-        expect(subject.call(all_params).errors.to_h[:zip]).to eq(['invalid zip with length not equal to 5 digits'])
+        all_params.merge!(address: nil)
+        expect(subject.call(all_params).errors.to_h[:address]).to eq(['must be a hash'])
       end
     end
   end

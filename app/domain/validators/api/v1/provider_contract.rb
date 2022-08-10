@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require './app/models/types'
+require './app/domain/validators/api/v1/office_location_contract'
 
 module Validators
   module Api

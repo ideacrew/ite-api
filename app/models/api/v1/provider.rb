@@ -38,7 +38,7 @@ module Api
 
       def generate_gateway_id
         loop do
-          self.provider_gateway_identifier = SecureRandom.random_number(999).to_i
+          self.provider_gateway_identifier = (SecureRandom.random_number(9e2) + 1e2).to_i
           break unless self.class.all.detect { |p| p.provider_gateway_identifier == provider_gateway_identifier }
         end
       end

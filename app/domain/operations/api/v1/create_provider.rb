@@ -25,6 +25,10 @@ module Operations
           result.success? ? Success(result.to_h) : Failure(result)
         end
 
+        # def check_for_existing_provider(validated_provider_params)
+        # check for provider with provider gateway identifier OR same other combo of features? (name and npi and ??)
+        # end
+
         def create_provider_entity(validated_provider_params)
           result = Try do
             ::Entities::Api::V1::Provider.new(validated_provider_params)

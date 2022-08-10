@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require './app/models/types'
-# require './app/domain/validators/api/v1/address_contract'
-# require './app/domain/validators/api/v1/phone_contract'
-# require './app/domain/validators/api/v1/email_contract'
+require './app/domain/validators/api/v1/address_contract'
+require './app/domain/validators/api/v1/phone_contract'
+require './app/domain/validators/api/v1/email_contract'
 
 module Validators
   module Api
