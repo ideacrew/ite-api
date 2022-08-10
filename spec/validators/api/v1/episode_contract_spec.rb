@@ -413,7 +413,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         result = subject.call(all_params)
         expect(result.failure?).to be_truthy
         expect(result.errors.to_h).to have_key(:criminal_justice_referral)
-        expect(result.errors.to_h[:criminal_justice_referral].first).to eq 'must be filled with a valid option if referral source is 7'
+        expect(result.errors.to_h[:criminal_justice_referral].first).to eq 'Should be one of 1-8 or 97-98'
       end
       it 'referral_source is not 7, then criminal_justice_referral should be 96' do
         all_params[:criminal_justice_referral] = '1'
@@ -421,7 +421,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         result = subject.call(all_params)
         expect(result.failure?).to be_truthy
         expect(result.errors.to_h).to have_key(:criminal_justice_referral)
-        expect(result.errors.to_h[:criminal_justice_referral].first).to eq 'must be filled with 96 if referral source is not 7'
+        expect(result.errors.to_h[:criminal_justice_referral].first).to eq 'Should be Not Applicable (96)'
       end
     end
     context 'with invalid service_request_date' do

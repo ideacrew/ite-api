@@ -21,7 +21,7 @@ module Transforms
         CLIENT_PROFILE_FIELDS = %i[marital_status veteran_status education employment not_in_labor
                                    income_source pregnant school_attendance legal_status arrests_past_30days
                                    self_help_group_attendance health_insurance].freeze
-        NON_STRING_FIELDS = %i[service_request_date discharge_date last_contact_date dob].freeze
+        NON_STRING_FIELDS = %i[admission_date service_request_date discharge_date last_contact_date dob].freeze
 
         def call(record)
           validated_payload = yield validate_record(record)

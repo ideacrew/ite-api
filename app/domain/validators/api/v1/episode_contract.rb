@@ -154,8 +154,8 @@ module Validators
         rule(:criminal_justice_referral, :referral_source) do
           key.failure('must be filled') if key && !value
           if key && values[:criminal_justice_referral] && values[:referral_source]
-            key.failure('must be filled with a valid option if referral source is 7') if values[:criminal_justice_referral] == '96' && values[:referral_source] == '7'
-            key.failure('must be filled with 96 if referral source is not 7') if values[:criminal_justice_referral] != '96' && values[:referral_source] != '7'
+            key.failure('Should be one of 1-8 or 97-98') if values[:criminal_justice_referral] == '96' && values[:referral_source] == '7'
+            key.failure('Should be Not Applicable (96)') if values[:criminal_justice_referral] != '96' && values[:referral_source] != '7'
           end
         end
 
