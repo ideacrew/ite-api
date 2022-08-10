@@ -9,7 +9,7 @@ module Validators
       class AddressContract < Dry::Validation::Contract
         params do
           required(:address_line1).filled(:string)
-          optional(:address_line1).maybe(:string)
+          optional(:address_line2).maybe(:string)
           optional(:dc_ward).maybe(:string)
           required(:city).filled(:string)
           required(:state).filled(:string)
@@ -17,7 +17,7 @@ module Validators
         end
 
         rule(:zip) do
-          key.failure(text: 'invalid zip with length not equal to 5 digits') if key && value && value.length != 5
+          key.failure('invalid zip with length not equal to 5 digits') if key && value && value.length != 5
         end
       end
     end
