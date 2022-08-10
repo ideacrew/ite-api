@@ -34,4 +34,8 @@ module Types
   ROUTE_OF_ADMINISTRATION_OPTIONS = Types::String.enum('1', '2', '3', '4', '20', '96', '97', '98').freeze
   PRIOR_SU_EPISODE_OPTIONS = Types::String.enum('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '97', '98').freeze
   CRIMINAL_JUSTICE_REFERRAL_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '6', '7', '8', '96', '97', '98').freeze
+  MARITAL_STATUS_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '97', '98').freeze
+  VETERAN_STATUS_OPTIONS = Types::String.enum('1', '2', '97', '98').freeze
+  PREGNANCY_OPTIONS = Types::String.enum('1', '2', '96', '97', '98').freeze
+  SCHOOL_ATTENDENCE_OPTIONS = Types::String.enum('1', '2', '96', '97', '98').freeze
 end

@@ -12,7 +12,6 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
       client_id: '8347ehf',
       treatment_location: '123 main',
       referral_source: '2',
-      primary_payment_source: '1',
       criminal_justice_referral: '96',
       record_type: 'A'
     }
@@ -26,6 +25,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
       # discharge_date: Date.today.to_s,
       discharge_type: '50',
       discharge_reason: '2',
+      primary_payment_source: '1',
       last_contact_date: Date.today.to_s,
       num_of_prior_episodes: '3',
       client: client_params,
@@ -54,18 +54,18 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
   let(:client_profile_params) do
     {
       client_id: '8347ehf',
-      marital_status: '01',
-      veteran_status: '01',
-      education: '01',
-      employment: '01',
-      not_in_labor: '01',
-      income_source: '01',
-      pregnant: '01',
-      school_attendance: '01',
-      legal_status: '01',
-      arrests_past_30days: '01',
-      self_help_group_attendance: '01',
-      health_insuranc: '01'
+      marital_status: '1',
+      veteran_status: '1',
+      education: '1',
+      employment: '1',
+      not_in_labor: '1',
+      income_source: '1',
+      school_attendance: '1',
+      legal_status: '1',
+      arrests_past_30days: '1',
+      pregnant: '2',
+      self_help_group_attendance: '1',
+      health_insuranc: '1'
     }
   end
 
@@ -161,7 +161,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         all_params[:record_group] = 'admission'
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:record_type)
-        expect(errors[:record_type]).to eq(['must correspond to record group'])
+        expect(errors[:record_type]).to eq(['Must correspond to the submission dataset'])
       end
     end
 
@@ -173,7 +173,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         expect(errors[:admission_date]).to eq(['must be a date'])
       end
       it 'is not a valid date' do
-        all_params[:admission_date] = 'February 30'
+        all_params[:admission_date] = '2'
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:admission_date)
         expect(errors[:admission_date]).to eq(['must be a date'])
@@ -441,12 +441,6 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
     end
 
     context 'with invalid primary_payment_source' do
-      it 'is not present' do
-        all_params[:primary_payment_source] = nil
-        errors = subject.call(all_params).errors.to_h
-        expect(errors).to have_key(:primary_payment_source)
-        expect(errors.to_h[:primary_payment_source].first).to eq('must be filled')
-      end
       it 'is an invalid value' do
         all_params[:primary_payment_source] = (Date.today - 10).to_s
         errors = subject.call(all_params).errors.to_h
@@ -474,16 +468,16 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         expect(result.errors.to_h[:dob]).to include 'Must be later than the current date'
       end
     end
-    # context 'with invalid gender' do
-    #  it 'fails if male and pregnant' do
-    #    all_params[:client][:gender] = '1'
-    #    all_params[:client_profile][:pregnant] = '01'
-    #    result = subject.call(all_params)
-    #    expect(result.failure?).to be_truthy
-    #    expect(result.errors.to_h).to have_key(:pregnant)
-    #    expect(result.errors.to_h[:pregnant].first).to eq 'Gender is male, pregnancy is true'
-    #  end
-    # end
+    context 'with invalid gender' do
+      it 'fails if male and pregnant' do
+        all_params[:client][:gender] = '1'
+        all_params[:client_profile][:pregnant] = '1'
+        result = subject.call(all_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:pregnant)
+        expect(result.errors.to_h[:pregnant].first).to eq 'Gender is male, pregnancy is true'
+      end
+    end
   end
 
   context 'valid parameters' do

@@ -19,7 +19,7 @@ describe ::Transforms::Api::V1::ToEpisode, dbclean: :after_each do
       expect(@result).to be_success
     end
     it 'should convert dates to dates' do
-      expect(@record[:admission_date].class).to eq Date
+      expect(@record[:last_contact_date].class).to eq Date
     end
     it 'should covert integers to strings' do
       expect(@record[:treatment_type].class).to eq String

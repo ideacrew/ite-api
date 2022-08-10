@@ -2,6 +2,7 @@
 
 require './app/models/types'
 require './app/domain/validators/api/v1/client_contract'
+require './app/domain/validators/api/v1/client_profile_contract'
 
 module Validators
   module Api
@@ -27,7 +28,7 @@ module Validators
           optional(:criminal_justice_referral).maybe(Types::CRIMINAL_JUSTICE_REFERRAL_OPTIONS)
           optional(:primary_payment_source).maybe(Types::PAYMENT_SOURCE_OPTIONS)
           optional(:client).maybe(Validators::Api::V1::ClientContract.params)
-          optional(:client_profile).maybe(:hash)
+          optional(:client_profile).maybe(Validators::Api::V1::ClientProfileContract.params)
           optional(:clinical_info).maybe(:hash)
 
           # fields from the extract
@@ -41,6 +42,14 @@ module Validators
           key(:client_id).failure('Field cannot contain special characters') if key && value && value.match(/[^a-zA-Z\d-]/)
           key.failure('Needs to be 15 or less characters') if key && value && value.length > 15
           key.failure('Cannot be all 0s') if key && value && value.chars.to_a.uniq == ['0']
+        end
+
+        %i[admission_date].each do |field|
+          rule(field) do
+            pattern1 = Regexp.new('^\d{4}\-\d{2}\-\d{2}$').freeze
+            pattern2 = Regexp.new('^\d{2}\/\d{2}\/\d{4}').freeze
+            key.failure('Must be a valid date in format YYYY-MM-DD or MM/DD/YYYY') if key && value && !(pattern1.match(value.to_s) || pattern2.match(value.to_s))
+          end
         end
 
         rule(:admission_date) do
@@ -65,8 +74,8 @@ module Validators
           discharge_types = %w[D S E]
           # active_types = %w[U]
           if values[:record_group]
-            key.failure('must correspond to record group') if key && admission_types.include?(values[:record_type]) && values[:record_group] != 'admission'
-            key.failure('must correspond to record group') if key && discharge_types.include?(values[:record_type]) && values[:record_group] != 'discharge'
+            key.failure('Must correspond to the submission dataset') if key && admission_types.include?(values[:record_type]) && values[:record_group] != 'admission'
+            key.failure('Must correspond to the submission dataset') if key && discharge_types.include?(values[:record_type]) && values[:record_group] != 'discharge'
             # key.failure(text: 'must correspond to record group') if key && active_types.include?(values[:record_type]) && values[:record_group] != 'active'
           end
         end
@@ -157,10 +166,6 @@ module Validators
           end
         end
 
-        rule(:primary_payment_source) do
-          key.failure('must be filled') if key && !value
-        end
-
         rule(:admission_date, client: :dob) do
           if key && (values[:admission_date] && values.dig(:client, :dob)) &&
              values[:client][:dob] > values[:admission_date]
@@ -182,14 +187,21 @@ module Validators
             end
           end
         end
+        rule(:client_profile) do
+          if key && value
+            result = Validators::Api::V1::ClientProfileContract.new.call(value)
+            result.errors.to_a.each do |error|
+              key(error.path.last).failure(error.text)
+            end
+          end
+        end
 
-        # rule("client.dob", "client_profile.pregnant") do
-        #   if key && (values[:admission_date] && values.dig(:client, :dob)) &&
-        #      values[:client][:dob] > values[:admission_date]
-        #     key(:dob).failure(text: 'Must be later than the admission date',
-        #                 warning: true)
-        #   end
-        # end
+        rule('client.gender', 'client_profile.pregnant') do
+          if key && (values.dig(:client_profile, :pregnant) && values.dig(:client, :gender)) &&
+             (values.dig(:client_profile, :pregnant) == '1' && values.dig(:client, :gender) == '1')
+            key(:pregnant).failure('Gender is male, pregnancy is true')
+          end
+        end
       end
     end
   end

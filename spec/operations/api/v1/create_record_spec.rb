@@ -24,12 +24,17 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :after_each do
       'last_contact_date' => Date.today.to_s,
       'record_type' => 'A',
       'referral_source' => '2',
+      'marital_status' => '2',
       'primary_payment_source' => '2',
       'criminal_justice_referral' => '96',
       'gender' => '1',
       'first_name' => 'George',
       'last_name' => 'Bluth',
       'race' => '1',
+      'veteran_status' => '1',
+      'not_in_labor' => '1',
+      'pregnant' => '2',
+      'school_attendance' => '2',
       'ethnicity' => '97',
       'primary_language' => '1' }
   end
