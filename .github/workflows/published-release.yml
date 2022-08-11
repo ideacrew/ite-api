@@ -2,7 +2,9 @@ name: Publish Release
 
 on:
   release:
-    types: [published]
+    types:
+      - published
+      - created
 
 concurrency:
   group: release-${{ github.ref }}
