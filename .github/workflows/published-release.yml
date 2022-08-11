@@ -11,6 +11,7 @@ concurrency:
 
 jobs:
   deploy-to-heroku:
+    environment: uat
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
