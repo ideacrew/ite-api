@@ -36,4 +36,36 @@ describe ::Transforms::Api::V1::ToEpisode, dbclean: :after_each do
       expect(@record).to_not have_key(:dob)
     end
   end
+  context 'date coversion' do
+    it 'should not convert invalid dates to dates' do
+      record.payload[:last_contact_date] = '2387647677'
+      result = described_class.new.call(record).value!
+      expect(result[:last_contact_date].class).to_not eq Date
+    end
+    it 'should not convert dates that do not match pattern' do
+      record.payload[:last_contact_date] = '12-02-2022'
+      result = described_class.new.call(record).value!
+      expect(result[:last_contact_date].class).to_not eq Date
+    end
+    it 'should convert dates that match pattern YYYY-MM-DD' do
+      record.payload[:last_contact_date] = '2022-12-10'
+      result = described_class.new.call(record).value!
+      expect(result[:last_contact_date].class).to eq Date
+    end
+    it 'should convert dates that match pattern YYYY-M-D' do
+      record.payload[:last_contact_date] = '2022-2-1'
+      result = described_class.new.call(record).value!
+      expect(result[:last_contact_date].class).to eq Date
+    end
+    it 'should convert dates that match pattern D/M/YYYY' do
+      record.payload[:last_contact_date] = '2/1/2022'
+      result = described_class.new.call(record).value!
+      expect(result[:last_contact_date].class).to eq Date
+    end
+    it 'should convert dates that match pattern DD/MM/YYYY' do
+      record.payload[:last_contact_date] = '12/01/2022'
+      result = described_class.new.call(record).value!
+      expect(result[:last_contact_date].class).to eq Date
+    end
+  end
 end
