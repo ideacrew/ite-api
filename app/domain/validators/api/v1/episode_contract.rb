@@ -44,16 +44,16 @@ module Validators
           key.failure('Cannot be all 0s') if key && value && value.chars.to_a.uniq == ['0']
         end
 
-        %i[admission_date].each do |field|
-          rule(field) do
-            pattern1 = Regexp.new('^\d{4}\-\d{2}\-\d{2}$').freeze
-            pattern2 = Regexp.new('^\d{2}\/\d{2}\/\d{4}').freeze
-            key.failure('Must be a valid date in format YYYY-MM-DD or MM/DD/YYYY') if key && value && !(pattern1.match(value.to_s) || pattern2.match(value.to_s))
-          end
-        end
+        # %i[admission_date].each do |field|
+        #   rule(field) do
+        #     pattern1 = Regexp.new('^\d{4}\-\d{2}\-\d{2}$').freeze
+        #     pattern2 = Regexp.new('^\d{2}\/\d{2}\/\d{4}').freeze
+        #     key.failure('Must be a valid date in format YYYY-MM-DD or MM/DD/YYYY') if key && value && !(pattern1.match(value.to_s) || pattern2.match(value.to_s))
+        #   end
+        # end
 
         rule(:admission_date) do
-          key.failure('Must be a valid date') if key && value && value.class != Date
+          key.failure('Must be a valid date in format YYYY-MM-DD or MM/DD/YYYY') if key && value && value.class != Date
           key.failure('Must be after January 1, 1920') if key && value && value < Date.new(1920, 0o1, 0o1)
         end
         rule(:admission_date, :last_contact_date) do

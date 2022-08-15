@@ -60,13 +60,13 @@ module Transforms
         def valid_date(value)
           return value if value.nil?
 
-          re = Regexp.new('\/\d{2}$').freeze
-          return Date.strptime(value, '%m/%d/%y') if value.match(re)
-
-          re = Regexp.new('\/\d{4}$').freeze
+          re = Regexp.new('^\d{1,2}\/\d{1,2}\/\d{4}$').freeze
           return Date.strptime(value, '%m/%d/%Y') if value.match(re)
 
-          Date.parse(value)
+          re = Regexp.new('^\d{4}\-\d{1,2}\-\d{1,2}$').freeze
+          return Date.strptime(value, '%Y-%m-%d') if value.match(re)
+
+          value
         rescue ArgumentError
           value
         end

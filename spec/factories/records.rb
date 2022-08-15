@@ -7,7 +7,7 @@ FactoryBot.define do
     payload do
       { provider_id: '15',
         episode_id: '194062',
-        admission_date: '01/04/22',
+        admission_date: '01/04/2022',
         treatment_type: '4',
         client_id: 'LEVN46410511921',
         codependent: '2',
