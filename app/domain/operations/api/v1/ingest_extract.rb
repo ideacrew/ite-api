@@ -13,13 +13,23 @@ module Operations
         send(:include, Dry::Monads[:result, :do, :try])
 
         def call(params)
+          provider = yield get_provider(params)
           validated_extract = yield validate_extract(params)
           extract_entity = yield create_entity(validated_extract)
-          extract = yield create_extract(extract_entity)
+          extract = yield create_extract(extract_entity, provider)
           create_records(extract, params)
         end
 
         private
+
+        def get_provider(params)
+          return Failure('no provider identifier') unless params[:provider_gateway_identifier]
+
+          providers = ::Api::V1::Provider.where(provider_gateway_identifier: params[:provider_gateway_identifier].to_i)
+          return Failure("no provider with provider gatweway id #{params[:provider_gateway_identifier]} exists") unless providers.any?
+
+          Success(providers.first)
+        end
 
         def validate_extract(params)
           result = ::Validators::Api::V1::ExtractContract.new.call(params)
@@ -34,9 +44,9 @@ module Operations
           result.success? ? Success(result.value!) : Failure(result)
         end
 
-        def create_extract(extract_entity)
-          extract = ::Api::V1::Extract.new(extract_entity.to_h)
-          extract.save ? Success(extract) : Failure('Failed to save extract')
+        def create_extract(extract_entity, provider)
+          extract = provider.extracts.build(extract_entity.to_h)
+          provider.save ? Success(provider.extracts.find(extract.id)) : Failure('Failed to save extract')
         end
 
         def create_records(extract, params)

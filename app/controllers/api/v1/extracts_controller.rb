@@ -7,7 +7,9 @@ module Api
       before_action :permit_params
 
       def show
-        @extract = Api::V1::Extract.find(params[:id])
+        # will need to adjust this logic so only if an admin see all extracts
+        provider = ::Api::V1::Provider.where(provider_gateway_identifier: params[:provider_gateway_identifier].to_i).first
+        @extract = provider.present? ? provider.extracts.find(params[:id]) : ::Api::V1::Provider.all.map(&:extracts).flatten.find(params[:id])
 
         render json: @extract if @extract
       end
@@ -33,8 +35,10 @@ module Api
       end
 
       def index
-        extracts = Api::V1::Extract.all
-        render json: extracts.order(&:created_at).reverse.map(&:list_view)
+        # will need to adjust this logic so only if an admin see all extracts
+        provider = ::Api::V1::Provider.where(provider_gateway_identifier: params[:provider_gateway_identifier].to_i).first
+        extracts = provider.present? ? provider.extracts : ::Api::V1::Provider.all.map(&:extracts).flatten
+        render json: extracts.sort(&:created_at).reverse.map(&:list_view)
       end
 
       private

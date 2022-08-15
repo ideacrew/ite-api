@@ -17,7 +17,7 @@ module Api
       field :adult_care, type: Boolean
       field :child_care, type: Boolean
 
-      embeds_many :extracts, class_name: 'Api::V1::Extracts', cascade_callbacks: true
+      embeds_many :extracts, cascade_callbacks: true
       embeds_many :office_locations, class_name: 'Api::V1::OfficeLocation', cascade_callbacks: true
 
       accepts_nested_attributes_for :office_locations, :extracts
