@@ -24,7 +24,6 @@ describe ::Operations::Api::V1::IngestExtract, dbclean: :after_each do
 
   context 'valid params' do
     before do
-      binding.pry
       @result = described_class.new.call(params)
       @extract = @result.value!
     end
