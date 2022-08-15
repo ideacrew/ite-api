@@ -17,6 +17,7 @@ module Api
       field :file_name, type: String
       field :record_group, type: String
       field :status, type: String
+
       embeds_many :records, cascade_callbacks: true, validate: true
 
       accepts_nested_attributes_for :records
