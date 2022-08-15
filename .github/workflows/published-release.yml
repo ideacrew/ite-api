@@ -1,0 +1,25 @@
+name: Publish Release
+
+on:
+  release:
+    types:
+      - published
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy-to-heroku:
+    environment: uat
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: "ite-api-staging" #Must be unique in Heroku
+          heroku_email: "kristin.merbach@ideacrew.com"
+          usedocker: true
+        env:
+          HD_MONGODB_URI: ${{ secrets.STAGING_MONGODB_URI }}
