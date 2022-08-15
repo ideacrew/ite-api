@@ -16,7 +16,7 @@ module Api
       field :record_group, type: String
       field :status, type: String
 
-      # embedded_in :provider
+      embedded_in :provider
       embeds_many :records, cascade_callbacks: true, validate: true
 
       accepts_nested_attributes_for :records
