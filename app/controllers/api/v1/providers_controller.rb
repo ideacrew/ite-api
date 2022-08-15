@@ -36,7 +36,7 @@ module Api
       def show
         @provider = Api::V1::Provider.find(params[:id])
 
-        render json: @provider if @provider
+        render json: @provider.attributes.to_h.except('extracts') if @provider
       end
 
       private

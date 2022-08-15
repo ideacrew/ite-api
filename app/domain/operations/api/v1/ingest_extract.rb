@@ -26,7 +26,7 @@ module Operations
           return Failure('no provider identifier') unless params[:provider_gateway_identifier]
 
           providers = ::Api::V1::Provider.where(provider_gateway_identifier: params[:provider_gateway_identifier].to_i)
-          return Failure("no provider with provider gatweway id #{params[:provider_gateway_identifier]} exists") unless providers.any?
+          return Failure("no provider exists or more than one provider was found with provider gatweway id #{params[:provider_gateway_identifier]}") unless providers.count == 1
 
           Success(providers.first)
         end
