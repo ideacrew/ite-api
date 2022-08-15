@@ -8,8 +8,13 @@ module Api
 
       def show
         # will need to adjust this logic so only if an admin see all extracts
-        provider = ::Api::V1::Provider.where(provider_gateway_identifier: params[:provider_gateway_identifier].to_i).first
-        @extract = provider.present? ? provider.extracts.find(params[:id]) : ::Api::V1::Provider.all.map(&:extracts).flatten.find(params[:id])
+
+        providers = if params[:provider_gateway_identifier]
+                      ::Api::V1::Provider.where(provider_gateway_identifier: params[:provider_gateway_identifier].to_i)
+                    else
+                      ::Api::V1::Provider.where(extracts: { :$elemMatch => { _id: BSON::ObjectId.from_string(params[:id]) } })
+                    end
+        @extract = providers.first.extracts.find(params[:id])
 
         render json: @extract if @extract
       end

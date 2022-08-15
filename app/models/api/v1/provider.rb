@@ -30,7 +30,7 @@ module Api
       validates_presence_of :provider_name, :is_active, :mh, :sud, :adult_care,
                             :child_care, :office_locations, :provider_gateway_identifier
 
-      before_validation :generate_gateway_id
+      before_validation :generate_gateway_id, on: [:create]
 
       index({ provider_gateway_identifier: 1 }, { sparse: true })
 
