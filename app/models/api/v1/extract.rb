@@ -7,6 +7,8 @@ module Api
       include Mongoid::Document
       include Mongoid::Timestamps
 
+      embedded_in :provider
+
       # field :payload, type: Hash
       field :provider_gateway_identifier, type: String
       field :coverage_start, type: Date
@@ -15,8 +17,6 @@ module Api
       field :file_name, type: String
       field :record_group, type: String
       field :status, type: String
-
-      # embedded_in :provider
       embeds_many :records, cascade_callbacks: true, validate: true
 
       accepts_nested_attributes_for :records

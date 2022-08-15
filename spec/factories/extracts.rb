@@ -2,6 +2,8 @@
 
 FactoryBot.define do
   factory :extract, class: '::Api::V1::Extract' do
+    association :provider
+
     provider_gateway_identifier { '13' }
     coverage_start { Date.today.to_s }
     coverage_end { Date.today.to_s }

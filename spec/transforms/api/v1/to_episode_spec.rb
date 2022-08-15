@@ -6,9 +6,7 @@ require 'csv'
 describe ::Transforms::Api::V1::ToEpisode, dbclean: :after_each do
   include Dry::Monads[:result, :do]
 
-  let(:extract) { FactoryBot.create(:extract, :with_records) }
-
-  let(:record) { extract.records.first }
+  let(:record) { FactoryBot.build(:record) }
 
   context 'with a valid row' do
     before do

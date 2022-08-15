@@ -5,7 +5,7 @@ require 'rails_helper'
 describe ::Operations::Api::V1::CreateRecord, dbclean: :after_each do
   include Dry::Monads[:result, :do]
 
-  let(:extract_params) { FactoryBot.create(:extract) }
+  let(:provider) { FactoryBot.create(:provider, :with_extracts) }
 
   let(:row) do
     { 'provider_id' => '15',
@@ -43,7 +43,7 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :after_each do
 
   let(:params) do
     {
-      extract: extract_params.attributes.symbolize_keys, payload: row, dups:
+      extract: provider.extracts.first.attributes.symbolize_keys, payload: row, dups:
     }
   end
 

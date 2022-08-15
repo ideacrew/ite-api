@@ -13,7 +13,7 @@ RSpec.describe Api::V1::Provider, type: :model, dbclean: :after_each do
       sud: true,
       adult_care: true,
       child_care: true,
-      office_locations: [office_location] }
+      office_locations: [office_location], extracts: [] }
   end
 
   context 'with a valid params' do

@@ -10,7 +10,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :providers, only: %i[index create update]
+      resources :providers, only: %i[index create update show]
     end
   end
 end
