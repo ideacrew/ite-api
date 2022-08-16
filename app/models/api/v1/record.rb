@@ -8,8 +8,9 @@ module Api
       include Mongoid::Timestamps
 
       field :payload, type: Hash
-      field :failures, type: Array
       field :warnings, type: Array
+      field :critical_errors, type: Array
+      field :fatal_errors, type: Array
       # Valid or Invalid
       field :status, type: String
 
