@@ -15,7 +15,7 @@ module Api
         result = ::Operations::Api::V1::CreateProvider.new.call(permit_params.to_h)
         if result.success?
           render json: { status_text: 'created provider', status: 200, content_type: 'application/json',
-                         provider_id: result.value!.id, provider_gateway_id: result.value!.provider_gateway_id }
+                         provider_id: result.value!.id, provider_gateway_id: result.value!.provider_gateway_identifier }
         else
           failure_text = if result.failure.instance_of?(String)
                            result.failure
