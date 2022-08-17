@@ -72,7 +72,7 @@ module Operations
           return Success(errors) unless duplicate
 
           failure = { episode_id: 'must be a unique identifier for admission episodes' }
-          errors[:failures] << failure
+          errors[:fatal_error_fields] << failure
           Success(errors)
         end
       end

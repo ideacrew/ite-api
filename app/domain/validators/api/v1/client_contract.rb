@@ -7,7 +7,7 @@ module Validators
     module V1
       # Contract for Episode.
       class ClientContract < Dry::Validation::Contract
-        params do
+        json do
           optional(:client_id).maybe(:string)
           optional(:first_name).maybe(:string)
           optional(:middle_name).maybe(:string)
@@ -28,7 +28,7 @@ module Validators
         %i[first_name middle_name last_name alt_first_name alt_last_name].each do |field|
           rule(field) do
             if key && value
-              key.failure('Length cannot be more than 30 characters') if value.length > 30
+              key.failure('Length cannot be more than 50 characters') if value.length > 50
               pattern = Regexp.new('^[a-zA-Z\d\s\-\'\ ]*$').freeze
               key.failure('Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters') unless pattern.match(value)
             end

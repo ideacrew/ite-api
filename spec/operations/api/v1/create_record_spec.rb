@@ -105,31 +105,31 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :after_each do
       end
     end
 
-    context 'with a missing discharge date' do
-      it 'should create a record with a failure if the admission group is "discharge"' do
-        params[:extract][:record_group] = 'discharge'
-        params[:payload][:discharge_date] = nil
-        record = described_class.new.call(params).value!
-        expect(record.fatal_errors.map(&:keys).flatten).to include(:discharge_date)
-      end
-
-      it 'should create a record with a warnings if the admission group is not "discharge"' do
-        params[:extract][:record_group] = 'admission'
-        params[:payload][:discharge_date] = nil
-        record = described_class.new.call(params).value!
-        expect(record.fatal_errors.map(&:keys).flatten).to_not include(:discharge_date)
-      end
-    end
-
-    # WIP
-    # context 'with duplicate episode id' do
-    #   it 'should add an episode_id id failure' do
-    #     params[:payload][:episode_id] = '1234'
+    # context 'with a missing discharge date' do
+    #   it 'should create a record with a failure if the admission group is "discharge"' do
+    #     params[:extract][:record_group] = 'discharge'
+    #     params[:payload][:discharge_date] = nil
     #     record = described_class.new.call(params).value!
-    #     expect(record.failures.map(&:keys).flatten).to include(:episode_id)
-    #     expect(record.failures.first[:episode_id]).to eq 'must be a unique identifier for admission episodes'
+    #     expect(record.fatal_errors.map(&:keys).flatten).to include(:discharge_date)
+    #   end
+
+    #   it 'should create a record with a warnings if the admission group is not "discharge"' do
+    #     params[:extract][:record_group] = 'admission'
+    #     params[:payload][:discharge_date] = nil
+    #     record = described_class.new.call(params).value!
+    #     expect(record.fatal_errors.map(&:keys).flatten).to_not include(:discharge_date)
     #   end
     # end
+
+    # WIP
+    context 'with duplicate episode id' do
+      it 'should add an episode_id id failure' do
+        params[:payload][:episode_id] = '1234'
+        record = described_class.new.call(params).value!
+        expect(record.fatal_errors.map(&:keys).flatten).to include(:episode_id)
+        expect(record.fatal_errors.first[:episode_id]).to eq 'must be a unique identifier for admission episodes'
+      end
+    end
 
     context 'with an invalid last_contact_date date' do
       it 'should create a record with a failure if the admission group is "active"' do

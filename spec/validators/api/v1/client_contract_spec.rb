@@ -36,12 +36,12 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       expect(result.errors.to_h[:first_name].first).to eq 'must be filled'
     end
 
-    it 'First name more than 30 characters' do
-      valid_params[:first_name] = 'testinghsbdkabcakdsbdsidnakbciaksbd'
+    it 'First name more than 50 characters' do
+      valid_params[:first_name] = 'testinghsbdkabcakdsbdsidnakbciaksbdtestinghsbdkabcakdsbdsidnakbciaksbd'
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:first_name)
-      expect(result.errors.to_h[:first_name].first).to eq 'Length cannot be more than 30 characters'
+      expect(result.errors.to_h[:first_name].first).to eq 'Length cannot be more than 50 characters'
     end
 
     it 'first name contains special characters other than \' \' \' or -' do
@@ -60,12 +60,12 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       expect(result.errors.to_h[:last_name].first).to eq 'must be filled'
     end
 
-    it 'Last name more than 30 characters' do
-      valid_params[:last_name] = 'testinghsbdkabcakdsbdsidnakbciaksbd'
+    it 'Last name more than 50 characters' do
+      valid_params[:last_name] = 'testinghsbdkabcakdsbdsidnakbciaksbdtestinghsbdkabcakdsbdsidnakbciaksbd'
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:last_name)
-      expect(result.errors.to_h[:last_name].first).to eq 'Length cannot be more than 30 characters'
+      expect(result.errors.to_h[:last_name].first).to eq 'Length cannot be more than 50 characters'
     end
 
     it 'last name contains special characters other than \' \' \' or -' do
@@ -76,12 +76,12 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       expect(result.errors.to_h[:last_name].first).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
     end
 
-    it 'Middle name more than 30 characters' do
-      valid_params[:middle_name] = 'testinghsbdkabcakdsbdsidnakbciaksbd'
+    it 'Middle name more than 50 characters' do
+      valid_params[:middle_name] = 'testinghsbdkabcakdsbdsidnakbciaksbdtestinghsbdkabcakdsbdsidnakbciaksbd'
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:middle_name)
-      expect(result.errors.to_h[:middle_name].first).to eq 'Length cannot be more than 30 characters'
+      expect(result.errors.to_h[:middle_name].first).to eq 'Length cannot be more than 50 characters'
     end
 
     it 'middle name contains special characters other than \' \' \' or -' do
@@ -92,12 +92,12 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       expect(result.errors.to_h[:middle_name].first).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
     end
 
-    it 'alt_first_name more than 30 characters' do
-      valid_params[:alt_first_name] = 'testinghsbdkabcakdsbdsidnakbciaksbd'
+    it 'alt_first_name more than 50 characters' do
+      valid_params[:alt_first_name] = 'testinghsbdkabcakdsbdsidnakbciaksbdtestinghsbdkabcakdsbdsidnakbciaksbd'
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:alt_first_name)
-      expect(result.errors.to_h[:alt_first_name].first).to eq 'Length cannot be more than 30 characters'
+      expect(result.errors.to_h[:alt_first_name].first).to eq 'Length cannot be more than 50 characters'
     end
 
     it 'alt first name contains special characters other than \' \' \' or -' do
@@ -108,12 +108,12 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       expect(result.errors.to_h[:alt_first_name].first).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
     end
 
-    it 'alt_last_name more than 30 characters' do
-      valid_params[:alt_last_name] = 'testinghsbdkabcakdsbdsidnakbciaksbd'
+    it 'alt_last_name more than 50 characters' do
+      valid_params[:alt_last_name] = 'testinghsbdkabcakdsbdsidnakbciaksbdtestinghsbdkabcakdsbdsidnakbciaksbd'
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:alt_last_name)
-      expect(result.errors.to_h[:alt_last_name].first).to eq 'Length cannot be more than 30 characters'
+      expect(result.errors.to_h[:alt_last_name].first).to eq 'Length cannot be more than 50 characters'
     end
 
     it 'alt last name contains special characters other than \' \' \' or -' do
