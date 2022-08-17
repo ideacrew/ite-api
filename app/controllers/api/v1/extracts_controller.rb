@@ -24,8 +24,11 @@ module Api
         if result.success?
           render json: { status_text: 'ingested payload', status: 200, content_type: 'application/json',
                          extract_id: result.value!.id, ingestion_status: result.value!.status,
-                         failures: result.value!.failed_record_count,
-                         warnings: result.value!.warned_record_count }
+                         pass_count: result.value!.pass_count,
+                         fail_count: result.value!.fail_count,
+                         critical_errors: result.value!.record_critical_errors_count,
+                         fatal_errors: result.value!.record_fatal_errors_count,
+                         warnings: result.value!.record_warning_count }
         else
           # failure_text = if result.failure.instance_of?(String)
           #                  result.failure

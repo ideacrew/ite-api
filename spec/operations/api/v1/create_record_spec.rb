@@ -67,8 +67,8 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :around_each do
       expect(@record.fatal_errors).to eq([])
     end
 
-    it 'should have a status of Valid' do
-      expect(@record.status).to eq('Valid')
+    it 'should have a status of Pass' do
+      expect(@record.status).to eq('Pass')
     end
   end
 
@@ -100,8 +100,8 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :around_each do
         expect(@record.warnings).to eq([])
       end
 
-      it 'should have a status of Invalid' do
-        expect(@record.status).to eq('Invalid')
+      it 'should have a status of Fail' do
+        expect(@record.status).to eq('Fail')
       end
     end
 
@@ -166,8 +166,8 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :around_each do
         expect(@record.warnings).to eq([])
       end
 
-      it 'should have a status of Invalid' do
-        expect(@record.status).to eq('Invalid')
+      it 'should have a status of Fail' do
+        expect(@record.status).to eq('Fail')
       end
     end
   end

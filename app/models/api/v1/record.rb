@@ -11,7 +11,6 @@ module Api
       field :warnings, type: Array
       field :critical_errors, type: Array
       field :fatal_errors, type: Array
-      # Valid or Invalid
       field :status, type: String
 
       embedded_in :extract

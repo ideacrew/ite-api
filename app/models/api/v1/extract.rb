@@ -35,16 +35,34 @@ module Api
         records&.count
       end
 
-      def failed_record_count
+      def record_critical_errors_count
         return 0 unless records.present?
 
-        records&.select { |t| t.failures&.any? }&.count
+        records&.select { |t| t.critical_errors.any? }&.count
       end
 
-      def warned_record_count
+      def record_fatal_errors_count
+        return 0 unless records.present?
+
+        records&.select { |t| t.fatal_errors.any? }&.count
+      end
+
+      def record_warning_count
         return 0 unless records.present?
 
         records&.select { |t| t.warnings&.any? }&.count
+      end
+
+      def pass_count
+        return 0 unless records.present?
+
+        records&.select { |t| t.status == 'Pass' }&.count
+      end
+
+      def fail_count
+        return 0 unless records.present?
+
+        records&.select { |t| t.status == 'Fail' }&.count
       end
 
       def list_view
@@ -54,8 +72,11 @@ module Api
           coverage_start:,
           submission_date: created_at,
           number_of_records: record_count,
-          record_failure_count: failed_record_count,
-          record_warning_count: warned_record_count,
+          record_critical_errors_count:,
+          record_fatal_errors_count:,
+          record_warning_count:,
+          pass_count:,
+          fail_count:,
           status:
         }
       end
