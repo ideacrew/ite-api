@@ -27,13 +27,13 @@ module Api
                          failures: result.value!.failed_record_count,
                          warnings: result.value!.warned_record_count }
         else
-          failure_text = if result.failure.instance_of?(String)
-                           result.failure
-                         else
-                           result.failure.errors.map do |_k, _v|
-                             "#{k}: #{v}"
-                           end
-                         end
+          # failure_text = if result.failure.instance_of?(String)
+          #                  result.failure
+          #                else
+          #                  result.failure.errors.map do |_k, _v|
+          #                    "#{k}: #{v}"
+          #                  end
+          #                end
           render json: { status_text: 'Could not ingest payload', status: 400, content_type: 'application/json',
                          failures: result.failure }
         end
