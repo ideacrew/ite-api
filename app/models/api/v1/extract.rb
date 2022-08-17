@@ -39,13 +39,13 @@ module Api
       def failed_record_count
         return 0 unless records.present?
 
-        records&.select { |t| t.failures.any? }&.count
+        records&.select { |t| t.failures&.any? }&.count
       end
 
       def warned_record_count
         return 0 unless records.present?
 
-        records&.select { |t| t.warnings.any? }&.count
+        records&.select { |t| t.warnings&.any? }&.count
       end
 
       def list_view

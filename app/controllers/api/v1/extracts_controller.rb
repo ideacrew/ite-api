@@ -35,7 +35,7 @@ module Api
                            end
                          end
           render json: { status_text: 'Could not ingest payload', status: 400, content_type: 'application/json',
-                         failures: failure_text }
+                         failures: result.failure }
         end
       end
 
