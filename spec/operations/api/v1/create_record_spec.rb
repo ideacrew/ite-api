@@ -127,7 +127,7 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :after_each do
         params[:payload][:episode_id] = '1234'
         record = described_class.new.call(params).value!
         expect(record.fatal_errors.map(&:keys).flatten).to include(:episode_id)
-        expect(record.fatal_errors.first[:episode_id]).to eq 'must be a unique identifier for admission episodes'
+        expect(record.fatal_errors.first[:episode_id][:text]).to eq 'must be a unique identifier for admission episodes'
       end
     end
 

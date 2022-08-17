@@ -50,7 +50,7 @@ module Operations
           warnings = %i[medicaid_id suffix sexual_orientation first_name_alt last_name_alt middle_name]
           critical_error_fields = %i[primary_language ethnicity race first_name last_name dob gender]
           fatal_error_fields = %i[Collateral client_id record_type admission_date treatment_type discharge_date last_contact_date]
-          errors = result.errors.messages.map { |message| { message.path.last => message.text } }
+          errors = result.errors.messages.map { |message| { message.path.last => { text: message.text, category: message&.meta&.first&.last } } }
           warnings = errors.select { |error| warnings.include? error.keys.first }
           critical_error_fields = errors.select { |error| critical_error_fields.include? error.keys.first }
           fatal_error_fields = errors.select { |error| fatal_error_fields.include? error.keys.first }
@@ -71,7 +71,7 @@ module Operations
           duplicate = dups.map(&:to_s).include?(episode[:episode_id])
           return Success(errors) unless duplicate
 
-          failure = { episode_id: 'must be a unique identifier for admission episodes' }
+          failure = { episode_id: { text: 'must be a unique identifier for admission episodes', category: 'Data Inconsistency' } }
           errors[:fatal_error_fields] << failure
           Success(errors)
         end

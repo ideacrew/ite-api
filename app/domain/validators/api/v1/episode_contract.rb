@@ -38,7 +38,7 @@ module Validators
           optional(:extracted_on)
           optional(:coverage_start)
           optional(:coverage_end)
-          optional(:record_group).maybe(:string)
+          # optional(:record_group).maybe(:string)
         end
 
         rule(:client_id) do
