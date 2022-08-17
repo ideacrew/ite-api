@@ -28,7 +28,11 @@ module Api
                 allow_blank: false
 
       validates_presence_of :provider_name, :is_active, :mh, :sud, :adult_care,
-                            :child_care, :office_locations, :provider_gateway_identifier
+                            :child_care, :office_locations
+
+      validates :provider_gateway_identifier, numericality: true, uniqueness: true,
+                                              length: { minimum: 3, maximum: 3, message: '%<value>s is not a valid provider_gateway_identifier' },
+                                              allow_blank: false
 
       before_validation :generate_gateway_id, on: [:create]
 
@@ -37,9 +41,12 @@ module Api
       private
 
       def generate_gateway_id
+        ids = self.class.all.map(&:provider_gateway_identifier)
+        return if provider_gateway_identifier && !ids.include?(provider_gateway_identifier)
+
         loop do
           self.provider_gateway_identifier = (SecureRandom.random_number(9e2) + 1e2).to_i
-          break unless self.class.all.detect { |p| p.provider_gateway_identifier == provider_gateway_identifier }
+          break unless ids.include?(provider_gateway_identifier)
         end
       end
     end
