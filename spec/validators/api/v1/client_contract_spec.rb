@@ -25,7 +25,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:client_id)
-      expect(result.errors.to_h[:client_id].first).to eq 'must be filled'
+      expect(result.errors.to_h[:client_id].first[:text]).to eq 'Must be filled'
+      expect(result.errors.to_h[:client_id].first[:category]).to eq 'Missing Value'
     end
 
     it 'without first name' do
@@ -33,7 +34,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:first_name)
-      expect(result.errors.to_h[:first_name].first).to eq 'must be filled'
+      expect(result.errors.to_h[:first_name].first[:text]).to eq 'Must be filled'
+      expect(result.errors.to_h[:first_name].first[:category]).to eq 'Missing Value'
     end
 
     it 'First name more than 50 characters' do
@@ -41,7 +43,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:first_name)
-      expect(result.errors.to_h[:first_name].first).to eq 'Length cannot be more than 50 characters'
+      expect(result.errors.to_h[:first_name].first[:text]).to eq 'cannot contain more than 50 characters'
+      expect(result.errors.to_h[:first_name].first[:category]).to eq 'Invalid Field Length'
     end
 
     it 'first name contains special characters other than \' \' \' or -' do
@@ -49,7 +52,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:first_name)
-      expect(result.errors.to_h[:first_name].first).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
+      expect(result.errors.to_h[:first_name].first[:text]).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
+      expect(result.errors.to_h[:first_name].first[:category]).to eq 'Invalid Value'
     end
 
     it 'without last name' do
@@ -57,7 +61,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:last_name)
-      expect(result.errors.to_h[:last_name].first).to eq 'must be filled'
+      expect(result.errors.to_h[:last_name].first[:text]).to eq 'Must be filled'
+      expect(result.errors.to_h[:last_name].first[:category]).to eq 'Missing Value'
     end
 
     it 'Last name more than 50 characters' do
@@ -65,15 +70,16 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:last_name)
-      expect(result.errors.to_h[:last_name].first).to eq 'Length cannot be more than 50 characters'
+      expect(result.errors.to_h[:last_name].first[:text]).to eq 'cannot contain more than 50 characters'
+      expect(result.errors.to_h[:last_name].first[:category]).to eq 'Invalid Field Length'
     end
 
     it 'last name contains special characters other than \' \' \' or -' do
       valid_params[:last_name] = 'testinghs!'
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
-      expect(result.errors.to_h).to have_key(:last_name)
-      expect(result.errors.to_h[:last_name].first).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
+      expect(result.errors.to_h[:last_name].first[:text]).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
+      expect(result.errors.to_h[:last_name].first[:category]).to eq 'Invalid Value'
     end
 
     it 'Middle name more than 50 characters' do
@@ -81,7 +87,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:middle_name)
-      expect(result.errors.to_h[:middle_name].first).to eq 'Length cannot be more than 50 characters'
+      expect(result.errors.to_h[:middle_name].first[:text]).to eq 'cannot contain more than 50 characters'
+      expect(result.errors.to_h[:middle_name].first[:category]).to eq 'Invalid Field Length'
     end
 
     it 'middle name contains special characters other than \' \' \' or -' do
@@ -89,7 +96,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:middle_name)
-      expect(result.errors.to_h[:middle_name].first).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
+      expect(result.errors.to_h[:middle_name].first[:text]).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
+      expect(result.errors.to_h[:middle_name].first[:category]).to eq 'Invalid Value'
     end
 
     it 'alt_first_name more than 50 characters' do
@@ -97,7 +105,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:alt_first_name)
-      expect(result.errors.to_h[:alt_first_name].first).to eq 'Length cannot be more than 50 characters'
+      expect(result.errors.to_h[:alt_first_name].first[:text]).to eq 'cannot contain more than 50 characters'
+      expect(result.errors.to_h[:alt_first_name].first[:category]).to eq 'Invalid Field Length'
     end
 
     it 'alt first name contains special characters other than \' \' \' or -' do
@@ -105,7 +114,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:alt_first_name)
-      expect(result.errors.to_h[:alt_first_name].first).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
+      expect(result.errors.to_h[:alt_first_name].first[:text]).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
+      expect(result.errors.to_h[:alt_first_name].first[:category]).to eq 'Invalid Value'
     end
 
     it 'alt_last_name more than 50 characters' do
@@ -113,7 +123,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:alt_last_name)
-      expect(result.errors.to_h[:alt_last_name].first).to eq 'Length cannot be more than 50 characters'
+      expect(result.errors.to_h[:alt_last_name].first[:text]).to eq 'cannot contain more than 50 characters'
+      expect(result.errors.to_h[:alt_last_name].first[:category]).to eq 'Invalid Field Length'
     end
 
     it 'alt last name contains special characters other than \' \' \' or -' do
@@ -121,7 +132,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:alt_last_name)
-      expect(result.errors.to_h[:alt_last_name].first).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
+      expect(result.errors.to_h[:alt_last_name].first[:text]).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
+      expect(result.errors.to_h[:alt_last_name].first[:category]).to eq 'Invalid Value'
     end
 
     it 'ssn more than 9 characters' do
@@ -225,7 +237,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:gender)
-      expect(result.errors.to_h[:gender].first).to eq 'must be filled'
+      expect(result.errors.to_h[:gender].first[:text]).to eq 'Must be filled'
+      expect(result.errors.to_h[:gender].first[:category]).to eq 'Missing Value'
     end
 
     it 'Passing gender with more than 2 characters' do
@@ -233,7 +246,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:gender)
-      expect(result.errors.to_h[:gender].first).to eq 'must be one of: 1, 2, 3, 4, 5, 6, 95, 97, 98'
+      expect(result.errors.to_h[:gender].first[:text]).to eq 'must be one of 1, 2, 3, 4, 5, 6, 95, 97, 98'
+      expect(result.errors.to_h[:gender].first[:category]).to eq 'Invalid Value'
     end
 
     it 'without race' do
@@ -241,7 +255,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:race)
-      expect(result.errors.to_h[:race].first).to eq 'must be filled'
+      expect(result.errors.to_h[:race].first[:text]).to eq 'Must be filled'
+      expect(result.errors.to_h[:race].first[:category]).to eq 'Missing Value'
     end
 
     it 'Passing race with more than 2 characters' do
@@ -249,7 +264,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:race)
-      expect(result.errors.to_h[:race].first).to eq 'must be one of: 1, 2, 3, 4, 5, 13, 20, 21, 23, 97, 98'
+      expect(result.errors.to_h[:race].first[:text]).to eq 'must be one of 1, 2, 3, 4, 5, 13, 20, 21, 23, 97, 98'
+      expect(result.errors.to_h[:race].first[:category]).to eq 'Invalid Value'
     end
 
     it 'without ethnicity' do
@@ -257,7 +273,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:ethnicity)
-      expect(result.errors.to_h[:ethnicity].first).to eq 'must be filled'
+      expect(result.errors.to_h[:ethnicity].first[:text]).to eq 'Must be filled'
+      expect(result.errors.to_h[:ethnicity].first[:category]).to eq 'Missing Value'
     end
 
     it 'Passing ethnicity with more than 2 characters' do
@@ -265,7 +282,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:ethnicity)
-      expect(result.errors.to_h[:ethnicity].first).to eq 'must be one of: 1, 2, 3, 4, 5, 6, 97, 98'
+      expect(result.errors.to_h[:ethnicity].first[:text]).to eq 'must be one of 1, 2, 3, 4, 5, 6, 97, 98'
+      expect(result.errors.to_h[:ethnicity].first[:category]).to eq 'Invalid Value'
     end
 
     it 'Passing sexual orientation with more than 2 characters' do
@@ -273,7 +291,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:sexual_orientation)
-      expect(result.errors.to_h[:sexual_orientation].first).to eq 'must be one of: 1, 2, 3, 4, 95, 97, 98'
+      expect(result.errors.to_h[:sexual_orientation].first[:text]).to eq 'must be one of 1, 2, 3, 4, 95, 97, 98'
+      expect(result.errors.to_h[:sexual_orientation].first[:category]).to eq 'Invalid Value'
     end
 
     it 'dob is more than 95 years ago' do

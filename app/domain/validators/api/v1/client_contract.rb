@@ -7,7 +7,10 @@ module Validators
     module V1
       # Contract for Episode.
       class ClientContract < Dry::Validation::Contract
-        json do
+        config.messages.default_locale = :en
+        config.messages.top_namespace = 'dry_validation_with_codes'
+        config.messages.load_paths = ['./config/locales/v1_messages.yml']
+        params do
           optional(:client_id).maybe(:string)
           optional(:first_name).maybe(:string)
           optional(:middle_name).maybe(:string)
@@ -28,22 +31,22 @@ module Validators
         %i[first_name middle_name last_name alt_first_name alt_last_name].each do |field|
           rule(field) do
             if key && value
-              key.failure('Length cannot be more than 50 characters') if value.length > 50
+              key.failure(:length_more_than50) if value.length > 50
               pattern = Regexp.new('^[a-zA-Z\d\s\-\'\ ]*$').freeze
-              key.failure('Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters') unless pattern.match(value)
+              key.failure(:unsuported_name_characters) unless pattern.match(value)
             end
           end
         end
 
         %i[first_name last_name client_id gender race ethnicity].each do |field|
           rule(field) do
-            key.failure('must be filled') if key && !value
+            key.failure(:missing_field) if key && !value
           end
         end
 
         { gender: Types::GENDER_OPTIONS, sexual_orientation: Types::SEXUAL_ORIENTATION_OPTIONS, race: Types::RACE_OPTIONS, ethnicity: Types::ETHNICITY_OPTIONS, primary_language: Types::LANGUAGE_OPTIONS }.each do |field, types|
           rule(field) do
-            key.failure("must be one of: #{types.values.join(', ')}") if key && value && !types.include?(value)
+            key.failure(text: "must be one of #{types.values.join(', ')}", category: 'Invalid Value') if key && value && !types.include?(value)
           end
         end
 

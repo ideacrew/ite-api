@@ -116,14 +116,14 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:client_id)
         expect(errors[:client_id].first[:text]).to eq('cannot contain all 0s')
-        expect(errors[:client_id].first[:category]).to eq('Invalid Field')
+        expect(errors[:client_id].first[:category]).to eq('Invalid Value')
       end
       it 'when longer than 15 characters' do
         all_params[:client_id] = '0000004389hfiugh4839g89righudhgdfhgj'
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:client_id)
         expect(errors[:client_id].first[:text]).to eq('cannot contain more than 15 digits')
-        expect(errors[:client_id].first[:category]).to eq('Invalid Field')
+        expect(errors[:client_id].first[:category]).to eq('Invalid Field Length')
       end
       it 'when not present' do
         all_params.merge!(client_id: nil)
@@ -379,7 +379,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :after_each do
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:episode_id)
         expect(errors.to_h[:episode_id].first[:text]).to eq('cannot contain more than 15 digits')
-        expect(errors[:episode_id].first[:category]).to eq('Invalid Field')
+        expect(errors[:episode_id].first[:category]).to eq('Invalid Field Length')
       end
       it 'has special characters' do
         all_params[:episode_id] = '3478657436!@'

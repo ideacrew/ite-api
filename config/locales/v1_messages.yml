@@ -22,9 +22,12 @@ en:
       missing_field:
         text: "Must be filled"
         category: "Missing Value"
+      not_in_list:
+        text: "must be one of %{list}"
+        category: "Invalid Value"
       all_zeros: 
         text: "cannot contain all 0s"
-        category: "Invalid Field"
+        category: "Invalid Value"
       special_characters: 
         text: "cannot contain special characters"
         category: "Invalid Field"
@@ -58,16 +61,22 @@ en:
       gender_pregnancy_mismatch:
         text: "gender is male, pregnancy is true"
         category: "Data Inconsistency"
+      length_more_than50:
+        text: "cannot contain more than 50 characters"
+        category: "Invalid Field Length"
+      unsuported_name_characters:
+        text: "Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters"
+        category: "Invalid Value"
 
       rules:
         client_id:
           length: 
             text: "cannot contain more than 15 digits"
-            category: "Invalid Field"
+            category: "Invalid Field Length"
         episode_id:
           length: 
             text: "cannot contain more than 15 digits"
-            category: "Invalid Field"
+            category: "Invalid Field Length"
         criminal_justice_referral:
           referral7_value96:
             text: "Should be one of 1-8 or 97-98"
