@@ -4,7 +4,7 @@ require 'spec_helper'
 # require 'email_validator'
 require './app/domain/validators/api/v1/email_contract'
 
-RSpec.describe ::Validators::Api::V1::EmailContract, dbclean: :after_each do
+RSpec.describe ::Validators::Api::V1::EmailContract, dbclean: :around_each do
   let(:all_params) do
     {
       address: 'test@test.com'

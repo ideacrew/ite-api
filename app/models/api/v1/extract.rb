@@ -15,15 +15,13 @@ module Api
       field :coverage_end, type: Date
       field :extracted_on, type: Date
       field :file_name, type: String
-      field :record_group, type: String
       field :status, type: String
 
       embeds_many :records, cascade_callbacks: true, validate: true
 
       accepts_nested_attributes_for :records
 
-      validates_presence_of :provider_gateway_identifier, :coverage_start, :coverage_end, :extracted_on,
-                            :record_group
+      validates_presence_of :provider_gateway_identifier, :coverage_start, :coverage_end, :extracted_on
 
       index({ provider_gateway_identifier: 1 }, { sparse: true })
 
@@ -55,7 +53,6 @@ module Api
           coverage_end:,
           coverage_start:,
           submission_date: created_at,
-          record_group:,
           number_of_records: record_count,
           record_failure_count: failed_record_count,
           record_warning_count: warned_record_count,

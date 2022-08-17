@@ -3,14 +3,13 @@
 require 'spec_helper'
 require './app/domain/validators/api/v1/extract_contract'
 
-RSpec.describe ::Validators::Api::V1::ExtractContract, dbclean: :after_each do
+RSpec.describe ::Validators::Api::V1::ExtractContract, dbclean: :around_each do
   let(:required_params) do
     {
       provider_gateway_identifier: '73982',
       coverage_start: Date.today.to_s,
       coverage_end: Date.today.to_s,
-      extracted_on: Date.today.to_s,
-      record_group: 'admission'
+      extracted_on: Date.today.to_s
     }
   end
 
@@ -20,8 +19,7 @@ RSpec.describe ::Validators::Api::V1::ExtractContract, dbclean: :after_each do
         {
           coverage_start: Date.today.to_s,
           coverage_end: Date.today.to_s,
-          extracted_on: Date.today.to_s,
-          record_group: 'Admission'
+          extracted_on: Date.today.to_s
         }
       end
 
@@ -81,15 +79,6 @@ RSpec.describe ::Validators::Api::V1::ExtractContract, dbclean: :after_each do
         it 'should fail validation' do
           required_params[:extracted_on] = Date.today + 1
           expect(subject.call(required_params).errors.to_h).to have_key(:extracted_on)
-        end
-      end
-    end
-
-    context 'invalid record group' do
-      context 'with record group not from list' do
-        it 'should fail validation' do
-          required_params[:record_group] = 'WrongOption'
-          expect(subject.call(required_params).errors.to_h).to have_key(:record_group)
         end
       end
     end

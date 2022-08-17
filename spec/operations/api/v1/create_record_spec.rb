@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe ::Operations::Api::V1::CreateRecord, dbclean: :after_each do
+describe ::Operations::Api::V1::CreateRecord, dbclean: :around_each do
   include Dry::Monads[:result, :do]
 
   let(:provider) { FactoryBot.create(:provider, :with_extracts) }
@@ -131,21 +131,21 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :after_each do
       end
     end
 
-    context 'with an invalid last_contact_date date' do
-      it 'should create a record with a failure if the admission group is "active"' do
-        params[:extract][:record_group] = 'active'
-        params[:payload][:last_contact_date] = 'not a date'
-        record = described_class.new.call(params).value!
-        expect(record.fatal_errors.map(&:keys).flatten).to include(:last_contact_date)
-      end
+    # context 'with an invalid last_contact_date date' do
+    #   it 'should create a record with a failure if the admission group is "active"' do
+    #     params[:extract][:record_group] = 'active'
+    #     params[:payload][:last_contact_date] = 'not a date'
+    #     record = described_class.new.call(params).value!
+    #     expect(record.fatal_errors.map(&:keys).flatten).to include(:last_contact_date)
+    #   end
 
-      it 'should create a record with a fatal error if the last_contact_date is missing' do
-        params[:extract][:record_group] = 'admission'
-        params[:payload][:last_contact_date] = 'not a date'
-        record = described_class.new.call(params).value!
-        expect(record.fatal_errors.map(&:keys).flatten).to include(:last_contact_date)
-      end
-    end
+    #   it 'should create a record with a fatal error if the last_contact_date is missing' do
+    #     params[:extract][:record_group] = 'admission'
+    #     params[:payload][:last_contact_date] = 'not a date'
+    #     record = described_class.new.call(params).value!
+    #     expect(record.fatal_errors.map(&:keys).flatten).to include(:last_contact_date)
+    #   end
+    # end
 
     context 'with invalid non-key field' do
       before do

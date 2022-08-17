@@ -8,7 +8,6 @@ FactoryBot.define do
     coverage_start { Date.today.to_s }
     coverage_end { Date.today.to_s }
     extracted_on { Date.today.to_s }
-    record_group { 'admission' }
 
     trait :with_records do
       records do

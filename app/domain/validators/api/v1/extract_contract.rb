@@ -13,7 +13,6 @@ module Validators
           required(:coverage_end).filled(:date)
           required(:extracted_on).filled(:date)
           optional(:file_name).maybe(:string)
-          required(:record_group).filled(::Types::RecordGroups)
         end
 
         rule(:coverage_start) do

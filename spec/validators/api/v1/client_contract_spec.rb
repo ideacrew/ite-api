@@ -3,7 +3,7 @@
 require 'spec_helper'
 require './app/domain/validators/api/v1/client_contract'
 
-RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :after_each do
+RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
   let(:valid_params) do
     {
       client_id: '8347ehf',

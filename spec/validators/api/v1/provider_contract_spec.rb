@@ -4,7 +4,7 @@ require 'spec_helper'
 require './app/domain/validators/api/v1/provider_contract'
 require './app/domain/validators/api/v1/office_location_contract'
 
-RSpec.describe ::Validators::Api::V1::ProviderContract, dbclean: :after_each do
+RSpec.describe ::Validators::Api::V1::ProviderContract, dbclean: :around_each do
   let(:required_params) do
     {
       provider_name: 'Acme Studio',

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Api::V1::Address, type: :model, dbclean: :after_each do
+RSpec.describe Api::V1::Address, type: :model, dbclean: :around_each do
   let(:office_location) { Api::V1::OfficeLocation.new }
   let(:address) { FactoryBot.build(:address, office_location:) }
 

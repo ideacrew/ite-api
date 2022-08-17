@@ -3,7 +3,7 @@
 require 'spec_helper'
 require './app/domain/validators/api/v1/phone_contract'
 
-RSpec.describe ::Validators::Api::V1::PhoneContract, dbclean: :after_each do
+RSpec.describe ::Validators::Api::V1::PhoneContract, dbclean: :around_each do
   let(:required_params) do
     {
       area_code: '101',
