@@ -81,5 +81,4 @@ describe ::Operations::Api::V1::CreateProvider, dbclean: :around_each do
       end
     end
   end
-
 end
