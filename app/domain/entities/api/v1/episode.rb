@@ -28,7 +28,7 @@ module Entities
         # Data of Last Contact
         attribute :last_contact_date, Types::Date.optional.meta(omittable: true)
         # Number of Prior SU Treatment Episodes
-        attribute :num_of_prior_episodes, Types::String.optional.meta(omittable: true) # confirm type
+        attribute :num_of_prior_su_episodes, Types::String.optional.meta(omittable: true) # confirm type
         # Referral Source
         attribute :referral_source, Types::String.optional.meta(omittable: true)
         # Detailed Criminal Justice Referral

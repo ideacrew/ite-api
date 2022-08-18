@@ -16,7 +16,7 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :around_each do
       'collateral' => '1',
       'dob' => (Date.today - 3000).to_s,
       'num_of_prior_admissions' => '2',
-      'num_of_prior_episodes' => '2',
+      'num_of_prior_su_episodes' => '2',
       'arrests_past_30days' => nil,
       'treatment_location' => '123 main',
       'education' => '12',

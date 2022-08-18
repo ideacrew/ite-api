@@ -13,6 +13,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
       treatment_location: '123 main',
       referral_source: '2',
       criminal_justice_referral: '96',
+      num_of_prior_su_episodes: '3',
       record_type: 'A'
     }
   end
@@ -25,9 +26,9 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
       # discharge_date: Date.today.to_s,
       discharge_type: '50',
       discharge_reason: '2',
+      discharge_date: Date.today.to_s,
       primary_payment_source: '1',
       last_contact_date: Date.today.to_s,
-      num_of_prior_episodes: '3',
       client: client_params,
       client_profile: client_profile_params,
       clinical_info: clinical_info_params
@@ -47,7 +48,8 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
       gender: '1',
       sexual_orientation: '2',
       race: '3',
-      ethnicity: '4'
+      ethnicity: '4',
+      primary_language: '1'
     }
   end
 
@@ -407,20 +409,20 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
         expect(errors[:episode_id].first[:category]).to eq('Invalid Field')
       end
     end
-    context 'with invalid num_of_prior_episodes it should fail' do
+    context 'with invalid num_of_prior_su_episodes it should fail' do
       # it 'is not present and the record group is not discharge' do
-      #   all_params[:num_of_prior_episodes] = nil
+      #   all_params[:num_of_prior_su_episodes] = nil
       #   all_params[:record_group] = 'admission'
       #   errors = subject.call(all_params).errors.to_h
-      #   expect(errors).to have_key(:num_of_prior_episodes)
-      #   expect(errors.to_h[:num_of_prior_episodes].first).to eq('Must be included for admission or active records')
+      #   expect(errors).to have_key(:num_of_prior_su_episodes)
+      #   expect(errors.to_h[:num_of_prior_su_episodes].first).to eq('Must be included for admission or active records')
       # end
       it 'is not a valid option' do
-        all_params[:num_of_prior_episodes] = '22'
+        all_params[:num_of_prior_su_episodes] = '22'
         errors = subject.call(all_params).errors.to_h
-        expect(errors).to have_key(:num_of_prior_episodes)
-        expect(errors.to_h[:num_of_prior_episodes].first[:text]).to eq('must be one of 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 97, 98')
-        expect(errors[:num_of_prior_episodes].first[:category]).to eq('Invalid Value')
+        expect(errors).to have_key(:num_of_prior_su_episodes)
+        expect(errors.to_h[:num_of_prior_su_episodes].first[:text]).to eq('must be one of 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 97, 98')
+        expect(errors[:num_of_prior_su_episodes].first[:category]).to eq('Invalid Value')
       end
     end
     context 'with invalid treatment location' do
@@ -556,7 +558,6 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
 
     context 'with required and optional parameters' do
       it 'should pass validation' do
-        all_params[:discharge_date] = Date.today.to_s
         result = subject.call(all_params)
         expect(result.success?).to be_truthy
       end
