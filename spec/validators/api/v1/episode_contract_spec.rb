@@ -42,7 +42,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
       first_name: 'test',
       last_name: 'test',
       ssn: '123758027',
-      medicaid_id: '16273833',
+      medicaid_id: '72345678',
       dob: Date.today,
       gender: '1',
       sexual_orientation: '2',

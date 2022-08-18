@@ -82,6 +82,12 @@ en:
       unsuported_name_characters:
         text: "Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters"
         category: "Invalid Value"
+      doesnt_start_with7:
+        text: "must start with 7"
+        category: "Invalid Value"
+      non_numeric:
+        text: "must contain only numbers"
+        category: "Wrong Format"
 
       rules:
         client_id:
@@ -91,6 +97,10 @@ en:
         episode_id:
           length: 
             text: "cannot contain more than 15 digits"
+            category: "Invalid Field Length"
+        medicaid_id:
+          length: 
+            text: "Length must be 8 characters"
             category: "Invalid Field Length"
         criminal_justice_referral:
           referral7_value96:

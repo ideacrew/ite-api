@@ -87,8 +87,10 @@ module Validators
 
         rule(:medicaid_id) do
           if key && value
-            key.failure('Length must be 8 characters') if value.length != 8
-            key.failure('Cannot be all 0s') if value.chars.to_a.uniq == ['0']
+            key.failure(:length) if value.length != 8
+            key.failure(:all_zeros) if value.chars.to_a.uniq == ['0']
+            key.failure(:non_numeric) unless value.scan(/\D/).empty?
+            key.failure(:doesnt_start_with7) unless value.start_with?('7')
           end
         end
       end

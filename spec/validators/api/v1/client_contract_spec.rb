@@ -10,7 +10,7 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       first_name: 'test',
       last_name: 'test',
       ssn: '223456789',
-      medicaid_id: '12345678',
+      medicaid_id: '72345678',
       dob: Date.today,
       gender: '1',
       sexual_orientation: '2',
@@ -233,7 +233,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:medicaid_id)
-      expect(result.errors.to_h[:medicaid_id].first).to eq 'Length must be 8 characters'
+      expect(result.errors.to_h[:medicaid_id].first[:text]).to eq 'Length must be 8 characters'
+      expect(result.errors.to_h[:medicaid_id].first[:category]).to eq 'Invalid Field Length'
     end
 
     it 'medicaid_id less than 8 characters' do
@@ -241,7 +242,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:medicaid_id)
-      expect(result.errors.to_h[:medicaid_id].first).to eq 'Length must be 8 characters'
+      expect(result.errors.to_h[:medicaid_id].first[:text]).to eq 'Length must be 8 characters'
+      expect(result.errors.to_h[:medicaid_id].first[:category]).to eq 'Invalid Field Length'
     end
 
     it 'medicaid_id is all 0s' do
@@ -249,7 +251,17 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:medicaid_id)
-      expect(result.errors.to_h[:medicaid_id].first).to eq 'Cannot be all 0s'
+      expect(result.errors.to_h[:medicaid_id].first[:text]).to eq 'cannot contain all 0s'
+      expect(result.errors.to_h[:medicaid_id].first[:category]).to eq 'Invalid Value'
+    end
+
+    it 'medicaid_id does not start with 7' do
+      valid_params[:medicaid_id] = '12345678'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:medicaid_id)
+      expect(result.errors.to_h[:medicaid_id].first[:text]).to eq 'must start with 7'
+      expect(result.errors.to_h[:medicaid_id].first[:category]).to eq 'Invalid Value'
     end
 
     it 'without gender' do
