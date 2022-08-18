@@ -9,7 +9,7 @@ module Types
   include Dry.Types
   include Dry::Logic
 
-  RecordGroups = Types::String.enum('admission', 'discharge', 'active').freeze
+  # RecordGroups = Types::String.enum('admission', 'discharge', 'active').freeze
   CODEPEDENT_OPTIONS = Types::String.enum('1', '2').freeze
   RECORD_TYPE_OPTIONS = Types::String.enum('A', 'T', 'D', 'M', 'X', 'E').freeze
   TREATMENT_TYPE_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '6', '7', '8', '72', '73', '74', '75', '76', '77',

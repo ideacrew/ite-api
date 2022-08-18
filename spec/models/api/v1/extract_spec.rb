@@ -3,7 +3,7 @@
 require 'rails_helper'
 # require 'types'
 
-RSpec.describe Api::V1::Extract, type: :model, dbclean: :after_each do
+RSpec.describe Api::V1::Extract, type: :model, dbclean: :around_each do
   let(:extract_params) do
     { "provider_gateway_identifier": 'all_fields',
       "coverage_start": Date.new(2022, 0o1, 0o1),
@@ -24,11 +24,14 @@ RSpec.describe Api::V1::Extract, type: :model, dbclean: :after_each do
         expect(@extract.coverage_range.count).to eq(31)
       end
 
-      it 'will have a record failure count' do
-        expect(@extract.failed_record_count).to eq(0)
+      it 'will have a record critical error count' do
+        expect(@extract.record_critical_errors_count).to eq(0)
+      end
+      it 'will have a record fatal error count' do
+        expect(@extract.record_fatal_errors_count).to eq(0)
       end
       it 'will have a record warning count' do
-        expect(@extract.warned_record_count).to eq(0)
+        expect(@extract.record_warning_count).to eq(0)
       end
       it 'will have a list_view that contains various fields' do
         expect(@extract.list_view[:submission_date]).to eq(@extract.created_at)

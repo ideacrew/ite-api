@@ -3,7 +3,7 @@
 require 'spec_helper'
 require './app/domain/validators/api/v1/address_contract'
 
-RSpec.describe ::Validators::Api::V1::AddressContract, dbclean: :after_each do
+RSpec.describe ::Validators::Api::V1::AddressContract, dbclean: :around_each do
   let(:required_params) do
     {
       address_line1: '123 main',

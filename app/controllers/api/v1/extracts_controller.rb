@@ -12,7 +12,7 @@ module Api
         providers = if params[:provider_gateway_identifier]
                       ::Api::V1::Provider.where(provider_gateway_identifier: params[:provider_gateway_identifier].to_i)
                     else
-                      ::Api::V1::Provider.where(extracts: { :$elemMatch => { _id: BSON::ObjectId.from_string(params[:id]) } })
+                      ::Api::V1::Provider.all.select { |p| p.extracts.pluck(:id.to_s).any? BSON::ObjectId.from_string(params[:id]) }
                     end
         @extract = providers.first.extracts.find(params[:id])
 
@@ -24,16 +24,12 @@ module Api
         if result.success?
           render json: { status_text: 'ingested payload', status: 200, content_type: 'application/json',
                          extract_id: result.value!.id, ingestion_status: result.value!.status,
-                         failures: result.value!.failed_record_count,
-                         warnings: result.value!.warned_record_count }
+                         pass_count: result.value!.pass_count,
+                         fail_count: result.value!.fail_count,
+                         critical_errors: result.value!.record_critical_errors_count,
+                         fatal_errors: result.value!.record_fatal_errors_count,
+                         warnings: result.value!.record_warning_count }
         else
-          # failure_text = if result.failure.instance_of?(String)
-          #                  result.failure
-          #                else
-          #                  result.failure.errors.map do |_k, _v|
-          #                    "#{k}: #{v}"
-          #                  end
-          #                end
           render json: { status_text: 'Could not ingest payload', status: 400, content_type: 'application/json',
                          failures: result.failure }
         end

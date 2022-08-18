@@ -57,7 +57,7 @@ module Operations
               record_object = extract.records.build
               record_object.assign_attributes(result.success.attributes)
             end
-            extract.status = extract.records&.select { |t| t.status == 'Invalid' }&.any? ? 'Invalid' : 'Valid'
+            extract.status = extract.records&.select { |t| t.status == 'Fail' }&.any? ? 'Invalid' : 'Valid'
             extract.save!
           end
           Success(extract)

@@ -8,12 +8,12 @@ module Api
       include Mongoid::Timestamps
 
       field :payload, type: Hash
-      field :failures, type: Array
       field :warnings, type: Array
-      # Valid or Invalid
+      field :critical_errors, type: Array
+      field :fatal_errors, type: Array
       field :status, type: String
 
-      embedded_in :extract
+      belongs_to :extract, inverse_of: :records, class_name: 'Api::V1::Extract'
 
       validates_presence_of :payload
 

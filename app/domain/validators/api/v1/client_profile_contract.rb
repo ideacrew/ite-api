@@ -7,6 +7,9 @@ module Validators
     module V1
       # Contract for client profile.
       class ClientProfileContract < Dry::Validation::Contract
+        config.messages.default_locale = :en
+        config.messages.top_namespace = 'dry_validation_with_codes'
+        config.messages.load_paths = ['./config/locales/v1_messages.yml']
         params do
           optional(:marital_status).maybe(:string)
           optional(:veteran_status).maybe(:string)
@@ -24,14 +27,14 @@ module Validators
 
         %i[marital_status veteran_status education employment not_in_labor pregnant school_attendance].each do |field|
           rule(field) do
-            key.failure('must be filled') if key && !value
+            key.failure(:missing_field) if key && !value
           end
         end
 
         { marital_status: Types::MARITAL_STATUS_OPTIONS, veteran_status: Types::VETERAN_STATUS_OPTIONS, education: Types::EDUCATION_OPTIONS, employment: Types::EMPLOYMENT_OPTIONS, pregnant: Types::PREGNANCY_OPTIONS,
           school_attendance: Types::SCHOOL_ATTENDENCE_OPTIONS }.each do |field, types|
           rule(field) do
-            key.failure("must be one of: #{types.values.join(', ')}") if key && value && !types.include?(value)
+            key.failure(text: "must be one of #{types.values.join(', ')}", category: 'Invalid Value') if key && value && !types.include?(value)
           end
         end
       end

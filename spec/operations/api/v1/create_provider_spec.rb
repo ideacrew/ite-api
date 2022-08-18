@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe ::Operations::Api::V1::CreateProvider, dbclean: :after_each do
+describe ::Operations::Api::V1::CreateProvider, dbclean: :around_each do
   include Dry::Monads[:result, :do]
 
   let(:params) do

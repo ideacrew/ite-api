@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Api::V1::Provider, type: :model, dbclean: :after_each do
+RSpec.describe Api::V1::Provider, type: :model, dbclean: :around_each do
   let(:office_location) { FactoryBot.build(:office_location, :with_phones, :with_emails) }
 
   let(:provider_params) do
@@ -100,6 +100,14 @@ RSpec.describe Api::V1::Provider, type: :model, dbclean: :after_each do
         provider_params[:office_locations] = []
         provider = described_class.new(provider_params)
         expect(provider.save).to eq false
+      end
+
+      it 'with an existing provider_gateway_identifier' do
+        existing_provider = FactoryBot.create(:provider)
+        provider_params[:provider_gateway_identifier] = existing_provider.provider_gateway_identifier
+        new_provider = described_class.new(provider_params)
+        new_provider.save
+        expect(new_provider.provider_gateway_identifier).not_to eq(existing_provider.provider_gateway_identifier)
       end
     end
   end

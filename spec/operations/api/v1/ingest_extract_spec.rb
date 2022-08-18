@@ -3,7 +3,7 @@
 require 'rails_helper'
 require 'csv'
 
-describe ::Operations::Api::V1::IngestExtract, dbclean: :after_each do
+describe ::Operations::Api::V1::IngestExtract, dbclean: :around_each do
   include Dry::Monads[:result, :do]
 
   let(:provider) { FactoryBot.create(:provider) }
@@ -17,7 +17,6 @@ describe ::Operations::Api::V1::IngestExtract, dbclean: :after_each do
       coverage_end: '01-01-2022',
       extracted_on: '01-01-2022',
       file_name: 'extract_data',
-      record_group: 'discharge',
       records: JSON.parse(records_array, symbolize_names: true)
     }
   end

@@ -16,7 +16,7 @@ module Operations
           record = yield create_record(record_entity)
           episode = yield structure_episode(record)
           validation_result = yield validate_episode(episode, params[:extract])
-          errors = yield structure_errors(validation_result, params[:extract])
+          errors = yield structure_errors(validation_result)
           cross_record_errors = yield check_episode_ids(errors, params[:dups], episode)
           update_record(cross_record_errors, record)
         end
@@ -46,21 +46,22 @@ module Operations
           Success(::Validators::Api::V1::EpisodeContract.new.call(episode.merge(extract)))
         end
 
-        def structure_errors(result, extract)
-          # flatten errors and separate into warnings and failures
-          key_fields = %i[client_id collateral record_type admission_date treatment_type]
-          key_fields << :discharge_date if extract[:record_group] == 'discharge'
-          key_fields << :last_contact_date if extract[:record_group] == 'active'
-          errors = result.errors.messages.map { |message| { message.path.last => message.text } }
-          warnings = errors.reject { |error| key_fields.include? error.keys.first }
-          failures = errors.select { |error| key_fields.include? error.keys.first }
-          Success(warnings:, failures:)
+        def structure_errors(result)
+          warnings = %i[medicaid_id suffix sexual_orientation first_name_alt last_name_alt middle_name]
+          critical_error_fields = %i[primary_language ethnicity race first_name last_name dob gender]
+          fatal_error_fields = %i[Collateral client_id record_type admission_date treatment_type discharge_date last_contact_date]
+          errors = result.errors.messages.map { |message| { message.path.last => { text: message.text, category: message&.meta&.first&.last } } }
+          warnings = errors.select { |error| warnings.include? error.keys.first }
+          critical_error_fields = errors.select { |error| critical_error_fields.include? error.keys.first }
+          fatal_error_fields = errors.select { |error| fatal_error_fields.include? error.keys.first }
+          Success(warnings:, critical_error_fields:, fatal_error_fields:)
         end
 
         def update_record(errors, record)
-          record.status = errors.compact_blank.any? ? 'Invalid' : 'Valid'
-          record.failures = errors[:failures].uniq.compact_blank!
+          record.status = errors.compact_blank.any? ? 'Fail' : 'Pass'
           record.warnings = errors[:warnings].uniq.compact_blank!
+          record.critical_errors = errors[:critical_error_fields].uniq.compact_blank!
+          record.fatal_errors = errors[:fatal_error_fields].uniq.compact_blank!
           Success(record)
         end
 
@@ -70,8 +71,8 @@ module Operations
           duplicate = dups.map(&:to_s).include?(episode[:episode_id])
           return Success(errors) unless duplicate
 
-          failure = { episode_id: 'must be a unique identifier for admission episodes' }
-          errors[:failures] << failure
+          failure = { episode_id: { text: 'must be a unique identifier for admission episodes', category: 'Data Inconsistency' } }
+          errors[:fatal_error_fields] << failure
           Success(errors)
         end
       end
