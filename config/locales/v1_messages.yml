@@ -88,6 +88,15 @@ en:
       non_numeric:
         text: "must contain only numbers"
         category: "Wrong Format"
+      all_same_digits:
+        text: "Cannot be all the same digits"
+        category: "Invalid Value"
+      sequential_ascending_order:
+        text: "Cannot be in sequential ascending order"
+        category: "Invalid Value"
+      sequential_descending_order:
+        text: "Cannot be in sequential descending order"
+        category: "Invalid Value"
 
       rules:
         client_id:
@@ -109,3 +118,17 @@ en:
           referral_not7_value_not96:
             text: "Should be Not Applicable (96)"
             category: "Data Inconsistency"
+        ssn:
+          length:
+            text: "Length must be 9 characters"
+            category: "Invalid Field Length"
+          end_with_all_zeros:
+            text: "Cannot end with 0000"
+            category: "Invalid Value"
+          cannot_start_with:
+            text: "Cannot end with 9, 666 or 000"
+            category: "Invalid Value"
+          middle_zeros:
+            text: "the 5th and 6th numbers from the right cannot be 00"
+            category: "Invalid Value"
+

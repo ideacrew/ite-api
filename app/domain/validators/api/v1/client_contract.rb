@@ -63,16 +63,16 @@ module Validators
 
         rule(:ssn) do
           if key && value
-            key.failure('Length should be 9 digits') if value.length != 9
-            key.failure('Cannot be all the same digits') if value.chars.to_a.uniq.length == 1
-            key.failure('Cannot be in sequential ascending order') if value.chars.to_a.each_cons(2).all? { |left, right| left < right }
-            key.failure('Cannot be in sequential descending order') if value.chars.to_a.each_cons(2).all? { |left, right| left > right }
-            key.failure('Cannot start with a 9') if value.start_with?('9')
-            key.failure('Cannot start with 666') if value.start_with?('666')
-            key.failure('Cannot start with 000') if value.start_with?('000')
-            key.failure('Cannot end with 0000') if value.end_with?('0000')
+            key.failure(:length) if value.length != 9
+            key.failure(:all_same_digits) if value.chars.to_a.uniq.length == 1
+            key.failure(:sequential_ascending_order) if value.chars.to_a.each_cons(2).all? { |left, right| left < right }
+            key.failure(:sequential_descending_order) if value.chars.to_a.each_cons(2).all? { |left, right| left > right }
+            key.failure(:cannot_start_with) if value.start_with?('9')
+            key.failure(:cannot_start_with) if value.start_with?('666')
+            key.failure(:cannot_start_with) if value.start_with?('000')
+            key.failure(:end_with_all_zeros) if value.end_with?('0000')
             pattern = Regexp.new('^\d{3}0{2}\d{4}$').freeze
-            key.failure('the 5th and 6th numbers from the right cannot be 00') if pattern.match(value)
+            key.failure(:middle_zeros) if pattern.match(value)
           end
         end
 

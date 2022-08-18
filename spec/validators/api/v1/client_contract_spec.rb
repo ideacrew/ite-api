@@ -161,7 +161,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:ssn)
-      expect(result.errors.to_h[:ssn].first).to eq 'Length should be 9 digits'
+      expect(result.errors.to_h[:ssn].first[:text]).to eq 'Length must be 9 characters'
+      expect(result.errors.to_h[:ssn].first[:category]).to eq 'Invalid Field Length'
     end
 
     it 'ssn all the same digits' do
@@ -169,7 +170,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:ssn)
-      expect(result.errors.to_h[:ssn]).to include 'Cannot be all the same digits'
+      expect(result.errors.to_h[:ssn].first[:text]).to eq('Cannot be all the same digits')
+      expect(result.errors.to_h[:ssn].first[:category]).to eq 'Invalid Value'
     end
 
     it 'ssn in sequential ascending order' do
@@ -177,7 +179,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:ssn)
-      expect(result.errors.to_h[:ssn]).to include 'Cannot be in sequential ascending order'
+      expect(result.errors.to_h[:ssn].first[:text]).to eq 'Cannot be in sequential ascending order'
+      expect(result.errors.to_h[:ssn].first[:category]).to eq 'Invalid Value'
     end
 
     it 'ssn in sequential descending order' do
@@ -185,7 +188,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:ssn)
-      expect(result.errors.to_h[:ssn]).to include 'Cannot be in sequential descending order'
+      expect(result.errors.to_h[:ssn].first[:text]).to eq 'Cannot be in sequential descending order'
+      expect(result.errors.to_h[:ssn].first[:category]).to eq 'Invalid Value'
     end
 
     it 'ssn starts with a 9' do
@@ -193,7 +197,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:ssn)
-      expect(result.errors.to_h[:ssn].first).to eq 'Cannot start with a 9'
+      expect(result.errors.to_h[:ssn].first[:text]).to eq 'Cannot end with 9, 666 or 000'
+      expect(result.errors.to_h[:ssn].first[:category]).to eq 'Invalid Value'
     end
 
     it 'ssn ends with 0000' do
@@ -201,7 +206,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:ssn)
-      expect(result.errors.to_h[:ssn].first).to eq 'Cannot end with 0000'
+      expect(result.errors.to_h[:ssn].first[:text]).to eq 'Cannot end with 0000'
+      expect(result.errors.to_h[:ssn].first[:category]).to eq 'Invalid Value'
     end
 
     it 'ssn starts with 666' do
@@ -209,7 +215,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:ssn)
-      expect(result.errors.to_h[:ssn].first).to eq 'Cannot start with 666'
+      expect(result.errors.to_h[:ssn].first[:text]).to eq 'Cannot end with 9, 666 or 000'
+      expect(result.errors.to_h[:ssn].first[:category]).to eq 'Invalid Value'
     end
 
     it 'ssn starts with 000' do
@@ -217,7 +224,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:ssn)
-      expect(result.errors.to_h[:ssn].first).to eq 'Cannot start with 000'
+      expect(result.errors.to_h[:ssn].first[:text]).to eq 'Cannot end with 9, 666 or 000'
+      expect(result.errors.to_h[:ssn].first[:category]).to eq 'Invalid Value'
     end
 
     it 'ssn has 00 as the middle section' do
@@ -225,7 +233,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:ssn)
-      expect(result.errors.to_h[:ssn].first).to eq 'the 5th and 6th numbers from the right cannot be 00'
+      expect(result.errors.to_h[:ssn].first[:text]).to eq 'the 5th and 6th numbers from the right cannot be 00'
+      expect(result.errors.to_h[:ssn].first[:category]).to eq 'Invalid Value'
     end
 
     it 'medicaid_id more than 8 characters' do
