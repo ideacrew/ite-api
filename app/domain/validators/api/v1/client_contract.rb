@@ -28,9 +28,11 @@ module Validators
           optional(:primary_language).maybe(:string)
           optional(:living_arrangement).maybe(:string)
           optional(:suffix).maybe(:string)
+          optional(:address_line1).maybe(:string)
+          optional(:address_line2).maybe(:string)
         end
 
-        %i[first_name middle_name last_name first_name_alt last_name_alt].each do |field|
+        %i[first_name middle_name last_name first_name_alt last_name_alt address_line1 address_line2].each do |field|
           rule(field) do
             if key && value
               key.failure(:length_more_than50) if value.length > 50
