@@ -90,7 +90,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
 
     context 'with optional parameters only' do
       it 'should list error for every required parameter' do
-        expect(subject.call(optional_params).errors.to_h.keys).to match_array required_params.keys
+        expect(subject.call(optional_params).errors.to_h.keys.flatten).to include(*required_params.keys)
       end
     end
 
@@ -304,6 +304,24 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:discharge_date)
         expect(errors[:discharge_date].first[:text]).to eq('cannot be later than the date of extraction')
+        expect(errors[:discharge_date].first[:category]).to eq('Data Inconsistency')
+      end
+
+      it 'is later than the coverage_end date' do
+        all_params[:coverage_end] = (Date.today - 10).to_s
+        all_params[:discharge_date] = Date.today.to_s
+        errors = subject.call(all_params).errors.to_h
+        expect(errors).to have_key(:discharge_date)
+        expect(errors[:discharge_date].first[:text]).to eq('cannot be later than the coverage end')
+        expect(errors[:discharge_date].first[:category]).to eq('Data Inconsistency')
+      end
+
+      it 'is later than the coverage_end date' do
+        all_params[:discharge_reason] = '1'
+        all_params[:discharge_date] = nil
+        errors = subject.call(all_params).errors.to_h
+        expect(errors).to have_key(:discharge_date)
+        expect(errors[:discharge_date].first[:text]).to eq('cannot be empty when discharge reason is present')
         expect(errors[:discharge_date].first[:category]).to eq('Data Inconsistency')
       end
 
@@ -538,6 +556,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
 
     context 'with required and optional parameters' do
       it 'should pass validation' do
+        all_params[:discharge_date] = Date.today.to_s
         result = subject.call(all_params)
         expect(result.success?).to be_truthy
       end

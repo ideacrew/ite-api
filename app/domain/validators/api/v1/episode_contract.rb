@@ -47,17 +47,12 @@ module Validators
           key.failure(:all_zeros) if key && value && value.chars.to_a.uniq == ['0']
         end
 
-        # %i[admission_date].each do |field|
-        #   rule(field) do
-        #     pattern1 = Regexp.new('^\d{4}\-\d{2}\-\d{2}$').freeze
-        #     pattern2 = Regexp.new('^\d{2}\/\d{2}\/\d{4}').freeze
-        #     key.failure('Must be a valid date in format YYYY-MM-DD or MM/DD/YYYY') if key && value && !(pattern1.match(value.to_s) || pattern2.match(value.to_s))
-        #   end
-        # end
-
-        rule(:admission_date) do
-          key.failure(:before1920) if key && value && value < Date.new(1920, 0o1, 0o1)
+        %i[discharge_date admission_date].each do |field|
+          rule(field) do
+            key.failure(:before1920) if key && value && value < Date.new(1920, 0o1, 0o1)
+          end
         end
+
         rule(:admission_date, :last_contact_date) do
           key.failure(:after_last_contact) if key && values[:last_contact_date] && values[:admission_date] > values[:last_contact_date]
         end
@@ -71,17 +66,6 @@ module Validators
           key.failure(:outside_coverage) if key && values[:coverage_end] && values[:admission_date] > Date.parse(values[:coverage_end].to_s)
         end
 
-        # rule(:record_type, :record_group) do
-        #   admission_types = %w[A T M X]
-        #   discharge_types = %w[D S E]
-        #   # active_types = %w[U]
-        #   if values[:record_group]
-        #     key.failure(:record_type_mismatch) if key && admission_types.include?(values[:record_type]) && values[:record_group] != 'admission'
-        #     key.failure(:record_type_mismatch) if key && discharge_types.include?(values[:record_type]) && values[:record_group] != 'discharge'
-        #     # key.failure(text: 'must correspond to record group') if key && active_types.include?(values[:record_type]) && values[:record_group] != 'active'
-        #   end
-        # end
-
         rule(:treatment_type, :record_type) do
           record_group1 = %w[M E X]
           record_group2 = %w[A T D]
@@ -94,11 +78,6 @@ module Validators
           key.failure(:treatment_type96) if key && values[:treatment_type] && values[:collateral] && values[:collateral] != '1' && values[:treatment_type] == '96'
         end
 
-        %i[discharge_date discharge_reason].each do |field|
-          # rule(field) do
-          #   key.failure('Must be included for discharge records') if key && values[:record_group] && values[:record_group] == 'discharge' && !values[field]
-          # end
-        end
         rule(:discharge_date, :extracted_on) do
           if key && (values[:extracted_on] && values[:discharge_date]) &&
              values[:discharge_date] > Date.parse(values[:extracted_on].to_s)
@@ -111,16 +90,19 @@ module Validators
             key.failure(:after_last_contact)
           end
         end
-        # rule(:discharge_date, :record_group) do
-        #   key.failure('Should not be included for active or admission records') if key && values[:record_group] != 'discharge' && values[:discharge_date]
-        # end
+
         rule(:discharge_date, :admission_date) do
           key.failure(:earlier_than_admission) if key && values[:discharge_date] && values[:admission_date] && values[:admission_date] > values[:discharge_date]
         end
 
-        # rule(:last_contact_date, :record_group) do
-        #   key.failure('must be included') if key && values[:record_group] && (values[:record_group] == 'active' && !values[:last_contact_date])
-        # end
+        rule(:discharge_date, :coverage_end) do
+          key.failure(:later_than_coverage_end) if key && values[:discharge_date] && values[:coverage_end] &&  Date.parse(values[:coverage_end]) < Date.parse(values[:discharge_date].to_s)
+        end
+
+        rule(:discharge_date, :discharge_reason) do
+          key.failure(:discharge_date_cannot_be_nil) if values[:discharge_reason] && !values[:discharge_date]
+        end
+
         rule(:last_contact_date, :extracted_on) do
           if key && (values[:last_contact_date] && values[:extracted_on]) &&
              values[:last_contact_date] > Date.parse(values[:extracted_on].to_s)

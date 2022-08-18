@@ -52,6 +52,12 @@ en:
       earlier_than_admission:
         text: "cannot be earlier than the date of admission"
         category: "Data Inconsistency"
+      later_than_coverage_end:
+        text: "cannot be later than the coverage end"
+        category: "Data Inconsistency"
+      discharge_date_cannot_be_nil:
+        text: "cannot be empty when discharge reason is present"
+        category: "Data Inconsistency"
       earlier_than_today:
         text: "cannot be earlier than today"
         category: "Data Inconsistency"
