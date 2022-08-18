@@ -15,7 +15,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       gender: '1',
       sexual_orientation: '2',
       race: '3',
-      ethnicity: '4'
+      ethnicity: '4',
+      primary_language: '1'
     }
   end
 

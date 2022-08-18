@@ -38,7 +38,7 @@ module Validators
           end
         end
 
-        %i[first_name last_name client_id gender race ethnicity dob].each do |field|
+        %i[first_name last_name client_id gender race ethnicity dob primary_language].each do |field|
           rule(field) do
             key.failure(:missing_field) if key && !value
           end
