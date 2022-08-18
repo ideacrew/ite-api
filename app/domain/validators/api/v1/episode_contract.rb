@@ -134,7 +134,7 @@ module Validators
         end
 
         rule(:criminal_justice_referral, :referral_source) do
-          key.failure(:missing_field) if key && !value
+          # key(:criminal_justice_referral).failure(:missing_field) if key && !value
           if key && values[:criminal_justice_referral] && values[:referral_source]
             key.failure(:referral7_value96) if values[:criminal_justice_referral] == '96' && values[:referral_source] == '7'
             key.failure(:referral_not7_value_not96) if values[:criminal_justice_referral] != '96' && values[:referral_source] != '7'

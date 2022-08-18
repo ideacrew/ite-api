@@ -28,6 +28,7 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :around_each do
       'primary_payment_source' => '2',
       'criminal_justice_referral' => '96',
       'gender' => '1',
+      'living_arrangement' => '1',
       'first_name' => 'George',
       'last_name' => 'Bluth',
       'race' => '1',

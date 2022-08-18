@@ -11,9 +11,8 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
       collateral: '2',
       client_id: '8347ehf',
       treatment_location: '123 main',
-      referral_source: '2',
-      criminal_justice_referral: '96',
       num_of_prior_su_episodes: '3',
+      referral_source: '2',
       record_type: 'A'
     }
   end
@@ -23,12 +22,12 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
       admission_type: '31',
       episode_id: 'fbgadfs7fgdy',
       service_request_date: Date.today.to_s,
-      # discharge_date: Date.today.to_s,
+      discharge_date: Date.today.to_s,
       discharge_type: '50',
       discharge_reason: '2',
-      discharge_date: Date.today.to_s,
       primary_payment_source: '1',
       last_contact_date: Date.today.to_s,
+      criminal_justice_referral: '96',
       client: client_params,
       client_profile: client_profile_params,
       clinical_info: clinical_info_params
@@ -49,7 +48,8 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
       sexual_orientation: '2',
       race: '3',
       ethnicity: '4',
-      primary_language: '1'
+      primary_language: '1',
+      living_arrangement: '1'
     }
   end
 
@@ -67,7 +67,8 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
       arrests_past_30days: '1',
       pregnant: '2',
       self_help_group_attendance: '1',
-      health_insuranc: '1'
+      health_insuranc: '1',
+      living_arrangement: '1'
     }
   end
 
@@ -458,14 +459,6 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
         expect(errors).to have_key(:criminal_justice_referral)
         expect(errors[:criminal_justice_referral].first[:text]).to eq('must be one of 1, 2, 3, 4, 5, 6, 7, 8, 96, 97, 98')
         expect(errors[:criminal_justice_referral].first[:category]).to eq('Invalid Value')
-      end
-      it 'without criminal justice referral it should warn' do
-        all_params[:criminal_justice_referral] = nil
-        result = subject.call(all_params)
-        expect(result.failure?).to be_truthy
-        expect(result.errors.to_h).to have_key(:criminal_justice_referral)
-        expect(result.errors.to_h[:criminal_justice_referral].first[:text]).to eq 'Must be filled'
-        expect(result.errors.to_h[:criminal_justice_referral].first[:category]).to eq('Missing Value')
       end
       it 'without criminal_justice_referral of 96 but with referral_source of 7 it should fail' do
         all_params[:criminal_justice_referral] = '96'

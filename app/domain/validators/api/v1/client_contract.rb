@@ -16,8 +16,8 @@ module Validators
           optional(:middle_name).maybe(:string)
           optional(:last_name).maybe(:string)
           optional(:suffix).maybe(:string)
-          optional(:alt_first_name).maybe(:string)
-          optional(:alt_last_name).maybe(:string)
+          optional(:first_name_alt).maybe(:string)
+          optional(:last_name_alt).maybe(:string)
           optional(:ssn).maybe(:string)
           optional(:medicaid_id).maybe(:string)
           optional(:dob).maybe(:date)
@@ -29,7 +29,7 @@ module Validators
           optional(:living_arrangement).maybe(:string)
         end
 
-        %i[first_name middle_name last_name alt_first_name alt_last_name].each do |field|
+        %i[first_name middle_name last_name first_name_alt last_name_alt].each do |field|
           rule(field) do
             if key && value
               key.failure(:length_more_than50) if value.length > 50

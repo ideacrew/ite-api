@@ -103,39 +103,39 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
     end
 
     it 'alt_first_name more than 50 characters' do
-      valid_params[:alt_first_name] = 'testinghsbdkabcakdsbdsidnakbciaksbdtestinghsbdkabcakdsbdsidnakbciaksbd'
+      valid_params[:first_name_alt] = 'testinghsbdkabcakdsbdsidnakbciaksbdtestinghsbdkabcakdsbdsidnakbciaksbd'
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
-      expect(result.errors.to_h).to have_key(:alt_first_name)
-      expect(result.errors.to_h[:alt_first_name].first[:text]).to eq 'cannot contain more than 50 characters'
-      expect(result.errors.to_h[:alt_first_name].first[:category]).to eq 'Invalid Field Length'
+      expect(result.errors.to_h).to have_key(:first_name_alt)
+      expect(result.errors.to_h[:first_name_alt].first[:text]).to eq 'cannot contain more than 50 characters'
+      expect(result.errors.to_h[:first_name_alt].first[:category]).to eq 'Invalid Field Length'
     end
 
     it 'alt first name contains special characters other than \' \' \' or -' do
-      valid_params[:alt_first_name] = 'testinghs!'
+      valid_params[:first_name_alt] = 'testinghs!'
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
-      expect(result.errors.to_h).to have_key(:alt_first_name)
-      expect(result.errors.to_h[:alt_first_name].first[:text]).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
-      expect(result.errors.to_h[:alt_first_name].first[:category]).to eq 'Invalid Value'
+      expect(result.errors.to_h).to have_key(:first_name_alt)
+      expect(result.errors.to_h[:first_name_alt].first[:text]).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
+      expect(result.errors.to_h[:first_name_alt].first[:category]).to eq 'Invalid Value'
     end
 
     it 'alt_last_name more than 50 characters' do
-      valid_params[:alt_last_name] = 'testinghsbdkabcakdsbdsidnakbciaksbdtestinghsbdkabcakdsbdsidnakbciaksbd'
+      valid_params[:last_name_alt] = 'testinghsbdkabcakdsbdsidnakbciaksbdtestinghsbdkabcakdsbdsidnakbciaksbd'
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
-      expect(result.errors.to_h).to have_key(:alt_last_name)
-      expect(result.errors.to_h[:alt_last_name].first[:text]).to eq 'cannot contain more than 50 characters'
-      expect(result.errors.to_h[:alt_last_name].first[:category]).to eq 'Invalid Field Length'
+      expect(result.errors.to_h).to have_key(:last_name_alt)
+      expect(result.errors.to_h[:last_name_alt].first[:text]).to eq 'cannot contain more than 50 characters'
+      expect(result.errors.to_h[:last_name_alt].first[:category]).to eq 'Invalid Field Length'
     end
 
     it 'alt last name contains special characters other than \' \' \' or -' do
-      valid_params[:alt_last_name] = 'testinghs!'
+      valid_params[:last_name_alt] = 'testinghs!'
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
-      expect(result.errors.to_h).to have_key(:alt_last_name)
-      expect(result.errors.to_h[:alt_last_name].first[:text]).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
-      expect(result.errors.to_h[:alt_last_name].first[:category]).to eq 'Invalid Value'
+      expect(result.errors.to_h).to have_key(:last_name_alt)
+      expect(result.errors.to_h[:last_name_alt].first[:text]).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
+      expect(result.errors.to_h[:last_name_alt].first[:category]).to eq 'Invalid Value'
     end
 
     it 'ssn more than 9 characters' do

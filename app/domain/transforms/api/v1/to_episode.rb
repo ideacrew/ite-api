@@ -14,7 +14,7 @@ module Transforms
                             service_request_date discharge_date discharge_type discharge_reason last_contact_date
                             num_of_prior_su_episodes referral_source criminal_justice_referral primary_payment_source
                             client client_profile clinical_info treatment_location].freeze
-        CLIENT_FIELDS = %i[first_name middle_name last_name last_name_alt alias ssn medicaid_id
+        CLIENT_FIELDS = %i[first_name middle_name last_name first_name_alt last_name_alt alias ssn medicaid_id
                            dob gender sexual_orientation race ethnicity primary_language phone1 phone2 living_arrangement].freeze
         CLINICAL_INFO_FIELDS = %i[gaf_score smi_sed co_occurring_sud_mh opioid_therapy substance_problems
                                   sud_diagnostic_codes mh_diagnostic_codes].freeze
