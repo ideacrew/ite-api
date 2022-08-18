@@ -74,7 +74,7 @@ module Validators
             key.failure(:record_type_mismatch) if key && record_group2.include?(values[:record_type]) && values[:treatment_type].to_i > 9
           end
         end
-        
+
         rule(:treatment_type, :collateral) do
           key.failure(:treatment_type96) if key && values[:treatment_type] && values[:collateral] && values[:collateral] != '1' && values[:treatment_type] == '96'
         end

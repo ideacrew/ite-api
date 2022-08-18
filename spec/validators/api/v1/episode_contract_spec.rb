@@ -162,7 +162,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
         all_params[:record_type] = '29'
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:record_type)
-        expect(errors[:record_type].first[:text]).to eq('must be one of A, T, D, M, X, E')
+        expect(errors[:record_type].first[:text]).to eq('must be one of A, T, M, X')
         expect(errors[:record_type].first[:category]).to eq('Invalid Value')
       end
       # it 'does not correctly correspond to the record_group' do
