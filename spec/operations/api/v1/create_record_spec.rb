@@ -9,7 +9,7 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :around_each do
 
   let(:row) do
     { 'provider_id' => '15',
-      'episode_id' => '194062',
+      'admission_id' => '194062',
       'admission_date' => Date.today.to_s,
       'treatment_type' => '4',
       'client_id' => 'LEVN46410511921',
@@ -123,12 +123,12 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :around_each do
     # end
 
     # WIP
-    context 'with duplicate episode id' do
-      it 'should add an episode_id id failure' do
-        params[:payload][:episode_id] = '1234'
+    context 'with duplicate admission id' do
+      it 'should add an admission_id id failure' do
+        params[:payload][:admission_id] = '1234'
         record = described_class.new.call(params).value!
-        expect(record.fatal_errors.map(&:keys).flatten).to include(:episode_id)
-        expect(record.fatal_errors.first[:episode_id][:text]).to eq 'must be a unique identifier for admission episodes'
+        expect(record.fatal_errors.map(&:keys).flatten).to include(:admission_id)
+        expect(record.fatal_errors.first[:admission_id][:text]).to eq 'must be a unique identifier for admission episodes'
       end
     end
 

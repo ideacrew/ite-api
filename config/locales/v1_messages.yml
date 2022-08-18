@@ -94,7 +94,7 @@ en:
           length: 
             text: "cannot contain more than 15 digits"
             category: "Invalid Field Length"
-        episode_id:
+        admission_id:
           length: 
             text: "cannot contain more than 15 digits"
             category: "Invalid Field Length"

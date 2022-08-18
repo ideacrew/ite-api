@@ -1,7 +1,7 @@
 [
   {
     "provider_id": 15,
-    "episode_id": 1234,
+    "admission_id": 1234,
     "admission_date": "01/04/2022",
     "treatment_type": 4,
     "client_id": "LEVN46410511921",
@@ -19,7 +19,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 1234,
+    "admission_id": 1234,
     "admission_date": "01/04/22",
     "treatment_type": 8,
     "client_id": "JEME32800728922",
@@ -37,7 +37,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194070,
+    "admission_id": 194070,
     "admission_date": "01/05/22",
     "treatment_type": 2,
     "client_id": "VAJS85671101582",
@@ -54,7 +54,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194071,
+    "admission_id": 194071,
     "admission_date": "01/05/22",
     "treatment_type": 2,
     "client_id": "CYRY90350520781",
@@ -71,7 +71,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194074,
+    "admission_id": 194074,
     "admission_date": "01/05/22",
     "treatment_type": 8,
     "client_id": "RTDS18121106611",
@@ -88,7 +88,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194075,
+    "admission_id": 194075,
     "admission_date": "01/05/22",
     "treatment_type": 8,
     "client_id": "AEWE31561025621",
@@ -105,7 +105,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194082,
+    "admission_id": 194082,
     "admission_date": "01/06/22",
     "treatment_type": 2,
     "client_id": "DEDS07011014862",
@@ -122,7 +122,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194083,
+    "admission_id": 194083,
     "admission_date": "01/06/22",
     "treatment_type": 2,
     "client_id": "WTMS52621120591",
@@ -139,7 +139,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194085,
+    "admission_id": 194085,
     "admission_date": "01/06/22",
     "treatment_type": 8,
     "client_id": "HDMY57920712591",
@@ -156,7 +156,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194086,
+    "admission_id": 194086,
     "admission_date": "01/06/22",
     "treatment_type": 2,
     "client_id": "BNHD33440928681",
@@ -173,7 +173,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194087,
+    "admission_id": 194087,
     "admission_date": "01/06/22",
     "treatment_type": 8,
     "client_id": "DDGR16970317841",
@@ -190,7 +190,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194088,
+    "admission_id": 194088,
     "admission_date": "01/06/22",
     "treatment_type": 8,
     "client_id": "WEHN02321016661",
@@ -207,7 +207,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194089,
+    "admission_id": 194089,
     "admission_date": "01/06/22",
     "treatment_type": 8,
     "client_id": "JNWE39401125781",
@@ -224,7 +224,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194090,
+    "admission_id": 194090,
     "admission_date": "01/07/22",
     "treatment_type": 2,
     "client_id": "KEWS63060628802",
@@ -241,7 +241,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194095,
+    "admission_id": 194095,
     "admission_date": "01/07/22",
     "treatment_type": 2,
     "client_id": "BNFS24470115631",
@@ -258,7 +258,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194101,
+    "admission_id": 194101,
     "admission_date": "01/09/22",
     "treatment_type": 8,
     "client_id": "MBGI47321112622",
@@ -275,7 +275,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194107,
+    "admission_id": 194107,
     "admission_date": "01/10/22",
     "treatment_type": 8,
     "client_id": "TSMN97810916802",
@@ -292,7 +292,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194108,
+    "admission_id": 194108,
     "admission_date": "01/10/22",
     "treatment_type": 8,
     "client_id": "JSHY77230122661",
@@ -309,7 +309,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194112,
+    "admission_id": 194112,
     "admission_date": "01/10/22",
     "treatment_type": 2,
     "client_id": "LEAN30210416771",
@@ -326,7 +326,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194114,
+    "admission_id": 194114,
     "admission_date": "01/10/22",
     "treatment_type": 2,
     "client_id": "MNJN34251113821",
@@ -343,7 +343,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194116,
+    "admission_id": 194116,
     "admission_date": "01/10/22",
     "treatment_type": 2,
     "client_id": "LTBR35021027801",
@@ -360,7 +360,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194117,
+    "admission_id": 194117,
     "admission_date": "01/10/22",
     "treatment_type": 4,
     "client_id": "DLAS09121022771",
@@ -377,7 +377,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194118,
+    "admission_id": 194118,
     "admission_date": "01/10/22",
     "treatment_type": 7,
     "client_id": "ARAS39110531881",
@@ -394,7 +394,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194119,
+    "admission_id": 194119,
     "admission_date": "01/07/22",
     "treatment_type": 8,
     "client_id": "SETN77640617942",
@@ -411,7 +411,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194123,
+    "admission_id": 194123,
     "admission_date": "01/11/22",
     "treatment_type": 8,
     "client_id": "LLGN69051022811",
@@ -428,7 +428,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194124,
+    "admission_id": 194124,
     "admission_date": "01/11/22",
     "treatment_type": 2,
     "client_id": "DDLS08361125551",
@@ -445,7 +445,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194129,
+    "admission_id": 194129,
     "admission_date": "01/11/22",
     "treatment_type": 8,
     "client_id": "CYRY90350520781",
@@ -462,7 +462,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194132,
+    "admission_id": 194132,
     "admission_date": "01/11/22",
     "treatment_type": 8,
     "client_id": "DDAN46150528641",
@@ -479,7 +479,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194133,
+    "admission_id": 194133,
     "admission_date": "01/11/22",
     "treatment_type": 8,
     "client_id": "MNRA85510809721",
@@ -496,7 +496,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194135,
+    "admission_id": 194135,
     "admission_date": "01/11/22",
     "treatment_type": 8,
     "client_id": "TSLE55991111801",
@@ -513,7 +513,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194136,
+    "admission_id": 194136,
     "admission_date": "01/11/22",
     "treatment_type": 8,
     "client_id": "DSRS64681219861",
@@ -530,7 +530,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194137,
+    "admission_id": 194137,
     "admission_date": "01/11/22",
     "treatment_type": 8,
     "client_id": "JAKG89520928802",
@@ -547,7 +547,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194138,
+    "admission_id": 194138,
     "admission_date": "01/11/22",
     "treatment_type": 8,
     "client_id": "WRSY28640303781",
@@ -564,7 +564,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194147,
+    "admission_id": 194147,
     "admission_date": "01/12/22",
     "treatment_type": 4,
     "client_id": "GABS86151003702",
@@ -581,7 +581,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194152,
+    "admission_id": 194152,
     "admission_date": "01/12/22",
     "treatment_type": 2,
     "client_id": "NLPT37800714551",
@@ -598,7 +598,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194154,
+    "admission_id": 194154,
     "admission_date": "01/12/22",
     "treatment_type": 2,
     "client_id": "MKMD30930315791",
@@ -615,7 +615,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194155,
+    "admission_id": 194155,
     "admission_date": "01/12/22",
     "treatment_type": 4,
     "client_id": "FNHR84800807631",
@@ -632,7 +632,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194163,
+    "admission_id": 194163,
     "admission_date": "01/12/22",
     "treatment_type": 8,
     "client_id": "AWWN76530726711",
@@ -649,7 +649,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194169,
+    "admission_id": 194169,
     "admission_date": "01/13/22",
     "treatment_type": 2,
     "client_id": "AEFD18231123592",
@@ -666,7 +666,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194175,
+    "admission_id": 194175,
     "admission_date": "01/14/22",
     "treatment_type": 4,
     "client_id": "DOLE70490410761",
@@ -683,7 +683,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194176,
+    "admission_id": 194176,
     "admission_date": "01/14/22",
     "treatment_type": 4,
     "client_id": "DDBR93690504681",
@@ -700,7 +700,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194177,
+    "admission_id": 194177,
     "admission_date": "01/14/22",
     "treatment_type": 4,
     "client_id": "CAGR28581110632",
@@ -717,7 +717,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194180,
+    "admission_id": 194180,
     "admission_date": "01/14/22",
     "treatment_type": 8,
     "client_id": "LAGN06980508872",
@@ -734,7 +734,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194181,
+    "admission_id": 194181,
     "admission_date": "01/14/22",
     "treatment_type": 4,
     "client_id": "MLFE16810731941",
@@ -751,7 +751,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194183,
+    "admission_id": 194183,
     "admission_date": "01/14/22",
     "treatment_type": 8,
     "client_id": "VAJS25100913842",
@@ -768,7 +768,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194185,
+    "admission_id": 194185,
     "admission_date": "01/14/22",
     "treatment_type": 4,
     "client_id": "AYBN05650403571",
@@ -785,7 +785,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194186,
+    "admission_id": 194186,
     "admission_date": "01/14/22",
     "treatment_type": 2,
     "client_id": "LYPR87630421801",
@@ -802,7 +802,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194187,
+    "admission_id": 194187,
     "admission_date": "01/14/22",
     "treatment_type": 4,
     "client_id": "TEHR18580430841",
@@ -819,7 +819,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194188,
+    "admission_id": 194188,
     "admission_date": "01/14/22",
     "treatment_type": 4,
     "client_id": "NATN24250321762",
@@ -836,7 +836,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194189,
+    "admission_id": 194189,
     "admission_date": "01/14/22",
     "treatment_type": 8,
     "client_id": "JEFD22570507911",
@@ -853,7 +853,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194194,
+    "admission_id": 194194,
     "admission_date": "01/18/22",
     "treatment_type": 8,
     "client_id": "MLTR56400706641",
@@ -870,7 +870,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194196,
+    "admission_id": 194196,
     "admission_date": "01/18/22",
     "treatment_type": 73,
     "client_id": "MBGI47321112622",
@@ -887,7 +887,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194199,
+    "admission_id": 194199,
     "admission_date": "01/18/22",
     "treatment_type": 7,
     "client_id": "KNSR50670802641",
@@ -904,7 +904,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194200,
+    "admission_id": 194200,
     "admission_date": "01/18/22",
     "treatment_type": 73,
     "client_id": "TYST20350509801",
@@ -921,7 +921,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194203,
+    "admission_id": 194203,
     "admission_date": "01/18/22",
     "treatment_type": 73,
     "client_id": "DESS36920412762",
@@ -938,7 +938,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194206,
+    "admission_id": 194206,
     "admission_date": "01/18/22",
     "treatment_type": 2,
     "client_id": "GLGL58800523791",
@@ -955,7 +955,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194222,
+    "admission_id": 194222,
     "admission_date": "01/19/22",
     "treatment_type": 8,
     "client_id": "MNCY12551013751",
@@ -972,7 +972,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194247,
+    "admission_id": 194247,
     "admission_date": "01/21/22",
     "treatment_type": 4,
     "client_id": "AEFD18231123592",
@@ -989,7 +989,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194252,
+    "admission_id": 194252,
     "admission_date": "01/21/22",
     "treatment_type": 4,
     "client_id": "PACY33491208512",
@@ -1006,7 +1006,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194253,
+    "admission_id": 194253,
     "admission_date": "01/21/22",
     "treatment_type": 2,
     "client_id": "DEMR46800831931",
@@ -1023,7 +1023,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194254,
+    "admission_id": 194254,
     "admission_date": "01/21/22",
     "treatment_type": 8,
     "client_id": "JDDR09240207741",
@@ -1040,7 +1040,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194255,
+    "admission_id": 194255,
     "admission_date": "01/21/22",
     "treatment_type": 2,
     "client_id": "FSJN37001205681",
@@ -1057,7 +1057,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194256,
+    "admission_id": 194256,
     "admission_date": "01/21/22",
     "treatment_type": 73,
     "client_id": "JYBE46501223781",
@@ -1074,7 +1074,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194265,
+    "admission_id": 194265,
     "admission_date": "01/22/22",
     "treatment_type": 2,
     "client_id": "DEST90250109982",
@@ -1091,7 +1091,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194266,
+    "admission_id": 194266,
     "admission_date": "01/23/22",
     "treatment_type": 8,
     "client_id": "TYWS81580307852",
@@ -1108,7 +1108,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194288,
+    "admission_id": 194288,
     "admission_date": "01/24/22",
     "treatment_type": 2,
     "client_id": "ODBE12530130541",
@@ -1125,7 +1125,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194289,
+    "admission_id": 194289,
     "admission_date": "01/24/22",
     "treatment_type": 2,
     "client_id": "AETR17710410562",
@@ -1142,7 +1142,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194294,
+    "admission_id": 194294,
     "admission_date": "01/25/22",
     "treatment_type": 4,
     "client_id": "IAMS11771109852",
@@ -1159,7 +1159,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194296,
+    "admission_id": 194296,
     "admission_date": "01/25/22",
     "treatment_type": 2,
     "client_id": "SEMN15911222932",
@@ -1176,7 +1176,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194304,
+    "admission_id": 194304,
     "admission_date": "01/25/22",
     "treatment_type": 8,
     "client_id": "DDLS08361125551",
@@ -1193,7 +1193,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194315,
+    "admission_id": 194315,
     "admission_date": "01/26/22",
     "treatment_type": 8,
     "client_id": "RDTS48960215591",
@@ -1210,7 +1210,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194317,
+    "admission_id": 194317,
     "admission_date": "01/26/22",
     "treatment_type": 2,
     "client_id": "DEDG61820421701",
@@ -1227,7 +1227,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194318,
+    "admission_id": 194318,
     "admission_date": "01/26/22",
     "treatment_type": 2,
     "client_id": "MWMY62100421641",
@@ -1244,7 +1244,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194319,
+    "admission_id": 194319,
     "admission_date": "01/26/22",
     "treatment_type": 8,
     "client_id": "EEMY03650407831",
@@ -1261,7 +1261,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194320,
+    "admission_id": 194320,
     "admission_date": "01/26/22",
     "treatment_type": 2,
     "client_id": "JNVS74880518641",
@@ -1278,7 +1278,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194321,
+    "admission_id": 194321,
     "admission_date": "01/26/22",
     "treatment_type": 4,
     "client_id": "GNBS56060828742",
@@ -1295,7 +1295,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194322,
+    "admission_id": 194322,
     "admission_date": "01/26/22",
     "treatment_type": 4,
     "client_id": "TIBN85910207691",
@@ -1312,7 +1312,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194323,
+    "admission_id": 194323,
     "admission_date": "01/26/22",
     "treatment_type": 2,
     "client_id": "GYTE94561213591",
@@ -1329,7 +1329,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194324,
+    "admission_id": 194324,
     "admission_date": "01/26/22",
     "treatment_type": 2,
     "client_id": "CSSR93401224811",
@@ -1346,7 +1346,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194327,
+    "admission_id": 194327,
     "admission_date": "01/26/22",
     "treatment_type": 2,
     "client_id": "PPWE43630531951",
@@ -1363,7 +1363,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194328,
+    "admission_id": 194328,
     "admission_date": "01/26/22",
     "treatment_type": 8,
     "client_id": "SLDP02271103701",
@@ -1380,7 +1380,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 194364,
+    "admission_id": 194364,
     "admission_date": "01/28/22",
     "treatment_type": 2,
     "client_id": "JHES26930720671",
@@ -1397,7 +1397,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 1234,
+    "admission_id": 1234,
     "admission_date": "01/31/22",
     "treatment_type": 4,
     "client_id": "AYBE19090825852",
@@ -1414,7 +1414,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 1234,
+    "admission_id": 1234,
     "admission_date": "01/31/22",
     "treatment_type": 8,
     "client_id": "SNLH88850111782",
@@ -1431,7 +1431,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 1234,
+    "admission_id": 1234,
     "admission_date": "01/31/22",
     "treatment_type": 8,
     "client_id": "JSWN41020508561",
@@ -1448,7 +1448,7 @@
   },
   {
     "provider_id": 15,
-    "episode_id": 1234,
+    "admission_id": 1234,
     "admission_date": "01/31/22",
     "treatment_type": 73,
     "client_id": "JYJN27550213911",

@@ -1,4 +1,4 @@
-provider_id,episode_id,admission_date,treatment_type,client_id,codependent,dob,gender,race,ethnicity,primary_language,num_of_prior_admissions,arrests_past_30days,education,employment
+provider_id,admission_id,admission_date,treatment_type,client_id,codependent,dob,gender,race,ethnicity,primary_language,num_of_prior_admissions,arrests_past_30days,education,employment
 15,194062,01/04/22,4,LEVN46410511921,2,05/11/92,2,,9,-1,2,,12,3
 15,194068,01/04/22,8,JEME32800728922,2,07/28/92,1,,9,-1,0,,12,3
 15,194070,01/05/22,2,VAJS85671101582,2,11/01/58,1,,9,-1,2,,12,3

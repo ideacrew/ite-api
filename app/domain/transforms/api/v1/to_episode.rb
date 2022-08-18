@@ -10,7 +10,7 @@ module Transforms
       class ToEpisode
         send(:include, Dry::Monads[:result, :do, :try])
 
-        EPISODE_FIELDS = %i[episode_id collateral record_type admission_type admission_date treatment_type
+        EPISODE_FIELDS = %i[admission_id collateral record_type admission_type admission_date treatment_type
                             service_request_date discharge_date discharge_type discharge_reason last_contact_date
                             num_of_prior_su_episodes referral_source criminal_justice_referral primary_payment_source
                             client client_profile clinical_info treatment_location].freeze

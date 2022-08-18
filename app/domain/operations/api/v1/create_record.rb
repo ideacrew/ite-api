@@ -17,7 +17,7 @@ module Operations
           episode = yield structure_episode(record)
           validation_result = yield validate_episode(episode, params[:extract])
           errors = yield structure_errors(validation_result)
-          cross_record_errors = yield check_episode_ids(errors, params[:dups], episode)
+          cross_record_errors = yield check_admission_ids(errors, params[:dups], episode)
           update_record(cross_record_errors, record)
         end
 
@@ -47,7 +47,7 @@ module Operations
         end
 
         def structure_errors(result)
-          warnings = %i[medicaid_id suffix sexual_orientation first_name_alt last_name_alt middle_name suffix]
+          warnings = %i[medicaid_id suffix sexual_orientation first_name_alt last_name_alt middle_name suffix admission_id]
           critical_error_fields = %i[primary_language ethnicity race first_name last_name dob gender num_of_prior_su_episodes referral_source living_arrangement]
           fatal_error_fields = %i[Collateral client_id record_type admission_date treatment_type discharge_date last_contact_date]
           errors = result.errors.messages.map { |message| { message.path.last => { text: message.text, category: message&.meta&.first&.last } } }
@@ -65,13 +65,13 @@ module Operations
           Success(record)
         end
 
-        def check_episode_ids(errors, dups, episode)
+        def check_admission_ids(errors, dups, episode)
           return Success(errors) unless dups
 
-          duplicate = dups.map(&:to_s).include?(episode[:episode_id])
+          duplicate = dups.map(&:to_s).include?(episode[:admission_id])
           return Success(errors) unless duplicate
 
-          failure = { episode_id: { text: 'must be a unique identifier for admission episodes', category: 'Data Inconsistency' } }
+          failure = { admission_id: { text: 'must be a unique identifier for admission episodes', category: 'Data Inconsistency' } }
           errors[:fatal_error_fields] << failure
           Success(errors)
         end

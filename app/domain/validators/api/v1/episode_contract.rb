@@ -13,7 +13,7 @@ module Validators
         config.messages.top_namespace = 'dry_validation_with_codes'
         config.messages.load_paths = ['./config/locales/v1_messages.yml']
         params do
-          optional(:episode_id).maybe(:string)
+          optional(:admission_id).maybe(:string)
           required(:collateral).filled(Types::CODEPEDENT_OPTIONS)
           required(:client_id).filled(:string)
           required(:record_type).filled(Types::RECORD_TYPE_OPTIONS)
@@ -122,7 +122,7 @@ module Validators
           end
         end
 
-        rule(:episode_id) do
+        rule(:admission_id) do
           if key && value
             key.failure(:special_characters) if value.match(/[^a-zA-Z\d-]/)
             key.failure(:length) if value.length > 15

@@ -20,7 +20,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
   let(:optional_params) do
     {
       admission_type: '31',
-      episode_id: 'fbgadfs7fgdy',
+      admission_id: 'fbgadfs7fgdy',
       service_request_date: Date.today.to_s,
       discharge_date: Date.today.to_s,
       discharge_type: '50',
@@ -394,20 +394,20 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
         expect(errors[:discharge_reason].first[:category]).to eq('Invalid Value')
       end
     end
-    context 'with invalid episode_id it should fail' do
+    context 'with invalid admission_id it should fail' do
       it 'is more than 15 characters' do
-        all_params[:episode_id] = '3478657436574865783465873465386gfueyg78r'
+        all_params[:admission_id] = '3478657436574865783465873465386gfueyg78r'
         errors = subject.call(all_params).errors.to_h
-        expect(errors).to have_key(:episode_id)
-        expect(errors.to_h[:episode_id].first[:text]).to eq('cannot contain more than 15 digits')
-        expect(errors[:episode_id].first[:category]).to eq('Invalid Field Length')
+        expect(errors).to have_key(:admission_id)
+        expect(errors.to_h[:admission_id].first[:text]).to eq('cannot contain more than 15 digits')
+        expect(errors[:admission_id].first[:category]).to eq('Invalid Field Length')
       end
       it 'has special characters' do
-        all_params[:episode_id] = '3478657436!@'
+        all_params[:admission_id] = '3478657436!@'
         errors = subject.call(all_params).errors.to_h
-        expect(errors).to have_key(:episode_id)
-        expect(errors.to_h[:episode_id].first[:text]).to eq('cannot contain special characters')
-        expect(errors[:episode_id].first[:category]).to eq('Invalid Field')
+        expect(errors).to have_key(:admission_id)
+        expect(errors.to_h[:admission_id].first[:text]).to eq('cannot contain special characters')
+        expect(errors[:admission_id].first[:category]).to eq('Invalid Field')
       end
     end
     context 'with invalid num_of_prior_su_episodes it should fail' do
