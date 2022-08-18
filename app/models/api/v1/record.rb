@@ -13,7 +13,7 @@ module Api
       field :fatal_errors, type: Array
       field :status, type: String
 
-      embedded_in :extract
+      belongs_to :extract, inverse_of: :records, class_name: 'Api::V1::Extract'
 
       validates_presence_of :payload
 

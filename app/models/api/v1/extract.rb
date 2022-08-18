@@ -7,7 +7,7 @@ module Api
       include Mongoid::Document
       include Mongoid::Timestamps
 
-      embedded_in :provider
+      belongs_to :provider, inverse_of: :extracts, class_name: 'Api::V1::Provider'
 
       # field :payload, type: Hash
       field :provider_gateway_identifier, type: String
@@ -17,7 +17,7 @@ module Api
       field :file_name, type: String
       field :status, type: String
 
-      embeds_many :records, cascade_callbacks: true, validate: true
+      has_many :records, inverse_of: :extract, class_name: 'Api::V1::Record'
 
       accepts_nested_attributes_for :records
 
