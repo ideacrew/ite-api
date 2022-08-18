@@ -133,6 +133,14 @@ RSpec.describe ::Validators::Api::V1::ClientProfileContract, dbclean: :around_ea
       expect(result.errors.to_h[:school_attendance].first[:text]).to eq 'must be one of 1, 2, 96, 97, 98'
       expect(result.errors.to_h[:school_attendance].first[:category]).to eq 'Invalid Value'
     end
+    it 'with invalid health_insurance' do
+      valid_params[:health_insurance] = 'not a real status'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:health_insurance)
+      expect(result.errors.to_h[:health_insurance].first[:text]).to eq 'must be one of 1, 2, 3, 4, 5, 6, 7, 8, 9, 97, 98'
+      expect(result.errors.to_h[:health_insurance].first[:category]).to eq 'Invalid Value'
+    end
   end
 
   context 'Passed with valid required params' do
