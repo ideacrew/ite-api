@@ -67,13 +67,14 @@ module Validators
         end
 
         rule(:treatment_type, :record_type) do
-          record_group1 = %w[M E X]
-          record_group2 = %w[A T D]
+          record_group1 = %w[M X]
+          record_group2 = %w[A T]
           unless values[:treatment_type] == '96'
             key.failure(:record_type_mismatch) if key && record_group1.include?(values[:record_type]) && (values[:treatment_type].to_i < 72 || values[:treatment_type].to_i > 77)
             key.failure(:record_type_mismatch) if key && record_group2.include?(values[:record_type]) && values[:treatment_type].to_i > 9
           end
         end
+        
         rule(:treatment_type, :collateral) do
           key.failure(:treatment_type96) if key && values[:treatment_type] && values[:collateral] && values[:collateral] != '1' && values[:treatment_type] == '96'
         end
