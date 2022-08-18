@@ -38,7 +38,7 @@ module Validators
           end
         end
 
-        %i[first_name last_name client_id gender race ethnicity].each do |field|
+        %i[first_name last_name client_id gender race ethnicity dob].each do |field|
           rule(field) do
             key.failure(:missing_field) if key && !value
           end
@@ -69,8 +69,8 @@ module Validators
           if key && value
             now = Time.now.utc.to_date
             age = now.year - value.year - (now.month > value.month || (now.month == value.month && now.day >= value.day) ? 0 : 1)
-            key.failure('Verify age over 95') if age > 95
-            key.failure('Should not be in the future') if value > now
+            key.failure(:dob_over95) if age > 95
+            key.failure(:cannot_be_in_future) if value > now
           end
         end
 

@@ -300,7 +300,7 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:dob)
-      expect(result.errors.to_h[:dob].first).to eq 'Verify age over 95'
+      expect(result.errors.to_h[:dob].first[:text]).to eq 'Verify age over 95'
     end
 
     it 'dob is greater than today' do
@@ -308,7 +308,7 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:dob)
-      expect(result.errors.to_h[:dob].first).to eq 'Should not be in the future'
+      expect(result.errors.to_h[:dob].first[:text]).to eq 'Cannot not be in the future'
     end
   end
 

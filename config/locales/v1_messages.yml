@@ -28,6 +28,12 @@ en:
       all_zeros: 
         text: "cannot contain all 0s"
         category: "Invalid Value"
+      dob_over95: 
+        text: "Verify age over 95"
+        category: "Invalid Value"
+      cannot_be_in_future: 
+        text: "Cannot not be in the future"
+        category: "Invalid Value"
       special_characters: 
         text: "cannot contain special characters"
         category: "Invalid Field"

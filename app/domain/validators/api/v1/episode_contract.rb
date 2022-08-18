@@ -56,12 +56,15 @@ module Validators
         rule(:admission_date, :last_contact_date) do
           key.failure(:after_last_contact) if key && values[:last_contact_date] && values[:admission_date] > values[:last_contact_date]
         end
+
         rule(:admission_date, :extracted_on) do
           key.failure(:after_extraction) if key && values[:extracted_on] && values[:admission_date] > Date.parse(values[:extracted_on].to_s)
         end
+
         rule(:admission_date, :coverage_start) do
           key.failure(:outside_coverage) if key && values[:coverage_start] && values[:admission_date] < Date.parse(values[:coverage_start].to_s)
         end
+
         rule(:admission_date, :coverage_end) do
           key.failure(:outside_coverage) if key && values[:coverage_end] && values[:admission_date] > Date.parse(values[:coverage_end].to_s)
         end
@@ -85,6 +88,7 @@ module Validators
             key.failure(:after_extraction)
           end
         end
+
         rule(:discharge_date, :last_contact_date) do
           if key && (values[:last_contact_date] && values[:discharge_date]) &&
              values[:discharge_date] > values[:last_contact_date]
@@ -110,6 +114,7 @@ module Validators
             key.failure(:after_extraction)
           end
         end
+
         rule(:last_contact_date, :admission_date) do
           if key && (values[:last_contact_date] && values[:admission_date]) &&
              values[:last_contact_date] < Date.parse(values[:admission_date].to_s)
@@ -123,10 +128,6 @@ module Validators
             key.failure(:length) if value.length > 15
           end
         end
-
-        # rule(:num_of_prior_episodes, :record_group) do
-        #   key.failure('Must be included for admission or active records') if key && values[:record_group] && values[:record_group] != 'discharge' && !values[:num_of_prior_episodes]
-        # end
 
         rule(:treatment_location) do
           key.failure(:missing_field) if key && !value
@@ -157,6 +158,7 @@ module Validators
             key(:dob).failure(:earlier_than_admission)
           end
         end
+
         rule(client: :dob) do
           if key && values.dig(:client, :dob) &&
              values[:client][:dob] > Date.today
@@ -172,6 +174,7 @@ module Validators
             end
           end
         end
+
         rule(:client_profile) do
           if key && value
             result = Validators::Api::V1::ClientProfileContract.new.call(value)
