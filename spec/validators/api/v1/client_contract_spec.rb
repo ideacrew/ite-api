@@ -16,7 +16,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       sexual_orientation: '2',
       race: '3',
       ethnicity: '4',
-      primary_language: '1'
+      primary_language: '1',
+      living_arrangement: '1'
     }
   end
 
@@ -294,6 +295,15 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       expect(result.errors.to_h).to have_key(:sexual_orientation)
       expect(result.errors.to_h[:sexual_orientation].first[:text]).to eq 'must be one of 1, 2, 3, 4, 95, 97, 98'
       expect(result.errors.to_h[:sexual_orientation].first[:category]).to eq 'Invalid Value'
+    end
+
+    it 'Passing living arrangement with more than 2 characters' do
+      valid_params[:living_arrangement] = '488393'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:living_arrangement)
+      expect(result.errors.to_h[:living_arrangement].first[:text]).to eq 'must be one of 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 97, 98'
+      expect(result.errors.to_h[:living_arrangement].first[:category]).to eq 'Invalid Value'
     end
 
     it 'dob is more than 95 years ago' do

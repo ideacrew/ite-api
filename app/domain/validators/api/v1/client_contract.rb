@@ -26,6 +26,7 @@ module Validators
           optional(:race).maybe(:string)
           optional(:ethnicity).maybe(:string)
           optional(:primary_language).maybe(:string)
+          optional(:living_arrangement).maybe(:string)
         end
 
         %i[first_name middle_name last_name alt_first_name alt_last_name].each do |field|
@@ -38,13 +39,14 @@ module Validators
           end
         end
 
-        %i[first_name last_name client_id gender race ethnicity dob primary_language].each do |field|
+        %i[first_name last_name client_id gender race ethnicity dob primary_language living_arrangement].each do |field|
           rule(field) do
             key.failure(:missing_field) if key && !value
           end
         end
 
-        { gender: Types::GENDER_OPTIONS, sexual_orientation: Types::SEXUAL_ORIENTATION_OPTIONS, race: Types::RACE_OPTIONS, ethnicity: Types::ETHNICITY_OPTIONS, primary_language: Types::LANGUAGE_OPTIONS }.each do |field, types|
+        { gender: Types::GENDER_OPTIONS, sexual_orientation: Types::SEXUAL_ORIENTATION_OPTIONS, race: Types::RACE_OPTIONS, ethnicity: Types::ETHNICITY_OPTIONS, primary_language: Types::LANGUAGE_OPTIONS,
+          living_arrangement: Types::LIVING_ARRANGEMENT_OPTIONS }.each do |field, types|
           rule(field) do
             key.failure(text: "must be one of #{types.values.join(', ')}", category: 'Invalid Value') if key && value && !types.include?(value)
           end
