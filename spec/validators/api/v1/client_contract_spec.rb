@@ -138,6 +138,24 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       expect(result.errors.to_h[:last_name_alt].first[:category]).to eq 'Invalid Value'
     end
 
+    it 'suffix more than 10 characters' do
+      valid_params[:suffix] = 'testinghsbdkabcakdsbdsidnakbciaksbdtestinghsbdkabcakdsbdsidnakbciaksbd'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:suffix)
+      expect(result.errors.to_h[:suffix].first[:text]).to eq 'cannot contain more than 10 characters'
+      expect(result.errors.to_h[:suffix].first[:category]).to eq 'Invalid Field Length'
+    end
+
+    it 'suffix contains special characters other than \' \' \' or -' do
+      valid_params[:suffix] = 'testinghs!'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:suffix)
+      expect(result.errors.to_h[:suffix].first[:text]).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
+      expect(result.errors.to_h[:suffix].first[:category]).to eq 'Invalid Value'
+    end
+
     it 'ssn more than 9 characters' do
       valid_params[:ssn] = '0123456789'
       result = subject.call(valid_params)

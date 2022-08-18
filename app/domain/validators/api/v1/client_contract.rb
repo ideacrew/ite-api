@@ -27,6 +27,7 @@ module Validators
           optional(:ethnicity).maybe(:string)
           optional(:primary_language).maybe(:string)
           optional(:living_arrangement).maybe(:string)
+          optional(:suffix).maybe(:string)
         end
 
         %i[first_name middle_name last_name first_name_alt last_name_alt].each do |field|
@@ -49,6 +50,14 @@ module Validators
           living_arrangement: Types::LIVING_ARRANGEMENT_OPTIONS }.each do |field, types|
           rule(field) do
             key.failure(text: "must be one of #{types.values.join(', ')}", category: 'Invalid Value') if key && value && !types.include?(value)
+          end
+        end
+
+        rule(:suffix) do
+          if key && value
+            pattern = Regexp.new('^[a-zA-Z\d\s\-\'\ ]*$').freeze
+            key.failure(:unsuported_name_characters) unless pattern.match(value)
+            key.failure(:length_more_than10) if value.length > 10
           end
         end
 

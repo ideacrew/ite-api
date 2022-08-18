@@ -76,6 +76,9 @@ en:
       length_more_than50:
         text: "cannot contain more than 50 characters"
         category: "Invalid Field Length"
+      length_more_than10:
+        text: "cannot contain more than 10 characters"
+        category: "Invalid Field Length"
       unsuported_name_characters:
         text: "Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters"
         category: "Invalid Value"
