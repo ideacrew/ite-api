@@ -379,13 +379,14 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
       end
     end
     context 'with invalid discharge reason field it should fail' do
-      # it 'is not present when the record group is discharge' do
-      #   all_params[:discharge_reason] = nil
-      #   all_params[:record_group] = 'discharge'
-      #   errors = subject.call(all_params).errors.to_h
-      #   expect(errors).to have_key(:discharge_reason)
-      #   expect(errors.to_h[:discharge_reason].first).to eq('Must be included for discharge records')
-      # end
+      it 'is not present when discharge_date present' do
+        all_params[:discharge_reason] = nil
+        all_params[:discharge_date] = Date.today.to_s
+        errors = subject.call(all_params).errors.to_h
+        expect(errors).to have_key(:discharge_reason)
+        expect(errors.to_h[:discharge_reason].first[:text]).to eq('cannot be empty when discharge date is present')
+        expect(errors.to_h[:discharge_reason].first[:category]).to eq('Data Inconsistency')
+      end
       it 'is not a valid discharge reason' do
         all_params[:discharge_reason] = '22'
         errors = subject.call(all_params).errors.to_h

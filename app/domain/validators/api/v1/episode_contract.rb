@@ -108,6 +108,10 @@ module Validators
           key.failure(:discharge_date_cannot_be_nil) if values[:discharge_reason] && !values[:discharge_date]
         end
 
+        rule(:discharge_reason, :discharge_date) do
+          key.failure(:discharge_reason_cannot_be_nil) if values[:discharge_date] && !values[:discharge_reason]
+        end
+
         rule(:last_contact_date, :extracted_on) do
           if key && (values[:last_contact_date] && values[:extracted_on]) &&
              values[:last_contact_date] > Date.parse(values[:extracted_on].to_s)

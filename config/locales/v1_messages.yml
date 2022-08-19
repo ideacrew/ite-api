@@ -64,6 +64,9 @@ en:
       discharge_date_cannot_be_nil:
         text: "cannot be empty when discharge reason is present"
         category: "Data Inconsistency"
+      discharge_reason_cannot_be_nil:
+        text: "cannot be empty when discharge date is present"
+        category: "Data Inconsistency"
       earlier_than_today:
         text: "cannot be earlier than today"
         category: "Data Inconsistency"
