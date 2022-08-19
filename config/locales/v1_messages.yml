@@ -97,6 +97,9 @@ en:
       start_with0:
         text: "cannot start with 0"
         category: "Invalid Value"
+      start_with00:
+        text: "cannot start with 00"
+        category: "Invalid Value"
       non_numeric:
         text: "must contain only numbers"
         category: "Wrong Format"
@@ -112,8 +115,18 @@ en:
       over21:
         text: "client who is older than 21 years old should be reported 96 (Not Applicable)"
         category: "Data Inconsistency"
+      invalid_zip:
+        text: "must be either 5 or 10 numeric characters, including a hyphen (-) and a leading zero (e.g., 20002 or 01701-3320)"
+        category: "Invalid Value"
+      not_a_state:
+        text: "must be a valid 2 letter state abbreviation"
+        category: "Invalid Value"
 
       rules:
+        address_zip_code:
+          length:
+            text: 'must contain 5 or 10 characters'
+            category: 'Invalid Field Length'
         client_id:
           length: 
             text: "cannot contain more than 15 digits"

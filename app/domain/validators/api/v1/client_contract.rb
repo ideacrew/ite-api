@@ -32,6 +32,8 @@ module Validators
           optional(:address_line2).maybe(:string)
           optional(:phone1).maybe(:string)
           optional(:phone2).maybe(:string)
+          optional(:address_zip_code).maybe(:string)
+          optional(:address_state).maybe(:string)
         end
 
         %i[first_name middle_name last_name first_name_alt last_name_alt address_line1 address_line2].each do |field|
@@ -44,10 +46,14 @@ module Validators
           end
         end
 
-        %i[first_name last_name client_id gender race ethnicity dob primary_language living_arrangement].each do |field|
+        %i[first_name last_name client_id gender race ethnicity dob primary_language living_arrangement address_state].each do |field|
           rule(field) do
             key.failure(:missing_field) if key && !value
           end
+        end
+
+        rule(:address_state) do
+          key.failure(:not_a_state) if key && value && !Types::UsStateAbbreviationKind.include?(value)
         end
 
         %i[phone2 phone1].each do |field|
@@ -105,6 +111,15 @@ module Validators
             key.failure(:all_zeros) if value.chars.to_a.uniq == ['0']
             key.failure(:non_numeric) unless value.scan(/\D/).empty?
             key.failure(:doesnt_start_with7) unless value.start_with?('7')
+          end
+        end
+
+        rule(:address_zip_code) do
+          if key && value
+            pattern = Regexp.new('^\d{5}(-\d{4})?$')
+            key.failure(:length) unless [5, 10].include?(value.length)
+            key.failure(:start_with00) if value.start_with?('0')
+            key.failure(:invalid_zip) unless pattern.match(value)
           end
         end
       end
