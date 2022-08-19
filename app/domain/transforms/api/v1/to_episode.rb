@@ -20,8 +20,8 @@ module Transforms
         CLINICAL_INFO_FIELDS = %i[gaf_score smi_sed co_occurring_sud_mh opioid_therapy substance_problems
                                   sud_diagnostic_codes mh_diagnostic_codes].freeze
         CLIENT_PROFILE_FIELDS = %i[marital_status veteran_status education employment not_in_labor
-                                   income_source pregnant school_attendance legal_status arrests_past_30days
-                                   self_help_group_admission self_help_group_discharge health_insurance].freeze
+                                   income_source pregnant school_attendance legal_status arrests_past_30days_admission
+                                   arrests_past_30days_discharge self_help_group_admission self_help_group_discharge health_insurance].freeze
         NON_STRING_FIELDS = %i[admission_date service_request_date discharge_date last_contact_date dob].freeze
 
         def call(record)

@@ -30,6 +30,7 @@ RSpec.describe ::Validators::Api::V1::ClientProfileContract, dbclean: :around_ea
       expect(result.errors.to_h[:marital_status].first[:text]).to eq 'Must be filled'
       expect(result.errors.to_h[:marital_status].first[:category]).to eq 'Missing Value'
     end
+
     it 'with invalid marital_status' do
       valid_params[:marital_status] = 'not a real status'
       result = subject.call(valid_params)
@@ -38,6 +39,25 @@ RSpec.describe ::Validators::Api::V1::ClientProfileContract, dbclean: :around_ea
       expect(result.errors.to_h[:marital_status].first[:text]).to eq 'must be one of 1, 2, 3, 4, 5, 97, 98'
       expect(result.errors.to_h[:marital_status].first[:category]).to eq 'Invalid Value'
     end
+
+    it 'with no legal_status' do
+      valid_params[:legal_status] = nil
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:legal_status)
+      expect(result.errors.to_h[:legal_status].first[:text]).to eq 'Must be filled'
+      expect(result.errors.to_h[:legal_status].first[:category]).to eq 'Missing Value'
+    end
+
+    it 'with invalid legal_status' do
+      valid_params[:legal_status] = 'not a real status'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:legal_status)
+      expect(result.errors.to_h[:legal_status].first[:text]).to eq 'must be one of 1, 2, 3, 4, 5, 6, 96, 97, 98'
+      expect(result.errors.to_h[:legal_status].first[:category]).to eq 'Invalid Value'
+    end
+
     it 'with no veteran_status' do
       valid_params[:veteran_status] = nil
       result = subject.call(valid_params)
