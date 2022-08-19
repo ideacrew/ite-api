@@ -66,7 +66,7 @@ en:
         category: "Data Inconsistency"
       discharge_reason_cannot_be_nil:
         text: "cannot be empty when discharge date is present"
-        category: "Data Inconsistency"
+        category: "Missing Value"
       discharge_date_nil:
         text: "cannot be present when discharge date is not"
         category: "Data Inconsistency"

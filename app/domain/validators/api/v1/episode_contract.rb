@@ -193,6 +193,7 @@ module Validators
 
         rule(:discharge_date, client_profile: :self_help_group_discharge) do
           key(:self_help_group_discharge).failure(:discharge_date_nil) if key && (!values[:discharge_date] && values.dig(:client_profile, :self_help_group_discharge))
+          key(:self_help_group_discharge).failure(:discharge_reason_cannot_be_nil) if key && (values[:discharge_date] && !values.dig(:client_profile, :self_help_group_discharge))
         end
       end
     end

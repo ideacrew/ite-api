@@ -66,7 +66,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
       legal_status: '1',
       arrests_past_30days: '1',
       pregnant: '2',
-      self_help_group_attendance: '1',
+      self_help_group_discharge: '1',
       health_insuranc: '1',
       living_arrangement: '1'
     }
@@ -385,7 +385,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:discharge_reason)
         expect(errors.to_h[:discharge_reason].first[:text]).to eq('cannot be empty when discharge date is present')
-        expect(errors.to_h[:discharge_reason].first[:category]).to eq('Data Inconsistency')
+        expect(errors.to_h[:discharge_reason].first[:category]).to eq('Missing Value')
       end
       it 'is not a valid discharge reason' do
         all_params[:discharge_reason] = '22'
@@ -549,6 +549,15 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
         expect(result.errors.to_h).to have_key(:self_help_group_discharge)
         expect(result.errors.to_h[:self_help_group_discharge].first[:text]).to eq 'cannot be present when discharge date is not'
         expect(result.errors.to_h[:self_help_group_discharge].first[:category]).to eq 'Data Inconsistency'
+      end
+      it 'fails if discharge_date valid and no self_help_group_discharge' do
+        all_params[:discharge_date] = Date.today.to_s
+        all_params[:client_profile][:self_help_group_discharge] = nil
+        result = subject.call(all_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:self_help_group_discharge)
+        expect(result.errors.to_h[:self_help_group_discharge].first[:text]).to eq 'cannot be empty when discharge date is present'
+        expect(result.errors.to_h[:self_help_group_discharge].first[:category]).to eq 'Missing Value'
       end
     end
   end
