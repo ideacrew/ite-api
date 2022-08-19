@@ -21,7 +21,8 @@ module Validators
           optional(:school_attendance).maybe(:string)
           optional(:legal_status).maybe(:string)
           optional(:arrests_past_30days).maybe(:string)
-          optional(:self_help_group_attendance).maybe(:string)
+          optional(:self_help_group_admission).maybe(:string)
+          optional(:self_help_group_discharge).maybe(:string)
           optional(:health_insurance).maybe(:string)
         end
 
@@ -32,7 +33,7 @@ module Validators
         end
 
         { marital_status: Types::MARITAL_STATUS_OPTIONS, veteran_status: Types::VETERAN_STATUS_OPTIONS, education: Types::EDUCATION_OPTIONS, employment: Types::EMPLOYMENT_OPTIONS, pregnant: Types::PREGNANCY_OPTIONS,
-          school_attendance: Types::SCHOOL_ATTENDENCE_OPTIONS, health_insurance: Types::HEALTH_INSURANCE_OPTIONS }.each do |field, types|
+          school_attendance: Types::SCHOOL_ATTENDENCE_OPTIONS, health_insurance: Types::HEALTH_INSURANCE_OPTIONS, self_help_group_discharge: Types::SELF_HELP_OPTIONS, self_help_group_admission: Types::SELF_HELP_OPTIONS }.each do |field, types|
           rule(field) do
             key.failure(text: "must be one of #{types.values.join(', ')}", category: 'Invalid Value') if key && value && !types.include?(value)
           end

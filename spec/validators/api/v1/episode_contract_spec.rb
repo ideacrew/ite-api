@@ -540,6 +540,17 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
         expect(result.errors.to_h[:pregnant].first[:category]).to eq 'Data Inconsistency'
       end
     end
+    context 'with invalid self_help_group_discharge' do
+      it 'fails if self_help_group_discharge true and no discharge date' do
+        all_params[:discharge_date] = nil
+        all_params[:client_profile][:self_help_group_discharge] = '1'
+        result = subject.call(all_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:self_help_group_discharge)
+        expect(result.errors.to_h[:self_help_group_discharge].first[:text]).to eq 'cannot be present when discharge date is not'
+        expect(result.errors.to_h[:self_help_group_discharge].first[:category]).to eq 'Data Inconsistency'
+      end
+    end
   end
 
   context 'valid parameters' do

@@ -141,6 +141,22 @@ RSpec.describe ::Validators::Api::V1::ClientProfileContract, dbclean: :around_ea
       expect(result.errors.to_h[:health_insurance].first[:text]).to eq 'must be one of 1, 2, 3, 4, 5, 6, 7, 8, 9, 97, 98'
       expect(result.errors.to_h[:health_insurance].first[:category]).to eq 'Invalid Value'
     end
+    it 'with invalid self_help_group_admission' do
+      valid_params[:self_help_group_admission] = 'not a real status'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:self_help_group_admission)
+      expect(result.errors.to_h[:self_help_group_admission].first[:text]).to eq 'must be one of 1, 2, 3, 4, 5, 6, 96, 97, 98'
+      expect(result.errors.to_h[:self_help_group_admission].first[:category]).to eq 'Invalid Value'
+    end
+    it 'with invalid self_help_group_discharge' do
+      valid_params[:self_help_group_discharge] = 'not a real status'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:self_help_group_discharge)
+      expect(result.errors.to_h[:self_help_group_discharge].first[:text]).to eq 'must be one of 1, 2, 3, 4, 5, 6, 96, 97, 98'
+      expect(result.errors.to_h[:self_help_group_discharge].first[:category]).to eq 'Invalid Value'
+    end
   end
 
   context 'Passed with valid required params' do
