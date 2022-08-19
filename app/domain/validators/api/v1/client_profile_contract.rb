@@ -26,7 +26,7 @@ module Validators
           optional(:health_insurance).maybe(:string)
         end
 
-        %i[marital_status veteran_status education employment not_in_labor pregnant school_attendance legal_status].each do |field|
+        %i[marital_status veteran_status education employment not_in_labor school_attendance legal_status].each do |field|
           rule(field) do
             key.failure(:missing_field) if key && !value
           end

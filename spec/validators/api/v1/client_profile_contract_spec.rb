@@ -121,15 +121,6 @@ RSpec.describe ::Validators::Api::V1::ClientProfileContract, dbclean: :around_ea
       expect(result.errors.to_h[:not_in_labor].first[:category]).to eq 'Missing Value'
     end
 
-    it 'with no pregnant' do
-      valid_params[:pregnant] = nil
-      result = subject.call(valid_params)
-      expect(result.failure?).to be_truthy
-      expect(result.errors.to_h).to have_key(:pregnant)
-      expect(result.errors.to_h[:pregnant].first[:text]).to eq 'Must be filled'
-      expect(result.errors.to_h[:pregnant].first[:category]).to eq 'Missing Value'
-    end
-
     it 'with invalid pregnant' do
       valid_params[:pregnant] = 'not a real status'
       result = subject.call(valid_params)
