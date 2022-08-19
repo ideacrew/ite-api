@@ -26,7 +26,7 @@ module Validators
           optional(:health_insurance).maybe(:string)
         end
 
-        %i[marital_status veteran_status education employment not_in_labor school_attendance legal_status].each do |field|
+        %i[marital_status veteran_status education employment school_attendance legal_status].each do |field|
           rule(field) do
             key.failure(:missing_field) if key && !value
           end
@@ -36,7 +36,7 @@ module Validators
           employment: Types::EMPLOYMENT_OPTIONS, pregnant: Types::PREGNANCY_OPTIONS,
           school_attendance: Types::SCHOOL_ATTENDENCE_OPTIONS, health_insurance: Types::HEALTH_INSURANCE_OPTIONS,
           self_help_group_discharge: Types::SELF_HELP_OPTIONS, self_help_group_admission: Types::SELF_HELP_OPTIONS,
-          legal_status: Types::LEGAL_STATUS_OPTIONS, income_source: Types::INCOME_SOURCE_OPTIONS }.each do |field, types|
+          legal_status: Types::LEGAL_STATUS_OPTIONS, income_source: Types::INCOME_SOURCE_OPTIONS, not_in_labor: Types::NOT_IN_LABOR_OPTIONS }.each do |field, types|
           rule(field) do
             key.failure(text: "must be one of #{types.values.join(', ')}", category: 'Invalid Value') if key && value && !types.include?(value)
           end

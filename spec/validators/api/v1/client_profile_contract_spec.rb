@@ -112,15 +112,6 @@ RSpec.describe ::Validators::Api::V1::ClientProfileContract, dbclean: :around_ea
       expect(result.errors.to_h[:employment].first[:category]).to eq 'Invalid Value'
     end
 
-    it 'with no not_in_labor' do
-      valid_params[:not_in_labor] = nil
-      result = subject.call(valid_params)
-      expect(result.failure?).to be_truthy
-      expect(result.errors.to_h).to have_key(:not_in_labor)
-      expect(result.errors.to_h[:not_in_labor].first[:text]).to eq 'Must be filled'
-      expect(result.errors.to_h[:not_in_labor].first[:category]).to eq 'Missing Value'
-    end
-
     it 'with invalid pregnant' do
       valid_params[:pregnant] = 'not a real status'
       result = subject.call(valid_params)
@@ -182,6 +173,15 @@ RSpec.describe ::Validators::Api::V1::ClientProfileContract, dbclean: :around_ea
       expect(result.errors.to_h).to have_key(:income_source)
       expect(result.errors.to_h[:income_source].first[:text]).to eq 'must be one of 1, 2, 3, 4, 95, 96, 97, 98'
       expect(result.errors.to_h[:income_source].first[:category]).to eq 'Invalid Value'
+    end
+
+    it 'with invalid not_in_labor' do
+      valid_params[:not_in_labor] = 'not a real status'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:not_in_labor)
+      expect(result.errors.to_h[:not_in_labor].first[:text]).to eq 'must be one of 1, 2, 3, 4, 5, 6, 7, 96, 97, 98'
+      expect(result.errors.to_h[:not_in_labor].first[:category]).to eq 'Invalid Value'
     end
   end
 
