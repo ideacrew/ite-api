@@ -30,6 +30,8 @@ module Validators
           optional(:suffix).maybe(:string)
           optional(:address_line1).maybe(:string)
           optional(:address_line2).maybe(:string)
+          optional(:phone1).maybe(:string)
+          optional(:phone2).maybe(:string)
         end
 
         %i[first_name middle_name last_name first_name_alt last_name_alt address_line1 address_line2].each do |field|
@@ -45,6 +47,16 @@ module Validators
         %i[first_name last_name client_id gender race ethnicity dob primary_language living_arrangement].each do |field|
           rule(field) do
             key.failure(:missing_field) if key && !value
+          end
+        end
+
+        %i[phone2 phone1].each do |field|
+          rule(field) do
+            if key && value
+              key.failure(:length_not10) if value.length != 10
+              key.failure(:non_numeric) unless value.scan(/\D/).empty?
+              key.failure(:start_with0) if value.start_with?('0')
+            end
           end
         end
 

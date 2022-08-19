@@ -396,6 +396,60 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       expect(result.errors.to_h[:address_line2].first[:text]).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
       expect(result.errors.to_h[:address_line2].first[:category]).to eq 'Invalid Value'
     end
+
+    it 'phone1 contains non numeric characters' do
+      valid_params[:phone1] = 'testinghs!'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:phone1)
+      expect(result.errors.to_h[:phone1].first[:text]).to eq 'must contain only numbers'
+      expect(result.errors.to_h[:phone1].first[:category]).to eq 'Wrong Format'
+    end
+
+    it 'phone1 contains more than 10 characters' do
+      valid_params[:phone1] = '1234567891011'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:phone1)
+      expect(result.errors.to_h[:phone1].first[:text]).to eq 'must contain 10 characters'
+      expect(result.errors.to_h[:phone1].first[:category]).to eq 'Invalid Field Length'
+    end
+
+    it 'phone1 starts with 0' do
+      valid_params[:phone1] = '0123456789'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:phone1)
+      expect(result.errors.to_h[:phone1].first[:text]).to eq 'cannot start with 0'
+      expect(result.errors.to_h[:phone1].first[:category]).to eq 'Invalid Value'
+    end
+
+    it 'phone2 contains non numeric characters' do
+      valid_params[:phone2] = 'testinghs!'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:phone2)
+      expect(result.errors.to_h[:phone2].first[:text]).to eq 'must contain only numbers'
+      expect(result.errors.to_h[:phone2].first[:category]).to eq 'Wrong Format'
+    end
+
+    it 'phone2 contains more than 10 characters' do
+      valid_params[:phone2] = '1234567891011'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:phone2)
+      expect(result.errors.to_h[:phone2].first[:text]).to eq 'must contain 10 characters'
+      expect(result.errors.to_h[:phone2].first[:category]).to eq 'Invalid Field Length'
+    end
+
+    it 'phone2 starts with 0' do
+      valid_params[:phone2] = '0123456789'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:phone2)
+      expect(result.errors.to_h[:phone2].first[:text]).to eq 'cannot start with 0'
+      expect(result.errors.to_h[:phone2].first[:category]).to eq 'Invalid Value'
+    end
   end
 
   context 'Passed with valid required params' do
