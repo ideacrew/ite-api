@@ -50,7 +50,9 @@ module Operations
           warnings = %i[address_zip_code phone1 phone2 veteran_status not_in_labor income_source pregnant medicaid_id suffix sexual_orientation first_name_alt
                         last_name_alt self_help_group_admission middle_name suffix admission_id service_request_date criminal_justice_referral
                         health_insurance address_line2 address_line1]
-          critical_error_fields = %i[address_state school_attendance marital_status employment education legal_status primary_language ethnicity race first_name last_name dob gender self_help_group_discharge arrests_past_30days_discharge num_of_prior_su_episodes
+          critical_error_fields = %i[address_city address_state school_attendance marital_status employment education
+                                     legal_status primary_language ethnicity race first_name last_name dob gender self_help_group_discharge
+                                     arrests_past_30days_discharge num_of_prior_su_episodes
                                      discharge_reason referral_source living_arrangement]
           fatal_error_fields = %i[collateral client_id record_type admission_date treatment_type discharge_date last_contact_date]
           errors = result.errors.messages.map { |message| { message.path.last => { text: message.text, category: message&.meta&.first&.last } } }

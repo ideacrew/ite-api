@@ -18,7 +18,8 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       ethnicity: '4',
       primary_language: '1',
       living_arrangement: '1',
-      address_state: 'ME'
+      address_state: 'ME',
+      address_city: 'Portland'
     }
   end
 
@@ -495,6 +496,24 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       expect(result.errors.to_h).to have_key(:address_state)
       expect(result.errors.to_h[:address_state].first[:text]).to eq 'must be a valid 2 letter state abbreviation'
       expect(result.errors.to_h[:address_state].first[:category]).to eq 'Invalid Value'
+    end
+
+    it 'without address_city' do
+      valid_params[:address_city] = nil
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:address_city)
+      expect(result.errors.to_h[:address_city].first[:text]).to eq 'Must be filled'
+      expect(result.errors.to_h[:address_city].first[:category]).to eq 'Missing Value'
+    end
+
+    it 'with invalid characters in address_city' do
+      valid_params[:address_city] = 'P0rtland!'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:address_city)
+      expect(result.errors.to_h[:address_city].first[:text]).to eq 'City can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
+      expect(result.errors.to_h[:address_city].first[:category]).to eq 'Invalid Value'
     end
   end
 

@@ -85,11 +85,17 @@ en:
       length_more_than10:
         text: "cannot contain more than 10 characters"
         category: "Invalid Field Length"
+      length_more_than30:
+        text: "cannot contain more than 30 characters"
+        category: "Invalid Field Length"
       length_not10:
         text: "must contain 10 characters"
         category: "Invalid Field Length"
       unsuported_name_characters:
         text: "Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters"
+        category: "Invalid Value"
+      unsuported_city_characters:
+        text: "City can only contain a hyphen (-), Apostrophe (‘), or a single space between characters"
         category: "Invalid Value"
       doesnt_start_with7:
         text: "must start with 7"

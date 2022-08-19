@@ -34,6 +34,7 @@ module Validators
           optional(:phone2).maybe(:string)
           optional(:address_zip_code).maybe(:string)
           optional(:address_state).maybe(:string)
+          optional(:address_city).maybe(:string)
         end
 
         %i[first_name middle_name last_name first_name_alt last_name_alt address_line1 address_line2].each do |field|
@@ -46,7 +47,7 @@ module Validators
           end
         end
 
-        %i[first_name last_name client_id gender race ethnicity dob primary_language living_arrangement address_state].each do |field|
+        %i[first_name last_name client_id gender race ethnicity dob primary_language living_arrangement address_state address_city].each do |field|
           rule(field) do
             key.failure(:missing_field) if key && !value
           end
@@ -54,6 +55,14 @@ module Validators
 
         rule(:address_state) do
           key.failure(:not_a_state) if key && value && !Types::UsStateAbbreviationKind.include?(value)
+        end
+
+        rule(:address_city) do
+          if key && value
+            key.failure(:length_more_than30) if value.length > 30
+            pattern = Regexp.new('^[a-zA-Z\s\-\'\ ]*$').freeze
+            key.failure(:unsuported_city_characters) unless pattern.match(value)
+          end
         end
 
         %i[phone2 phone1].each do |field|
