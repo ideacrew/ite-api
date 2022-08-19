@@ -191,6 +191,15 @@ module Validators
           end
         end
 
+        rule('client.dob', 'client_profile.school_attendance') do
+          if key && (values.dig(:client_profile, :school_attendance) && values.dig(:client, :dob))
+            now = Time.now.utc.to_date
+            dob = values.dig(:client, :dob)
+            age = now.year - dob.year - (now.month > dob.month || (now.month == dob.month && now.day >= dob.day) ? 0 : 1)
+            key(:school_attendance).failure(:over21) if values.dig(:client_profile, :school_attendance) != '96' && age > 21
+          end
+        end
+
         rule(:discharge_date, client_profile: :self_help_group_discharge) do
           key(:self_help_group_discharge).failure(:discharge_date_nil) if key && (!values[:discharge_date] && values.dig(:client_profile, :self_help_group_discharge))
           key(:self_help_group_discharge).failure(:discharge_reason_cannot_be_nil) if key && (values[:discharge_date] && !values.dig(:client_profile, :self_help_group_discharge))

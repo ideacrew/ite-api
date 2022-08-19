@@ -541,6 +541,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
         expect(result.errors.to_h[:pregnant].first[:category]).to eq 'Data Inconsistency'
       end
     end
+
     context 'with invalid self_help_group_discharge' do
       it 'fails if self_help_group_discharge true and no discharge date' do
         all_params[:discharge_date] = nil
@@ -551,6 +552,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
         expect(result.errors.to_h[:self_help_group_discharge].first[:text]).to eq 'cannot be present when discharge date is not'
         expect(result.errors.to_h[:self_help_group_discharge].first[:category]).to eq 'Data Inconsistency'
       end
+
       it 'fails if discharge_date valid and no self_help_group_discharge' do
         all_params[:discharge_date] = Date.today.to_s
         all_params[:client_profile][:self_help_group_discharge] = nil
@@ -559,6 +561,18 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
         expect(result.errors.to_h).to have_key(:self_help_group_discharge)
         expect(result.errors.to_h[:self_help_group_discharge].first[:text]).to eq 'cannot be empty when discharge date is present'
         expect(result.errors.to_h[:self_help_group_discharge].first[:category]).to eq 'Missing Value'
+      end
+    end
+
+    context 'with invalid school_attendance' do
+      it 'fails if school_attendance is not 96 and age is greater than 21' do
+        all_params[:client][:dob] = (Date.today - (366 * 22)).to_s
+        all_params[:client_profile][:school_attendance] = '1'
+        result = subject.call(all_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:school_attendance)
+        expect(result.errors.to_h[:school_attendance].first[:text]).to eq 'client who is older than 21 years old should be reported 96 (Not Applicable)'
+        expect(result.errors.to_h[:school_attendance].first[:category]).to eq 'Data Inconsistency'
       end
     end
   end

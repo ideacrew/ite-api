@@ -103,6 +103,9 @@ en:
       sequential_descending_order:
         text: "Cannot be in sequential descending order"
         category: "Invalid Value"
+      over21:
+        text: "client who is older than 21 years old should be reported 96 (Not Applicable)"
+        category: "Data Inconsistency"
 
       rules:
         client_id:
