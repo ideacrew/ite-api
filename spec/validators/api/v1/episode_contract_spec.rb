@@ -11,8 +11,8 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
       collateral: '2',
       client_id: '8347ehf',
       treatment_location: '123 main',
+      num_of_prior_su_episodes: '3',
       referral_source: '2',
-      criminal_justice_referral: '96',
       record_type: 'A'
     }
   end
@@ -20,14 +20,14 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
   let(:optional_params) do
     {
       admission_type: '31',
-      episode_id: 'fbgadfs7fgdy',
+      admission_id: 'fbgadfs7fgdy',
       service_request_date: Date.today.to_s,
-      # discharge_date: Date.today.to_s,
+      discharge_date: Date.today.to_s,
       discharge_type: '50',
       discharge_reason: '2',
       primary_payment_source: '1',
       last_contact_date: Date.today.to_s,
-      num_of_prior_episodes: '3',
+      criminal_justice_referral: '96',
       client: client_params,
       client_profile: client_profile_params,
       clinical_info: clinical_info_params
@@ -42,12 +42,16 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
       first_name: 'test',
       last_name: 'test',
       ssn: '123758027',
-      medicaid_id: '16273833',
+      medicaid_id: '72345678',
       dob: Date.today,
       gender: '1',
       sexual_orientation: '2',
       race: '3',
-      ethnicity: '4'
+      ethnicity: '4',
+      primary_language: '1',
+      living_arrangement: '1',
+      address_city: 'Portland',
+      address_state: 'ME'
     }
   end
 
@@ -62,10 +66,12 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
       income_source: '1',
       school_attendance: '1',
       legal_status: '1',
-      arrests_past_30days: '1',
+      arrests_past_30days_admission: '1',
+      arrests_past_30days_discharge: '1',
       pregnant: '2',
-      self_help_group_attendance: '1',
-      health_insuranc: '1'
+      self_help_group_discharge: '1',
+      health_insuranc: '1',
+      living_arrangement: '1'
     }
   end
 
@@ -162,7 +168,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
         all_params[:record_type] = '29'
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:record_type)
-        expect(errors[:record_type].first[:text]).to eq('must be one of A, T, D, M, X, E')
+        expect(errors[:record_type].first[:text]).to eq('must be one of A, T, M, X')
         expect(errors[:record_type].first[:category]).to eq('Invalid Value')
       end
       # it 'does not correctly correspond to the record_group' do
@@ -376,13 +382,14 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
       end
     end
     context 'with invalid discharge reason field it should fail' do
-      # it 'is not present when the record group is discharge' do
-      #   all_params[:discharge_reason] = nil
-      #   all_params[:record_group] = 'discharge'
-      #   errors = subject.call(all_params).errors.to_h
-      #   expect(errors).to have_key(:discharge_reason)
-      #   expect(errors.to_h[:discharge_reason].first).to eq('Must be included for discharge records')
-      # end
+      it 'is not present when discharge_date present' do
+        all_params[:discharge_reason] = nil
+        all_params[:discharge_date] = Date.today.to_s
+        errors = subject.call(all_params).errors.to_h
+        expect(errors).to have_key(:discharge_reason)
+        expect(errors.to_h[:discharge_reason].first[:text]).to eq('cannot be empty when discharge date is present')
+        expect(errors.to_h[:discharge_reason].first[:category]).to eq('Missing Value')
+      end
       it 'is not a valid discharge reason' do
         all_params[:discharge_reason] = '22'
         errors = subject.call(all_params).errors.to_h
@@ -391,36 +398,36 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
         expect(errors[:discharge_reason].first[:category]).to eq('Invalid Value')
       end
     end
-    context 'with invalid episode_id it should fail' do
+    context 'with invalid admission_id it should fail' do
       it 'is more than 15 characters' do
-        all_params[:episode_id] = '3478657436574865783465873465386gfueyg78r'
+        all_params[:admission_id] = '3478657436574865783465873465386gfueyg78r'
         errors = subject.call(all_params).errors.to_h
-        expect(errors).to have_key(:episode_id)
-        expect(errors.to_h[:episode_id].first[:text]).to eq('cannot contain more than 15 digits')
-        expect(errors[:episode_id].first[:category]).to eq('Invalid Field Length')
+        expect(errors).to have_key(:admission_id)
+        expect(errors.to_h[:admission_id].first[:text]).to eq('cannot contain more than 15 digits')
+        expect(errors[:admission_id].first[:category]).to eq('Invalid Field Length')
       end
       it 'has special characters' do
-        all_params[:episode_id] = '3478657436!@'
+        all_params[:admission_id] = '3478657436!@'
         errors = subject.call(all_params).errors.to_h
-        expect(errors).to have_key(:episode_id)
-        expect(errors.to_h[:episode_id].first[:text]).to eq('cannot contain special characters')
-        expect(errors[:episode_id].first[:category]).to eq('Invalid Field')
+        expect(errors).to have_key(:admission_id)
+        expect(errors.to_h[:admission_id].first[:text]).to eq('cannot contain special characters')
+        expect(errors[:admission_id].first[:category]).to eq('Invalid Field')
       end
     end
-    context 'with invalid num_of_prior_episodes it should fail' do
+    context 'with invalid num_of_prior_su_episodes it should fail' do
       # it 'is not present and the record group is not discharge' do
-      #   all_params[:num_of_prior_episodes] = nil
+      #   all_params[:num_of_prior_su_episodes] = nil
       #   all_params[:record_group] = 'admission'
       #   errors = subject.call(all_params).errors.to_h
-      #   expect(errors).to have_key(:num_of_prior_episodes)
-      #   expect(errors.to_h[:num_of_prior_episodes].first).to eq('Must be included for admission or active records')
+      #   expect(errors).to have_key(:num_of_prior_su_episodes)
+      #   expect(errors.to_h[:num_of_prior_su_episodes].first).to eq('Must be included for admission or active records')
       # end
       it 'is not a valid option' do
-        all_params[:num_of_prior_episodes] = '22'
+        all_params[:num_of_prior_su_episodes] = '22'
         errors = subject.call(all_params).errors.to_h
-        expect(errors).to have_key(:num_of_prior_episodes)
-        expect(errors.to_h[:num_of_prior_episodes].first[:text]).to eq('must be one of 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 97, 98')
-        expect(errors[:num_of_prior_episodes].first[:category]).to eq('Invalid Value')
+        expect(errors).to have_key(:num_of_prior_su_episodes)
+        expect(errors.to_h[:num_of_prior_su_episodes].first[:text]).to eq('must be one of 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 97, 98')
+        expect(errors[:num_of_prior_su_episodes].first[:category]).to eq('Invalid Value')
       end
     end
     context 'with invalid treatment location' do
@@ -456,14 +463,6 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
         expect(errors).to have_key(:criminal_justice_referral)
         expect(errors[:criminal_justice_referral].first[:text]).to eq('must be one of 1, 2, 3, 4, 5, 6, 7, 8, 96, 97, 98')
         expect(errors[:criminal_justice_referral].first[:category]).to eq('Invalid Value')
-      end
-      it 'without criminal justice referral it should warn' do
-        all_params[:criminal_justice_referral] = nil
-        result = subject.call(all_params)
-        expect(result.failure?).to be_truthy
-        expect(result.errors.to_h).to have_key(:criminal_justice_referral)
-        expect(result.errors.to_h[:criminal_justice_referral].first[:text]).to eq 'Must be filled'
-        expect(result.errors.to_h[:criminal_justice_referral].first[:category]).to eq('Missing Value')
       end
       it 'without criminal_justice_referral of 96 but with referral_source of 7 it should fail' do
         all_params[:criminal_justice_referral] = '96'
@@ -544,6 +543,40 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
         expect(result.errors.to_h[:pregnant].first[:category]).to eq 'Data Inconsistency'
       end
     end
+
+    context 'with invalid self_help_group_discharge' do
+      it 'fails if self_help_group_discharge true and no discharge date' do
+        all_params[:discharge_date] = nil
+        all_params[:client_profile][:self_help_group_discharge] = '1'
+        result = subject.call(all_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:self_help_group_discharge)
+        expect(result.errors.to_h[:self_help_group_discharge].first[:text]).to eq 'cannot be present when discharge date is not'
+        expect(result.errors.to_h[:self_help_group_discharge].first[:category]).to eq 'Data Inconsistency'
+      end
+
+      it 'fails if discharge_date valid and no self_help_group_discharge' do
+        all_params[:discharge_date] = Date.today.to_s
+        all_params[:client_profile][:self_help_group_discharge] = nil
+        result = subject.call(all_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:self_help_group_discharge)
+        expect(result.errors.to_h[:self_help_group_discharge].first[:text]).to eq 'cannot be empty when discharge date is present'
+        expect(result.errors.to_h[:self_help_group_discharge].first[:category]).to eq 'Missing Value'
+      end
+    end
+
+    context 'with invalid school_attendance' do
+      it 'fails if school_attendance is not 96 and age is greater than 21' do
+        all_params[:client][:dob] = (Date.today - (366 * 22)).to_s
+        all_params[:client_profile][:school_attendance] = '1'
+        result = subject.call(all_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:school_attendance)
+        expect(result.errors.to_h[:school_attendance].first[:text]).to eq 'client who is older than 21 years old should be reported 96 (Not Applicable)'
+        expect(result.errors.to_h[:school_attendance].first[:category]).to eq 'Data Inconsistency'
+      end
+    end
   end
 
   context 'valid parameters' do
@@ -556,7 +589,6 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
 
     context 'with required and optional parameters' do
       it 'should pass validation' do
-        all_params[:discharge_date] = Date.today.to_s
         result = subject.call(all_params)
         expect(result.success?).to be_truthy
       end

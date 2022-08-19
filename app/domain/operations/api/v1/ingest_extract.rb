@@ -53,7 +53,7 @@ module Operations
           if params[:records]
             params[:records].each do |record|
               result = Operations::Api::V1::CreateRecord.new.call(extract: extract.attributes.symbolize_keys,
-                                                                  payload: record, dups: dup_episode_ids(params))
+                                                                  payload: record, dups: dup_admission_ids(params))
               record_object = extract.records.build
               record_object.assign_attributes(result.success.attributes)
             end
@@ -63,9 +63,9 @@ module Operations
           Success(extract)
         end
 
-        def dup_episode_ids(params)
-          episode_ids = params[:records].map.map { |r| r[:episode_id] }
-          episode_ids.select { |e| episode_ids.count(e) > 1 }.uniq
+        def dup_admission_ids(params)
+          admission_ids = params[:records].map.map { |r| r[:admission_id] }
+          admission_ids.select { |e| admission_ids.count(e) > 1 }.uniq
         end
       end
     end

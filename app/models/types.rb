@@ -11,7 +11,7 @@ module Types
 
   # RecordGroups = Types::String.enum('admission', 'discharge', 'active').freeze
   CODEPEDENT_OPTIONS = Types::String.enum('1', '2').freeze
-  RECORD_TYPE_OPTIONS = Types::String.enum('A', 'T', 'D', 'M', 'X', 'E').freeze
+  RECORD_TYPE_OPTIONS = Types::String.enum('A', 'T', 'M', 'X').freeze
   TREATMENT_TYPE_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '6', '7', '8', '72', '73', '74', '75', '76', '77',
                                               '96').freeze
   DISCHARGE_REASON_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '95',
@@ -20,12 +20,12 @@ module Types
   SEXUAL_ORIENTATION_OPTIONS = Types::String.enum('1', '2', '3', '4', '95', '97', '98').freeze
   RACE_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '13', '20', '21', '23', '97', '98').freeze
   ETHNICITY_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '6', '97', '98').freeze
-  LANGUAGE_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '97',
+  LANGUAGE_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '95', '97',
                                         '98').freeze
   REFERRAL_SOURCE_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '6', '7', '97', '98').freeze
   PAYMENT_SOURCE_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '6', '7', '8', '9', '97',
                                               '98').freeze
-  LIVING_ARRANGEMENT_OPTIONS = Types::String.enum('1', '3', '11', '12', '13', '14', '15', '16', '17', '97',
+  LIVING_ARRANGEMENT_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '97',
                                                   '98').freeze
   EDUCATION_OPTIONS = Types::String.enum('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14',
                                          '15', '16', '17', '18', '71', '72', '73', '74', '97', '98').freeze
@@ -38,4 +38,71 @@ module Types
   VETERAN_STATUS_OPTIONS = Types::String.enum('1', '2', '97', '98').freeze
   PREGNANCY_OPTIONS = Types::String.enum('1', '2', '96', '97', '98').freeze
   SCHOOL_ATTENDENCE_OPTIONS = Types::String.enum('1', '2', '96', '97', '98').freeze
+  HEALTH_INSURANCE_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '6', '7', '8', '9', '97', '98').freeze
+  SELF_HELP_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '6', '96', '97', '98').freeze
+  INCOME_SOURCE_OPTIONS = Types::String.enum('1', '2', '3', '4', '95', '96', '97', '98').freeze
+  NOT_IN_LABOR_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '6', '7', '96', '97', '98').freeze
+  WARD_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '6', '7', '8', '96', '97', '98').freeze
+  UsStateAbbreviationKind =
+    Types::String.enum(
+      'AL',
+      'AK',
+      'AS',
+      'AZ',
+      'AR',
+      'CA',
+      'CO',
+      'CT',
+      'DE',
+      'DC',
+      'FM',
+      'FL',
+      'GA',
+      'GU',
+      'HI',
+      'ID',
+      'IL',
+      'IN',
+      'IA',
+      'KS',
+      'KY',
+      'LA',
+      'ME',
+      'MH',
+      'MD',
+      'MA',
+      'MI',
+      'MN',
+      'MS',
+      'MO',
+      'MT',
+      'NE',
+      'NV',
+      'NH',
+      'NJ',
+      'NM',
+      'NY',
+      'NC',
+      'ND',
+      'MP',
+      'OH',
+      'OK',
+      'OR',
+      'PW',
+      'PA',
+      'PR',
+      'RI',
+      'SC',
+      'SD',
+      'TN',
+      'TX',
+      'UT',
+      'VT',
+      'VI',
+      'VA',
+      'WA',
+      'WV',
+      'WI',
+      'WY'
+    )
 end

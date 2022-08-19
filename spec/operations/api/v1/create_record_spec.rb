@@ -9,14 +9,14 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :around_each do
 
   let(:row) do
     { 'provider_id' => '15',
-      'episode_id' => '194062',
+      'admission_id' => '194062',
       'admission_date' => Date.today.to_s,
       'treatment_type' => '4',
       'client_id' => 'LEVN46410511921',
       'collateral' => '1',
       'dob' => (Date.today - 3000).to_s,
       'num_of_prior_admissions' => '2',
-      'num_of_prior_episodes' => '2',
+      'num_of_prior_su_episodes' => '2',
       'arrests_past_30days' => nil,
       'treatment_location' => '123 main',
       'education' => '12',
@@ -28,6 +28,7 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :around_each do
       'primary_payment_source' => '2',
       'criminal_justice_referral' => '96',
       'gender' => '1',
+      'living_arrangement' => '1',
       'first_name' => 'George',
       'last_name' => 'Bluth',
       'race' => '1',
@@ -35,6 +36,9 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :around_each do
       'not_in_labor' => '1',
       'pregnant' => '2',
       'school_attendance' => '2',
+      'address_city' => 'Portland',
+      'address_state' => 'ME',
+      'legal_status' => '1',
       'ethnicity' => '97',
       'primary_language' => '1' }
   end
@@ -122,12 +126,12 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :around_each do
     # end
 
     # WIP
-    context 'with duplicate episode id' do
-      it 'should add an episode_id id failure' do
-        params[:payload][:episode_id] = '1234'
+    context 'with duplicate admission id' do
+      it 'should add an admission_id id failure' do
+        params[:payload][:admission_id] = '1234'
         record = described_class.new.call(params).value!
-        expect(record.fatal_errors.map(&:keys).flatten).to include(:episode_id)
-        expect(record.fatal_errors.first[:episode_id][:text]).to eq 'must be a unique identifier for admission episodes'
+        expect(record.fatal_errors.map(&:keys).flatten).to include(:admission_id)
+        expect(record.fatal_errors.first[:admission_id][:text]).to eq 'must be a unique identifier for admission episodes'
       end
     end
 

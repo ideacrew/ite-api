@@ -67,7 +67,7 @@ describe ::Operations::Api::V1::IngestExtract, dbclean: :around_each do
 
     context 'invalid records' do
       before do
-        params[:records].first[:episode_id] = nil
+        params[:records].first[:admission_date] = nil
         @result = described_class.new.call(params)
         @extract = @result.value!
       end

@@ -5,7 +5,7 @@ module Entities
     module V1
       # entity to define a service episode for use in payload validation
       class Episode < Dry::Struct
-        attribute :episode_id, Types::String.optional.meta(omittable: true)
+        attribute :admission_id, Types::String.optional.meta(omittable: true)
         attribute :client_id, Types::String.optional.meta(omittable: true)
         # Codependent or Collateral
         attribute :collateral, Types::String.optional.meta(omittable: true) # confirm type
@@ -28,7 +28,7 @@ module Entities
         # Data of Last Contact
         attribute :last_contact_date, Types::Date.optional.meta(omittable: true)
         # Number of Prior SU Treatment Episodes
-        attribute :num_of_prior_episodes, Types::String.optional.meta(omittable: true) # confirm type
+        attribute :num_of_prior_su_episodes, Types::String.optional.meta(omittable: true) # confirm type
         # Referral Source
         attribute :referral_source, Types::String.optional.meta(omittable: true)
         # Detailed Criminal Justice Referral

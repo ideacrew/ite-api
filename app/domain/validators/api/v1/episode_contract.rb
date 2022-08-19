@@ -13,7 +13,7 @@ module Validators
         config.messages.top_namespace = 'dry_validation_with_codes'
         config.messages.load_paths = ['./config/locales/v1_messages.yml']
         params do
-          optional(:episode_id).maybe(:string)
+          optional(:admission_id).maybe(:string)
           required(:collateral).filled(Types::CODEPEDENT_OPTIONS)
           required(:client_id).filled(:string)
           required(:record_type).filled(Types::RECORD_TYPE_OPTIONS)
@@ -26,8 +26,8 @@ module Validators
           optional(:discharge_type).maybe(:string)
           optional(:discharge_reason).maybe(Types::DISCHARGE_REASON_OPTIONS)
           optional(:last_contact_date).maybe(:date)
-          optional(:num_of_prior_episodes).maybe(Types::PRIOR_SU_EPISODE_OPTIONS)
-          optional(:referral_source).maybe(Types::REFERRAL_SOURCE_OPTIONS)
+          required(:num_of_prior_su_episodes).filled(Types::PRIOR_SU_EPISODE_OPTIONS)
+          required(:referral_source).filled(Types::REFERRAL_SOURCE_OPTIONS)
           optional(:criminal_justice_referral).maybe(Types::CRIMINAL_JUSTICE_REFERRAL_OPTIONS)
           optional(:primary_payment_source).maybe(Types::PAYMENT_SOURCE_OPTIONS)
           optional(:client).maybe(Validators::Api::V1::ClientContract.params)
@@ -56,24 +56,28 @@ module Validators
         rule(:admission_date, :last_contact_date) do
           key.failure(:after_last_contact) if key && values[:last_contact_date] && values[:admission_date] > values[:last_contact_date]
         end
+
         rule(:admission_date, :extracted_on) do
           key.failure(:after_extraction) if key && values[:extracted_on] && values[:admission_date] > Date.parse(values[:extracted_on].to_s)
         end
+
         rule(:admission_date, :coverage_start) do
           key.failure(:outside_coverage) if key && values[:coverage_start] && values[:admission_date] < Date.parse(values[:coverage_start].to_s)
         end
+
         rule(:admission_date, :coverage_end) do
           key.failure(:outside_coverage) if key && values[:coverage_end] && values[:admission_date] > Date.parse(values[:coverage_end].to_s)
         end
 
         rule(:treatment_type, :record_type) do
-          record_group1 = %w[M E X]
-          record_group2 = %w[A T D]
+          record_group1 = %w[M X]
+          record_group2 = %w[A T]
           unless values[:treatment_type] == '96'
             key.failure(:record_type_mismatch) if key && record_group1.include?(values[:record_type]) && (values[:treatment_type].to_i < 72 || values[:treatment_type].to_i > 77)
             key.failure(:record_type_mismatch) if key && record_group2.include?(values[:record_type]) && values[:treatment_type].to_i > 9
           end
         end
+
         rule(:treatment_type, :collateral) do
           key.failure(:treatment_type96) if key && values[:treatment_type] && values[:collateral] && values[:collateral] != '1' && values[:treatment_type] == '96'
         end
@@ -84,6 +88,7 @@ module Validators
             key.failure(:after_extraction)
           end
         end
+
         rule(:discharge_date, :last_contact_date) do
           if key && (values[:last_contact_date] && values[:discharge_date]) &&
              values[:discharge_date] > values[:last_contact_date]
@@ -103,12 +108,17 @@ module Validators
           key.failure(:discharge_date_cannot_be_nil) if values[:discharge_reason] && !values[:discharge_date]
         end
 
+        rule(:discharge_reason, :discharge_date) do
+          key.failure(:discharge_reason_cannot_be_nil) if values[:discharge_date] && !values[:discharge_reason]
+        end
+
         rule(:last_contact_date, :extracted_on) do
           if key && (values[:last_contact_date] && values[:extracted_on]) &&
              values[:last_contact_date] > Date.parse(values[:extracted_on].to_s)
             key.failure(:after_extraction)
           end
         end
+
         rule(:last_contact_date, :admission_date) do
           if key && (values[:last_contact_date] && values[:admission_date]) &&
              values[:last_contact_date] < Date.parse(values[:admission_date].to_s)
@@ -116,27 +126,19 @@ module Validators
           end
         end
 
-        rule(:episode_id) do
+        rule(:admission_id) do
           if key && value
             key.failure(:special_characters) if value.match(/[^a-zA-Z\d-]/)
             key.failure(:length) if value.length > 15
           end
         end
 
-        # rule(:num_of_prior_episodes, :record_group) do
-        #   key.failure('Must be included for admission or active records') if key && values[:record_group] && values[:record_group] != 'discharge' && !values[:num_of_prior_episodes]
-        # end
-
         rule(:treatment_location) do
           key.failure(:missing_field) if key && !value
         end
 
-        rule(:referral_source) do
-          key.failure(:missing_field) if key && !value
-        end
-
         rule(:criminal_justice_referral, :referral_source) do
-          key.failure(:missing_field) if key && !value
+          # key(:criminal_justice_referral).failure(:missing_field) if key && !value
           if key && values[:criminal_justice_referral] && values[:referral_source]
             key.failure(:referral7_value96) if values[:criminal_justice_referral] == '96' && values[:referral_source] == '7'
             key.failure(:referral_not7_value_not96) if values[:criminal_justice_referral] != '96' && values[:referral_source] != '7'
@@ -156,6 +158,7 @@ module Validators
             key(:dob).failure(:earlier_than_admission)
           end
         end
+
         rule(client: :dob) do
           if key && values.dig(:client, :dob) &&
              values[:client][:dob] > Date.today
@@ -171,6 +174,7 @@ module Validators
             end
           end
         end
+
         rule(:client_profile) do
           if key && value
             result = Validators::Api::V1::ClientProfileContract.new.call(value)
@@ -185,6 +189,20 @@ module Validators
              (values.dig(:client_profile, :pregnant) == '1' && values.dig(:client, :gender) == '1')
             key(:pregnant).failure(:gender_pregnancy_mismatch)
           end
+        end
+
+        rule('client.dob', 'client_profile.school_attendance') do
+          if key && (values.dig(:client_profile, :school_attendance) && values.dig(:client, :dob))
+            now = Time.now.utc.to_date
+            dob = values.dig(:client, :dob)
+            age = now.year - dob.year - (now.month > dob.month || (now.month == dob.month && now.day >= dob.day) ? 0 : 1)
+            key(:school_attendance).failure(:over21) if values.dig(:client_profile, :school_attendance) != '96' && age > 21
+          end
+        end
+
+        rule(:discharge_date, client_profile: :self_help_group_discharge) do
+          key(:self_help_group_discharge).failure(:discharge_date_nil) if key && (!values[:discharge_date] && values.dig(:client_profile, :self_help_group_discharge))
+          key(:self_help_group_discharge).failure(:discharge_reason_cannot_be_nil) if key && (values[:discharge_date] && !values.dig(:client_profile, :self_help_group_discharge))
         end
       end
     end
