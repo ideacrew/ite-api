@@ -174,6 +174,15 @@ RSpec.describe ::Validators::Api::V1::ClientProfileContract, dbclean: :around_ea
       expect(result.errors.to_h[:self_help_group_discharge].first[:text]).to eq 'must be one of 1, 2, 3, 4, 5, 6, 96, 97, 98'
       expect(result.errors.to_h[:self_help_group_discharge].first[:category]).to eq 'Invalid Value'
     end
+
+    it 'with invalid income_source' do
+      valid_params[:income_source] = 'not a real status'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:income_source)
+      expect(result.errors.to_h[:income_source].first[:text]).to eq 'must be one of 1, 2, 3, 4, 95, 96, 97, 98'
+      expect(result.errors.to_h[:income_source].first[:category]).to eq 'Invalid Value'
+    end
   end
 
   context 'Passed with valid required params' do

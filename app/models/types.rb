@@ -40,4 +40,5 @@ module Types
   SCHOOL_ATTENDENCE_OPTIONS = Types::String.enum('1', '2', '96', '97', '98').freeze
   HEALTH_INSURANCE_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '6', '7', '8', '9', '97', '98').freeze
   SELF_HELP_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '6', '96', '97', '98').freeze
+  INCOME_SOURCE_OPTIONS = Types::String.enum('1', '2', '3', '4', '95', '96', '97', '98').freeze
 end

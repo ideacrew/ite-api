@@ -32,8 +32,11 @@ module Validators
           end
         end
 
-        { marital_status: Types::MARITAL_STATUS_OPTIONS, veteran_status: Types::VETERAN_STATUS_OPTIONS, education: Types::EDUCATION_OPTIONS, employment: Types::EMPLOYMENT_OPTIONS, pregnant: Types::PREGNANCY_OPTIONS,
-          school_attendance: Types::SCHOOL_ATTENDENCE_OPTIONS, health_insurance: Types::HEALTH_INSURANCE_OPTIONS, self_help_group_discharge: Types::SELF_HELP_OPTIONS, self_help_group_admission: Types::SELF_HELP_OPTIONS, legal_status: Types::LEGAL_STATUS_OPTIONS }.each do |field, types|
+        { marital_status: Types::MARITAL_STATUS_OPTIONS, veteran_status: Types::VETERAN_STATUS_OPTIONS, education: Types::EDUCATION_OPTIONS,
+          employment: Types::EMPLOYMENT_OPTIONS, pregnant: Types::PREGNANCY_OPTIONS,
+          school_attendance: Types::SCHOOL_ATTENDENCE_OPTIONS, health_insurance: Types::HEALTH_INSURANCE_OPTIONS,
+          self_help_group_discharge: Types::SELF_HELP_OPTIONS, self_help_group_admission: Types::SELF_HELP_OPTIONS,
+          legal_status: Types::LEGAL_STATUS_OPTIONS, income_source: Types::INCOME_SOURCE_OPTIONS }.each do |field, types|
           rule(field) do
             key.failure(text: "must be one of #{types.values.join(', ')}", category: 'Invalid Value') if key && value && !types.include?(value)
           end
