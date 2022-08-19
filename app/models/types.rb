@@ -42,7 +42,7 @@ module Types
   SELF_HELP_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '6', '96', '97', '98').freeze
   INCOME_SOURCE_OPTIONS = Types::String.enum('1', '2', '3', '4', '95', '96', '97', '98').freeze
   NOT_IN_LABOR_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '6', '7', '96', '97', '98').freeze
-
+  WARD_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '6', '7', '8', '96', '97', '98').freeze
   UsStateAbbreviationKind =
     Types::String.enum(
       'AL',

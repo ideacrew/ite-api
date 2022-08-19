@@ -515,6 +515,15 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       expect(result.errors.to_h[:address_city].first[:text]).to eq 'City can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
       expect(result.errors.to_h[:address_city].first[:category]).to eq 'Invalid Value'
     end
+
+    it 'with invalid address_ward' do
+      valid_params[:address_ward] = 'invalid'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:address_ward)
+      expect(result.errors.to_h[:address_ward].first[:text]).to eq 'must be one of 1, 2, 3, 4, 5, 6, 7, 8, 96, 97, 98'
+      expect(result.errors.to_h[:address_ward].first[:category]).to eq 'Invalid Value'
+    end
   end
 
   context 'Passed with valid required params' do

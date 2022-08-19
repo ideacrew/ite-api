@@ -35,6 +35,7 @@ module Validators
           optional(:address_zip_code).maybe(:string)
           optional(:address_state).maybe(:string)
           optional(:address_city).maybe(:string)
+          optional(:address_ward).maybe(:string)
         end
 
         %i[first_name middle_name last_name first_name_alt last_name_alt address_line1 address_line2].each do |field|
@@ -76,7 +77,7 @@ module Validators
         end
 
         { gender: Types::GENDER_OPTIONS, sexual_orientation: Types::SEXUAL_ORIENTATION_OPTIONS, race: Types::RACE_OPTIONS, ethnicity: Types::ETHNICITY_OPTIONS, primary_language: Types::LANGUAGE_OPTIONS,
-          living_arrangement: Types::LIVING_ARRANGEMENT_OPTIONS }.each do |field, types|
+          living_arrangement: Types::LIVING_ARRANGEMENT_OPTIONS, address_ward: Types::WARD_OPTIONS }.each do |field, types|
           rule(field) do
             key.failure(text: "must be one of #{types.values.join(', ')}", category: 'Invalid Value') if key && value && !types.include?(value)
           end
