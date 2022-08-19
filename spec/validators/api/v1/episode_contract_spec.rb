@@ -49,7 +49,9 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
       race: '3',
       ethnicity: '4',
       primary_language: '1',
-      living_arrangement: '1'
+      living_arrangement: '1',
+      address_city: 'Portland',
+      address_state: 'ME'
     }
   end
 
