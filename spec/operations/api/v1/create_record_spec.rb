@@ -175,5 +175,29 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :around_each do
         expect(@record.status).to eq('Fail')
       end
     end
+
+    context 'with invalid warning field' do
+      before do
+        params[:payload][:medicaid_id] = '000000000'
+        @result = described_class.new.call(params)
+        @record = @result.value!
+      end
+
+      it 'should create a record with a failure' do
+        expect(@record.critical_errors).to eq([])
+      end
+
+      it 'should create a record with a failure' do
+        expect(@record.fatal_errors).to eq([])
+      end
+
+      it 'should create a record without a warning' do
+        expect(@record.warnings).to_not eq([])
+      end
+
+      it 'should have a status of Pass' do
+        expect(@record.status).to eq('Pass')
+      end
+    end
   end
 end
