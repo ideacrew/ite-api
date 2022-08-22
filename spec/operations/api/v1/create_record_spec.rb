@@ -36,6 +36,7 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :around_each do
       'not_in_labor' => '1',
       'pregnant' => '2',
       'school_attendance' => '2',
+      'arrests_past_30days_admission' => '1',
       'address_city' => 'Portland',
       'address_state' => 'ME',
       'legal_status' => '1',

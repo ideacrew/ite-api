@@ -15,7 +15,8 @@ RSpec.describe ::Validators::Api::V1::ClientProfileContract, dbclean: :around_ea
       pregnant: '1',
       school_attendance: '1',
       legal_status: '1',
-      arrests_past_30days: '1',
+      arrests_past_30days_discharge: '1',
+      arrests_past_30days_admission: '1',
       self_help_group_attendance: '1',
       health_insurance: '1'
     }
@@ -173,6 +174,35 @@ RSpec.describe ::Validators::Api::V1::ClientProfileContract, dbclean: :around_ea
       expect(result.errors.to_h).to have_key(:not_in_labor)
       expect(result.errors.to_h[:not_in_labor].first[:text]).to eq 'must be one of 1, 2, 3, 4, 5, 6, 7, 96, 97, 98'
       expect(result.errors.to_h[:not_in_labor].first[:category]).to eq 'Invalid Value'
+    end
+
+    it 'with invalid arrests_past_30days_admission' do
+      valid_params[:arrests_past_30days_admission] = 'not a real status'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:arrests_past_30days_admission)
+      response = 'must be one of 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 97, 98'
+      expect(result.errors.to_h[:arrests_past_30days_admission].first[:text]).to eq response
+      expect(result.errors.to_h[:arrests_past_30days_admission].first[:category]).to eq 'Invalid Value'
+    end
+
+    it 'with invalid arrests_past_30days_discharge' do
+      valid_params[:arrests_past_30days_discharge] = 'not a real status'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:arrests_past_30days_discharge)
+      response = 'must be one of 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 97, 98'
+      expect(result.errors.to_h[:arrests_past_30days_discharge].first[:text]).to eq response
+      expect(result.errors.to_h[:arrests_past_30days_discharge].first[:category]).to eq 'Invalid Value'
+    end
+
+    it 'with no arrests_past_30days_admission' do
+      valid_params[:arrests_past_30days_admission] = nil
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:arrests_past_30days_admission)
+      expect(result.errors.to_h[:arrests_past_30days_admission].first[:text]).to eq 'Must be filled'
+      expect(result.errors.to_h[:arrests_past_30days_admission].first[:category]).to eq 'Missing Value'
     end
   end
 

@@ -200,9 +200,11 @@ module Validators
           end
         end
 
-        rule(:discharge_date, client_profile: :self_help_group_discharge) do
-          key(:self_help_group_discharge).failure(:discharge_date_nil) if key && (!values[:discharge_date] && values.dig(:client_profile, :self_help_group_discharge))
-          key(:self_help_group_discharge).failure(:discharge_reason_cannot_be_nil) if key && (values[:discharge_date] && !values.dig(:client_profile, :self_help_group_discharge))
+        %i[self_help_group_discharge arrests_past_30days_discharge].each do |field|
+          rule(:discharge_date, client_profile: field) do
+            key(field).failure(:discharge_date_nil) if key && (!values[:discharge_date] && values.dig(:client_profile, field))
+            key(field).failure(:discharge_reason_cannot_be_nil) if key && (values[:discharge_date] && !values.dig(:client_profile, field))
+          end
         end
       end
     end

@@ -566,6 +566,28 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
       end
     end
 
+    context 'with invalid arrests_past_30days_discharge' do
+      it 'fails if arrests_past_30days_discharge true and no discharge date' do
+        all_params[:discharge_date] = nil
+        all_params[:client_profile][:arrests_past_30days_discharge] = '1'
+        result = subject.call(all_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:arrests_past_30days_discharge)
+        expect(result.errors.to_h[:arrests_past_30days_discharge].first[:text]).to eq 'cannot be present when discharge date is not'
+        expect(result.errors.to_h[:arrests_past_30days_discharge].first[:category]).to eq 'Data Inconsistency'
+      end
+
+      it 'fails if discharge_date valid and no arrests_past_30days_discharge' do
+        all_params[:discharge_date] = Date.today.to_s
+        all_params[:client_profile][:arrests_past_30days_discharge] = nil
+        result = subject.call(all_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:arrests_past_30days_discharge)
+        expect(result.errors.to_h[:arrests_past_30days_discharge].first[:text]).to eq 'cannot be empty when discharge date is present'
+        expect(result.errors.to_h[:arrests_past_30days_discharge].first[:category]).to eq 'Missing Value'
+      end
+    end
+
     context 'with invalid school_attendance' do
       it 'fails if school_attendance is not 96 and age is greater than 21' do
         all_params[:client][:dob] = (Date.today - (366 * 22)).to_s
