@@ -207,7 +207,7 @@ module Validators
             dob = values.dig(:client, :dob)
             age = now.year - dob.year - (now.month > dob.month || (now.month == dob.month && now.day >= dob.day) ? 0 : 1)
             key(:smi_sed).failure(:under22) if values.dig(:clinical_info, :smi_sed) == '1' && age < 22
-            key(:smi_sed).failure(:over22) if %w[2 3].include?(values.dig(:clinical_info, :smi_sed)) && age > 22
+            key(:smi_sed).failure(:over22) if %w[2 3].include?(values.dig(:clinical_info, :smi_sed)) && age >= 22
           end
         end
 
