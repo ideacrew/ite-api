@@ -3,6 +3,7 @@
 require './app/models/types'
 require './app/domain/validators/api/v1/client_contract'
 require './app/domain/validators/api/v1/client_profile_contract'
+require './app/domain/validators/api/v1/clinical_info_contract'
 
 module Validators
   module Api
@@ -32,7 +33,7 @@ module Validators
           optional(:primary_payment_source).maybe(Types::PAYMENT_SOURCE_OPTIONS)
           optional(:client).maybe(Validators::Api::V1::ClientContract.params)
           optional(:client_profile).maybe(Validators::Api::V1::ClientProfileContract.params)
-          optional(:clinical_info).maybe(:hash)
+          optional(:clinical_info).maybe(Validators::Api::V1::ClinicalInfoContract.params)
 
           # fields from the extract
           optional(:extracted_on)
@@ -197,6 +198,16 @@ module Validators
             dob = values.dig(:client, :dob)
             age = now.year - dob.year - (now.month > dob.month || (now.month == dob.month && now.day >= dob.day) ? 0 : 1)
             key(:school_attendance).failure(:over21) if values.dig(:client_profile, :school_attendance) != '96' && age > 21
+          end
+        end
+
+        rule('client.dob', 'clinical_info.smi_sed') do
+          if key && (values.dig(:clinical_info, :smi_sed) && values.dig(:client, :dob))
+            now = Time.now.utc.to_date
+            dob = values.dig(:client, :dob)
+            age = now.year - dob.year - (now.month > dob.month || (now.month == dob.month && now.day >= dob.day) ? 0 : 1)
+            key(:smi_sed).failure(:under22) if values.dig(:clinical_info, :smi_sed) == '1' && age < 22
+            key(:smi_sed).failure(:over22) if %w[2 3].include?(values.dig(:clinical_info, :smi_sed)) && age > 22
           end
         end
 

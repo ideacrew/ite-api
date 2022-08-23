@@ -127,6 +127,12 @@ en:
       not_a_state:
         text: "must be a valid 2 letter state abbreviation"
         category: "Invalid Value"
+      under22:
+        text: 'cannot be 1 if client is younger than 22'
+        category: 'Data Inconsistency'
+      over22:
+        text: 'cannot be 2 or 3 if client is older than 22'
+        category: 'Data Inconsistency'
 
       rules:
         address_zip_code:

@@ -599,6 +599,27 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
         expect(result.errors.to_h[:school_attendance].first[:category]).to eq 'Data Inconsistency'
       end
     end
+
+    context 'with invalid smi_sed' do
+      it 'fails if smi_sed is 1 and client younger than 22' do
+        all_params[:client][:dob] = (Date.today - (366 * 20)).to_s
+        all_params[:clinical_info][:smi_sed] = '1'
+        result = subject.call(all_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:smi_sed)
+        expect(result.errors.to_h[:smi_sed].first[:text]).to eq 'cannot be 1 if client is younger than 22'
+        expect(result.errors.to_h[:smi_sed].first[:category]).to eq 'Data Inconsistency'
+      end
+      it 'fails if smi_sed is 2 and client older than 22' do
+        all_params[:client][:dob] = (Date.today - (366 * 23)).to_s
+        all_params[:clinical_info][:smi_sed] = '2'
+        result = subject.call(all_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:smi_sed)
+        expect(result.errors.to_h[:smi_sed].first[:text]).to eq 'cannot be 2 or 3 if client is older than 22'
+        expect(result.errors.to_h[:smi_sed].first[:category]).to eq 'Data Inconsistency'
+      end
+    end
   end
 
   context 'valid parameters' do
