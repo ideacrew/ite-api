@@ -45,6 +45,7 @@ module Types
   ARREST_OPTIONS = Types::String.enum('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14',
                                       '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '97', '98').freeze
   SME_OPTIONS = Types::String.enum('1', '2', '3', '4', '97', '98').freeze
+  COOCCURRING_OPTIONS = Types::String.enum('1', '2', '97', '98').freeze
   GAF_OPTIONS = Types::String.enum(((1..100).map(&:to_s) << '997' << '998').flatten).freeze
   UsStateAbbreviationKind =
     Types::String.enum(

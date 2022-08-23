@@ -14,6 +14,7 @@ module Validators
           optional(:smi_sed).maybe(:string)
           optional(:gaf_score_admission).maybe(:string)
           optional(:gaf_score_discharge).maybe(:string)
+          optional(:co_occurring_sud_mh).maybe(:string)
         end
 
         %i[smi_sed gaf_score_admission].each do |field|
@@ -28,7 +29,7 @@ module Validators
           end
         end
 
-        { smi_sed: Types::SME_OPTIONS }.each do |field, types|
+        { smi_sed: Types::SME_OPTIONS, co_occurring_sud_mh: Types::COOCCURRING_OPTIONS }.each do |field, types|
           rule(field) do
             key.failure(text: "must be one of #{types.values.join(', ')}", category: 'Invalid Value') if key && value && !types.include?(value)
           end

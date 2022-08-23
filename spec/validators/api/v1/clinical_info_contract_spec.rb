@@ -57,6 +57,15 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
       expect(result.errors.to_h[:gaf_score_discharge].first[:text]).to eq 'must be one of 1-100, 997, 998'
       expect(result.errors.to_h[:gaf_score_discharge].first[:category]).to eq 'Invalid Value'
     end
+
+    it 'with invalid co_occurring_sud_mh' do
+      valid_params[:co_occurring_sud_mh] = 'not a real status'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:co_occurring_sud_mh)
+      expect(result.errors.to_h[:co_occurring_sud_mh].first[:text]).to eq 'must be one of 1, 2, 97, 98'
+      expect(result.errors.to_h[:co_occurring_sud_mh].first[:category]).to eq 'Invalid Value'
+    end
   end
 
   context 'Passed with valid required params' do
