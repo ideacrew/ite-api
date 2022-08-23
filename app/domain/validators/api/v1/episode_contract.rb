@@ -217,6 +217,13 @@ module Validators
             key(field).failure(:discharge_reason_cannot_be_nil) if key && (values[:discharge_date] && !values.dig(:client_profile, field))
           end
         end
+
+        %i[gaf_score_discharge].each do |field|
+          rule(:discharge_date, clinical_info: field) do
+            key(field).failure(:discharge_date_nil) if key && (!values[:discharge_date] && values.dig(:clinical_info, field))
+            key(field).failure(:discharge_reason_cannot_be_nil) if key && (values[:discharge_date] && !values.dig(:clinical_info, field))
+          end
+        end
       end
     end
   end

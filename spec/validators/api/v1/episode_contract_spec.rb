@@ -77,7 +77,8 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
 
   let(:clinical_info_params) do
     {
-      gaf_score: '16',
+      gaf_score_admission: '16',
+      gaf_score_discharge: '16',
       smi_sed: '15',
       co_occurring_sud_mh: '13',
       opioid_therapy: '12',
@@ -610,6 +611,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
         expect(result.errors.to_h[:smi_sed].first[:text]).to eq 'cannot be 1 if client is younger than 22'
         expect(result.errors.to_h[:smi_sed].first[:category]).to eq 'Data Inconsistency'
       end
+
       it 'fails if smi_sed is 2 and client older than 22' do
         all_params[:client][:dob] = (Date.today - (366 * 23)).to_s
         all_params[:clinical_info][:smi_sed] = '2'
@@ -618,6 +620,28 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
         expect(result.errors.to_h).to have_key(:smi_sed)
         expect(result.errors.to_h[:smi_sed].first[:text]).to eq 'cannot be 2 or 3 if client is older than 22'
         expect(result.errors.to_h[:smi_sed].first[:category]).to eq 'Data Inconsistency'
+      end
+    end
+
+    context 'with invalid gaf_score_discharge' do
+      it 'fails if gaf_score_discharge true and no discharge date' do
+        all_params[:discharge_date] = nil
+        all_params[:clinical_info][:gaf_score_discharge] = '1'
+        result = subject.call(all_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:gaf_score_discharge)
+        expect(result.errors.to_h[:gaf_score_discharge].first[:text]).to eq 'cannot be present when discharge date is not'
+        expect(result.errors.to_h[:gaf_score_discharge].first[:category]).to eq 'Data Inconsistency'
+      end
+
+      it 'fails if discharge_date valid and no gaf_score_discharge' do
+        all_params[:discharge_date] = Date.today.to_s
+        all_params[:clinical_info][:gaf_score_discharge] = nil
+        result = subject.call(all_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:gaf_score_discharge)
+        expect(result.errors.to_h[:gaf_score_discharge].first[:text]).to eq 'cannot be empty when discharge date is present'
+        expect(result.errors.to_h[:gaf_score_discharge].first[:category]).to eq 'Missing Value'
       end
     end
   end
