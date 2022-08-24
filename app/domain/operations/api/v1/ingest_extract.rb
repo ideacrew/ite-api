@@ -9,6 +9,7 @@ module Operations
   module Api
     module V1
       # operation to validate provider extract
+      # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       class IngestExtract
         send(:include, Dry::Monads[:result, :do, :try])
 
@@ -51,7 +52,7 @@ module Operations
 
         def create_records(extract, params)
           if params[:records]
-            params[:records].each do |record|
+            params[:records].select { |r| r&.values&.compact_blank&.any? }.each do |record|
               result = Operations::Api::V1::CreateRecord.new.call(extract: extract.attributes.symbolize_keys,
                                                                   payload: record, dups: dup_admission_ids(params))
               record_object = extract.records.build
@@ -68,6 +69,7 @@ module Operations
           admission_ids.select { |e| admission_ids.count(e) > 1 }.uniq
         end
       end
+      # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     end
   end
 end

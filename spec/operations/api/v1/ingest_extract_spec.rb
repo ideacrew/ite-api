@@ -38,6 +38,9 @@ describe ::Operations::Api::V1::IngestExtract, dbclean: :around_each do
     it 'extract should have a status' do
       expect(@extract.status).to_not be_nil
     end
+    it 'extract should have the same number of records as the records hash' do
+      expect(@extract.records.length).to eq(params[:records].length)
+    end
   end
 
   context 'invalid params' do
@@ -82,6 +85,20 @@ describe ::Operations::Api::V1::IngestExtract, dbclean: :around_each do
       end
       it 'extract should have a status of "invalid"' do
         expect(@extract.status).to eq('Invalid')
+      end
+      it 'extract should have the same number of records as the records hash' do
+        expect(@extract.records.length).to eq(params[:records].length)
+      end
+    end
+
+    context 'record with no values at all' do
+      before do
+        params[:records].first.update(params[:records].first) { |_key, _value| '' }
+        @result = described_class.new.call(params)
+        @extract = @result.value!
+      end
+      it 'should not create a record for a blank record' do
+        expect(@extract.records.length).to eq(params[:records].length - 1)
       end
     end
   end
