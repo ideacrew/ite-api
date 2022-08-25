@@ -13,6 +13,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
       treatment_location: '123 main',
       num_of_prior_su_episodes: '3',
       referral_source: '2',
+      last_contact_date: Date.today.to_s,
       record_type: 'A'
     }
   end
@@ -26,7 +27,6 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
       discharge_type: '50',
       discharge_reason: '2',
       primary_payment_source: '1',
-      last_contact_date: Date.today.to_s,
       criminal_justice_referral: '96',
       client: client_params,
       client_profile: client_profile_params,
@@ -352,13 +352,13 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
     end
 
     context 'with invalid last contact date field it should fail' do
-      # it 'is blank when the record_group is active' do
-      #   all_params[:record_group] = 'active'
-      #   all_params[:last_contact_date] = nil
-      #   errors = subject.call(all_params).errors.to_h
-      #   expect(errors).to have_key(:last_contact_date)
-      #   expect(errors.to_h[:last_contact_date].first).to eq('must be included')
-      # end
+      it 'is missing' do
+        all_params[:last_contact_date] = nil
+        errors = subject.call(all_params).errors.to_h
+        expect(errors).to have_key(:last_contact_date)
+        expect(errors[:last_contact_date].first[:text]).to eq('Must be filled')
+        expect(errors[:last_contact_date].first[:category]).to eq('Missing Value')
+      end
       it 'is not a date' do
         all_params[:last_contact_date] = 'Not a date'
         errors = subject.call(all_params).errors.to_h

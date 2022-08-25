@@ -26,7 +26,7 @@ module Validators
           optional(:discharge_date).maybe(:date)
           optional(:discharge_type).maybe(:string)
           optional(:discharge_reason).maybe(Types::DISCHARGE_REASON_OPTIONS)
-          optional(:last_contact_date).maybe(:date)
+          required(:last_contact_date).filled(:date)
           required(:num_of_prior_su_episodes).filled(Types::PRIOR_SU_EPISODE_OPTIONS)
           required(:referral_source).filled(Types::REFERRAL_SOURCE_OPTIONS)
           optional(:criminal_justice_referral).maybe(Types::CRIMINAL_JUSTICE_REFERRAL_OPTIONS)
