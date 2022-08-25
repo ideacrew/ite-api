@@ -166,6 +166,9 @@ en:
       over22:
         text: 'cannot be 2 or 3 if client is older than 22'
         category: 'Data Inconsistency'
+      co_occurring_sud_mh_mismatch:
+        text: 'must be 1 if MH record and sud_dx1 is applicable'
+        category: 'Data Inconsistency'
 
       rules:
         address_zip_code:

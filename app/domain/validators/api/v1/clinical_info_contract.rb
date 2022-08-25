@@ -48,6 +48,11 @@ module Validators
           end
         end
 
+        # the Record Type indicates a MH record (M or X) and SU Diagnosis One is other than 999.9996 (No Applicable Diagnosis), the Validation Result will indicate a warning due to data inconsistency.
+        rule(:co_occurring_sud_mh, :record_type, :sud_dx1) do
+          key.failure(:co_occurring_sud_mh_mismatch) if key && value && values[:co_occurring_sud_mh] != '1' && %w[M X].include?(values[:record_type]) && values[:sud_dx1] != '999.9996'
+        end
+
         %i[sud_dx1 mh_dx1 sud_dx2 sud_dx3 mh_dx2 mh_dx3].each do |field|
           rule(field) do
             if key && value

@@ -70,6 +70,17 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
       expect(result.errors.to_h[:co_occurring_sud_mh].first[:category]).to eq 'Invalid Value'
     end
 
+    it 'with mismatched co_occurring_sud_mh' do
+      valid_params[:co_occurring_sud_mh] = '2'
+      valid_params[:record_type] = 'M'
+      valid_params[:sud_dx1] = 'F14.8393'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:co_occurring_sud_mh)
+      expect(result.errors.to_h[:co_occurring_sud_mh].first[:text]).to eq 'must be 1 if MH record and sud_dx1 is applicable'
+      expect(result.errors.to_h[:co_occurring_sud_mh].first[:category]).to eq 'Data Inconsistency'
+    end
+
     context 'sud_dx1' do
       it 'with nil sud_dx1' do
         valid_params[:sud_dx1] = nil
