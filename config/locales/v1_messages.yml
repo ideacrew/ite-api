@@ -101,7 +101,13 @@ en:
         text: "cannot be non applicable with a record type as 'A'/'T' and collateral as 2"
         category: "Data Inconsistency"
       sud_dx1_co_occuring_mismatch:
-        text: "cannot be applicable with a record type as 'M'/'X' and co occurring sud mh not 1"
+        text: "cannot be with a record type as 'M'/'X' and co occurring sud mh not 1"
+        category: "Data Inconsistency"
+      mh_dx1_mismatch_collateral:
+        text: "cannot be non applicable with a record type as 'M'/'X'"
+        category: "Data Inconsistency"
+      mh_dx1_co_occuring_mismatch:
+        text: "cannot be with a record type as 'A'/'T' and co occurring sud mh not 1"
         category: "Data Inconsistency"
       unsuported_name_characters:
         text: "Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters"
