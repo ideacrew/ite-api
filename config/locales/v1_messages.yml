@@ -91,6 +91,18 @@ en:
       length_not10:
         text: "must contain 10 characters"
         category: "Invalid Field Length"
+      length_eq3_or8:
+        text: "should have length 3 or 8"
+        category: "Invalid Field Length"
+      format_with3_or8:
+        text: "should start with F and 1 with length 3 or 8 with character '.' after 3 digits"
+        category: "Invalid Value"
+      sud_dx1_mismatch_collateral:
+        text: "cannot be non applicable with a record type as 'A'/'T' and collateral as 2"
+        category: "Data Inconsistency"
+      sud_dx1_co_occuring_mismatch:
+        text: "cannot be applicable with a record type as 'M'/'X' and co occurring sud mh not 1"
+        category: "Data Inconsistency"
       unsuported_name_characters:
         text: "Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters"
         category: "Invalid Value"

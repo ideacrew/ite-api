@@ -15,9 +15,14 @@ module Validators
           optional(:gaf_score_admission).maybe(:string)
           optional(:gaf_score_discharge).maybe(:string)
           optional(:co_occurring_sud_mh).maybe(:string)
+          optional(:sud_dx1).maybe(:string)
+
+          # from episode
+          optional(:collateral)
+          optional(:record_type)
         end
 
-        %i[smi_sed gaf_score_admission].each do |field|
+        %i[smi_sed gaf_score_admission sud_dx1].each do |field|
           rule(field) do
             key.failure(:missing_field) if key && !value
           end
@@ -32,6 +37,25 @@ module Validators
         { smi_sed: Types::SME_OPTIONS, co_occurring_sud_mh: Types::COOCCURRING_OPTIONS }.each do |field, types|
           rule(field) do
             key.failure(text: "must be one of #{types.values.join(', ')}", category: 'Invalid Value') if key && value && !types.include?(value)
+          end
+        end
+
+        rule(:sud_dx1) do
+          if key && value
+            key.failure(:length_eq3_or8) unless value.length == 3 || value.length == 8
+            unless value == '999.9996'
+              pattern1 = Regexp.new('^[fF][1][0-9]{1}$').freeze
+              pattern2 = Regexp.new('^[fF][1][0-9]{1}\.[a-zA-Z0-9]{4}$').freeze
+              key.failure(:format_with3_or8) if value.length == 3 && !pattern1.match(value)
+              key.failure(:format_with3_or8) if value.length == 8 && !pattern2.match(value)
+            end
+          end
+        end
+
+        rule(:sud_dx1, :record_type, :collateral, :co_occurring_sud_mh) do
+          if key && value
+            key.failure(:sud_dx1_mismatch_collateral) if (value == '999.9996') && %w[A T].include?(values[:record_type]) && values[:collateral] == '2'
+            key.failure(:sud_dx1_co_occuring_mismatch) if !schema_error?(:sud_dx1) && %w[M X].include?(values[:record_type]) && values[:co_occurring_sud_mh] != '1'
           end
         end
       end
