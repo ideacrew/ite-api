@@ -102,7 +102,7 @@ module Validators
         end
 
         rule(:discharge_date, :coverage_end) do
-          key.failure(:later_than_coverage_end) if key && values[:discharge_date] && values[:coverage_end] &&  Date.parse(values[:coverage_end]) < Date.parse(values[:discharge_date].to_s)
+          key.failure(:later_than_coverage_end) if key && values[:discharge_date] && values[:coverage_end] && Date.parse(values[:coverage_end].to_s) < Date.parse(values[:discharge_date].to_s)
         end
 
         rule(:discharge_date, :discharge_reason) do
