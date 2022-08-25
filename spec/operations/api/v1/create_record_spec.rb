@@ -41,6 +41,8 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :around_each do
       'address_state' => 'ME',
       'legal_status' => '1',
       'ethnicity' => '97',
+      'smi_sed' => '2',
+      'gaf_score_admission' => '1',
       'primary_language' => '1' }
   end
 

@@ -79,8 +79,8 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
     {
       gaf_score_admission: '16',
       gaf_score_discharge: '16',
-      smi_sed: '15',
-      co_occurring_sud_mh: '13',
+      smi_sed: '4',
+      co_occurring_sud_mh: '1',
       opioid_therapy: '12',
       substance_problems: [{}],
       sud_diagnostic_codes: ['12'],

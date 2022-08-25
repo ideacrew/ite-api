@@ -25,7 +25,7 @@ module Validators
 
         %i[gaf_score_discharge gaf_score_admission].each do |field|
           rule(field) do
-            key.failure(text: 'must be one of 1-100, 997, 998', category: 'Invalid Value') if key && !Types::GAF_OPTIONS.values.first.include?(value)
+            key.failure(text: 'must be one of 1-100, 997, 998', category: 'Invalid Value') if key && value && !Types::GAF_OPTIONS.values.first.include?(value)
           end
         end
 
