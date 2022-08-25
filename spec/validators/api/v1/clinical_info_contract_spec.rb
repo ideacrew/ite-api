@@ -10,7 +10,6 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
       gaf_score_admission: '1',
       gaf_score_discharge: '1',
       sud_dx1: 'F14.8393',
-      sud_dx2: 'F14.8393',
       mh_dx1: 'F14.8393',
       collateral: '1'
     }
@@ -113,6 +112,10 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
     end
 
     context 'sud_dx2' do
+      before do
+        valid_params[:sud_dx2] = 'F14.8393'
+      end
+
       it 'without sud_dx1' do
         valid_params[:sud_dx1] = nil
         result = subject.call(valid_params)
@@ -236,6 +239,95 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
         expect(result.errors.to_h).to have_key(:mh_dx1)
         expect(result.errors.to_h[:mh_dx1].first[:text]).to eq "cannot be with a record type as 'A'/'T' and co occurring sud mh not 1"
         expect(result.errors.to_h[:mh_dx1].first[:category]).to eq 'Data Inconsistency'
+      end
+    end
+
+    context 'mh_dx2' do
+      before do
+        valid_params[:mh_dx2] = 'F14.8393'
+      end
+
+      it 'without mh_dx1' do
+        valid_params[:mh_dx1] = nil
+        result = subject.call(valid_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:mh_dx2)
+        expect(result.errors.to_h[:mh_dx2].first[:text]).to eq 'cannot have mh_dx2 without mh_dx1'
+        expect(result.errors.to_h[:mh_dx2].first[:category]).to eq 'Data Inconsistency'
+      end
+
+      it 'with invalid co_occurring_sud_mh' do
+        valid_params[:mh_dx2] = 'not a  status'
+        result = subject.call(valid_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:mh_dx2)
+        expect(result.errors.to_h[:mh_dx2].first[:text]).to eq 'should have length 3 or 8'
+        expect(result.errors.to_h[:mh_dx2].first[:category]).to eq 'Invalid Field Length'
+      end
+
+      it 'with record_type and collateral mismatch' do
+        valid_params[:mh_dx2] = '999.9996'
+        valid_params[:record_type] = 'M'
+        result = subject.call(valid_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:mh_dx2)
+        expect(result.errors.to_h[:mh_dx2].first[:text]).to eq "cannot be non applicable with a record type as 'M'/'X'"
+        expect(result.errors.to_h[:mh_dx2].first[:category]).to eq 'Data Inconsistency'
+      end
+
+      it 'with record_type and co_occurring_sud_mh mismatch' do
+        valid_params[:co_occurring_sud_mh] = '2'
+        valid_params[:record_type] = 'A'
+        result = subject.call(valid_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:mh_dx2)
+        expect(result.errors.to_h[:mh_dx2].first[:text]).to eq "cannot be with a record type as 'A'/'T' and co occurring sud mh not 1"
+        expect(result.errors.to_h[:mh_dx2].first[:category]).to eq 'Data Inconsistency'
+      end
+    end
+
+    context 'mh_dx3' do
+      before do
+        valid_params[:mh_dx3] = 'F14.8393'
+      end
+
+      it 'without mh_dx3' do
+        valid_params[:mh_dx1] = nil
+        valid_params[:mh_dx2] = nil
+        result = subject.call(valid_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:mh_dx3)
+        expect(result.errors.to_h[:mh_dx3].first[:text]).to eq 'cannot have mh_dx2 without mh_dx1 and mh_dx2'
+        expect(result.errors.to_h[:mh_dx3].first[:category]).to eq 'Data Inconsistency'
+      end
+
+      it 'with invalid co_occurring_sud_mh' do
+        valid_params[:mh_dx3] = 'not a  status'
+        result = subject.call(valid_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:mh_dx3)
+        expect(result.errors.to_h[:mh_dx3].first[:text]).to eq 'should have length 3 or 8'
+        expect(result.errors.to_h[:mh_dx3].first[:category]).to eq 'Invalid Field Length'
+      end
+
+      it 'with record_type and collateral mismatch' do
+        valid_params[:mh_dx3] = '999.9996'
+        valid_params[:record_type] = 'M'
+        result = subject.call(valid_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:mh_dx3)
+        expect(result.errors.to_h[:mh_dx3].first[:text]).to eq "cannot be non applicable with a record type as 'M'/'X'"
+        expect(result.errors.to_h[:mh_dx3].first[:category]).to eq 'Data Inconsistency'
+      end
+
+      it 'with record_type and co_occurring_sud_mh mismatch' do
+        valid_params[:co_occurring_sud_mh] = '2'
+        valid_params[:record_type] = 'A'
+        result = subject.call(valid_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:mh_dx2)
+        expect(result.errors.to_h[:mh_dx2].first[:text]).to eq "cannot be with a record type as 'A'/'T' and co occurring sud mh not 1"
+        expect(result.errors.to_h[:mh_dx2].first[:category]).to eq 'Data Inconsistency'
       end
     end
   end

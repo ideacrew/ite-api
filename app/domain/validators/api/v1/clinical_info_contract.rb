@@ -19,6 +19,8 @@ module Validators
           optional(:sud_dx2).maybe(:string)
           optional(:sud_dx3).maybe(:string)
           optional(:mh_dx1).maybe(:string)
+          optional(:mh_dx2).maybe(:string)
+          optional(:mh_dx3).maybe(:string)
 
           # from episode
           optional(:collateral)
@@ -43,7 +45,7 @@ module Validators
           end
         end
 
-        %i[sud_dx1 mh_dx1 sud_dx2 sud_dx3].each do |field|
+        %i[sud_dx1 mh_dx1 sud_dx2 sud_dx3 mh_dx2 mh_dx3].each do |field|
           rule(field) do
             if key && value
               key.failure(:length_eq3_or8) unless value.length == 3 || value.length == 8
@@ -65,10 +67,20 @@ module Validators
           key.failure(:sud_dx2_without_dx1_dx2) if key && value && !values[:sud_dx1] && !values[:sud_dx2]
         end
 
-        rule(:mh_dx1, :record_type, :co_occurring_sud_mh) do
-          if key && value
-            key.failure(:mh_dx1_mismatch_collateral) if (value == '999.9996') && %w[M X].include?(values[:record_type])
-            key.failure(:mh_dx1_co_occuring_mismatch) if !schema_error?(:mh_dx1) && %w[A T].include?(values[:record_type]) && values[:co_occurring_sud_mh] != '1'
+        rule(:mh_dx2, :mh_dx1) do
+          key.failure(:mh_dx2_without_dx1) if key && value && !values[:mh_dx1]
+        end
+
+        rule(:mh_dx3, :mh_dx2, :mh_dx1) do
+          key.failure(:mh_dx2_without_dx1_dx2) if key && value && !values[:mh_dx1] && !values[:mh_dx2]
+        end
+
+        %i[mh_dx1 mh_dx2 mh_dx3].each do |field|
+          rule(field, :record_type, :co_occurring_sud_mh) do
+            if key && value
+              key.failure(:mh_dx1_mismatch_collateral) if (value == '999.9996') && %w[M X].include?(values[:record_type])
+              key.failure(:mh_dx1_co_occuring_mismatch) if !schema_error?(field) && %w[A T].include?(values[:record_type]) && values[:co_occurring_sud_mh] != '1'
+            end
           end
         end
 

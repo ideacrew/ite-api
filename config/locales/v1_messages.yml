@@ -115,6 +115,12 @@ en:
       sud_dx2_without_dx1_dx2:
         text: "cannot have sud_dx2 without sud_dx1 and sud_dx2"
         category: "Data Inconsistency"
+      mh_dx2_without_dx1:
+        text: "cannot have mh_dx2 without mh_dx1"
+        category: "Data Inconsistency"
+      mh_dx2_without_dx1_dx2:
+        text: "cannot have mh_dx2 without mh_dx1 and mh_dx2"
+        category: "Data Inconsistency"
       unsuported_name_characters:
         text: "Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters"
         category: "Invalid Value"
