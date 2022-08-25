@@ -109,6 +109,9 @@ en:
       mh_dx1_co_occuring_mismatch:
         text: "cannot be with a record type as 'A'/'T' and co occurring sud mh not 1"
         category: "Data Inconsistency"
+      sud_dx2_without_dx1:
+        text: "cannot have sud_dx2 without sud_dx1"
+        category: "Data Inconsistency"
       unsuported_name_characters:
         text: "Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters"
         category: "Invalid Value"

@@ -84,7 +84,10 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
       opioid_therapy: '12',
       substance_problems: [{}],
       sud_diagnostic_codes: ['12'],
-      mh_diagnostic_codes: ['19']
+      mh_diagnostic_codes: ['19'],
+      sud_dx1: 'F14.8393',
+      mh_dx1: 'F14.8393',
+      sud_dx2: 'F14.8393'
     }
   end
 
