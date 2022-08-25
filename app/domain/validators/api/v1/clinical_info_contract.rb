@@ -21,6 +21,9 @@ module Validators
           optional(:mh_dx1).maybe(:string)
           optional(:mh_dx2).maybe(:string)
           optional(:mh_dx3).maybe(:string)
+          optional(:non_bh_dx1).maybe(:string)
+          optional(:non_bh_dx2).maybe(:string)
+          optional(:non_bh_dx3).maybe(:string)
 
           # from episode
           optional(:collateral)
@@ -89,6 +92,20 @@ module Validators
             if key && value
               key.failure(:sud_dx1_mismatch_collateral) if (value == '999.9996') && %w[A T].include?(values[:record_type]) && values[:collateral] == '2'
               key.failure(:sud_dx1_co_occuring_mismatch) if !schema_error?(field) && %w[M X].include?(values[:record_type]) && values[:co_occurring_sud_mh] != '1'
+            end
+          end
+        end
+
+        %i[non_bh_dx1 non_bh_dx2 non_bh_dx3].each do |field|
+          rule(field) do
+            if key && value
+              key.failure(:length_eq3_or8) unless value.length == 3 || value.length == 8
+              unless value == '999.9996'
+                pattern1 = Regexp.new('^[^fF][0-9]{2}$').freeze
+                pattern2 = Regexp.new('^[^fF][0-9]{2}\.[a-zA-Z0-9]{4}$').freeze
+                key.failure(:bh_format_with3_or8) if value.length == 3 && !pattern1.match(value)
+                key.failure(:bh_format_with3_or8) if value.length == 8 && !pattern2.match(value)
+              end
             end
           end
         end

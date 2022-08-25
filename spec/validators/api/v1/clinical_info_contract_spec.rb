@@ -325,9 +325,38 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
         valid_params[:record_type] = 'A'
         result = subject.call(valid_params)
         expect(result.failure?).to be_truthy
-        expect(result.errors.to_h).to have_key(:mh_dx2)
-        expect(result.errors.to_h[:mh_dx2].first[:text]).to eq "cannot be with a record type as 'A'/'T' and co occurring sud mh not 1"
-        expect(result.errors.to_h[:mh_dx2].first[:category]).to eq 'Data Inconsistency'
+        expect(result.errors.to_h).to have_key(:mh_dx3)
+        expect(result.errors.to_h[:mh_dx3].first[:text]).to eq "cannot be with a record type as 'A'/'T' and co occurring sud mh not 1"
+        expect(result.errors.to_h[:mh_dx3].first[:category]).to eq 'Data Inconsistency'
+      end
+    end
+
+    context 'non_bh_dx1 non_bh_dx2 non_bh_dx3' do
+      it 'invalid non_bh_dx1' do
+        valid_params[:non_bh_dx1] = 'F14.8393'
+        result = subject.call(valid_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:non_bh_dx1)
+        expect(result.errors.to_h[:non_bh_dx1].first[:text]).to eq "should not start with F, with length 3 or 8 with character '.' after 3 digits"
+        expect(result.errors.to_h[:non_bh_dx1].first[:category]).to eq 'Invalid Value'
+      end
+
+      it 'invalid non_bh_dx1' do
+        valid_params[:non_bh_dx2] = 'F14.8393'
+        result = subject.call(valid_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:non_bh_dx2)
+        expect(result.errors.to_h[:non_bh_dx2].first[:text]).to eq "should not start with F, with length 3 or 8 with character '.' after 3 digits"
+        expect(result.errors.to_h[:non_bh_dx2].first[:category]).to eq 'Invalid Value'
+      end
+
+      it 'invalid non_bh_dx1' do
+        valid_params[:non_bh_dx3] = 'F14.8393'
+        result = subject.call(valid_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:non_bh_dx3)
+        expect(result.errors.to_h[:non_bh_dx3].first[:text]).to eq "should not start with F, with length 3 or 8 with character '.' after 3 digits"
+        expect(result.errors.to_h[:non_bh_dx3].first[:category]).to eq 'Invalid Value'
       end
     end
   end
