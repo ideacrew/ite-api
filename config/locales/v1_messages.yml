@@ -125,7 +125,7 @@ en:
         text: "cannot have mh_dx2 without mh_dx1 and mh_dx2"
         category: "Data Inconsistency"
       unsuported_name_characters:
-        text: "Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters"
+        text: "can only contain a hyphen (-), Apostrophe (‘), or a single space between characters"
         category: "Invalid Value"
       unsuported_city_characters:
         text: "City can only contain a hyphen (-), Apostrophe (‘), or a single space between characters"

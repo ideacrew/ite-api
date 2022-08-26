@@ -56,7 +56,16 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:first_name)
-      expect(result.errors.to_h[:first_name].first[:text]).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
+      expect(result.errors.to_h[:first_name].first[:text]).to eq 'can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
+      expect(result.errors.to_h[:first_name].first[:category]).to eq 'Invalid Value'
+    end
+
+    it 'first name contains number' do
+      valid_params[:first_name] = 'testinghs9'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:first_name)
+      expect(result.errors.to_h[:first_name].first[:text]).to eq 'can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
       expect(result.errors.to_h[:first_name].first[:category]).to eq 'Invalid Value'
     end
 
@@ -65,7 +74,25 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:first_name)
-      expect(result.errors.to_h[:first_name].first[:text]).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
+      expect(result.errors.to_h[:first_name].first[:text]).to eq 'can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
+      expect(result.errors.to_h[:first_name].first[:category]).to eq 'Invalid Value'
+    end
+
+    it 'first name starts with a space' do
+      valid_params[:first_name] = ' testinghs dkfjhjfdhg'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:first_name)
+      expect(result.errors.to_h[:first_name].first[:text]).to eq 'can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
+      expect(result.errors.to_h[:first_name].first[:category]).to eq 'Invalid Value'
+    end
+
+    it 'first name ends with a space' do
+      valid_params[:first_name] = 'testinghs dkfjhjfdhg '
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:first_name)
+      expect(result.errors.to_h[:first_name].first[:text]).to eq 'can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
       expect(result.errors.to_h[:first_name].first[:category]).to eq 'Invalid Value'
     end
 
@@ -91,7 +118,7 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       valid_params[:last_name] = 'testinghs!'
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
-      expect(result.errors.to_h[:last_name].first[:text]).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
+      expect(result.errors.to_h[:last_name].first[:text]).to eq 'can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
       expect(result.errors.to_h[:last_name].first[:category]).to eq 'Invalid Value'
     end
 
@@ -109,7 +136,7 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:middle_name)
-      expect(result.errors.to_h[:middle_name].first[:text]).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
+      expect(result.errors.to_h[:middle_name].first[:text]).to eq 'can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
       expect(result.errors.to_h[:middle_name].first[:category]).to eq 'Invalid Value'
     end
 
@@ -127,7 +154,7 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:first_name_alt)
-      expect(result.errors.to_h[:first_name_alt].first[:text]).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
+      expect(result.errors.to_h[:first_name_alt].first[:text]).to eq 'can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
       expect(result.errors.to_h[:first_name_alt].first[:category]).to eq 'Invalid Value'
     end
 
@@ -145,7 +172,7 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:last_name_alt)
-      expect(result.errors.to_h[:last_name_alt].first[:text]).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
+      expect(result.errors.to_h[:last_name_alt].first[:text]).to eq 'can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
       expect(result.errors.to_h[:last_name_alt].first[:category]).to eq 'Invalid Value'
     end
 
@@ -163,7 +190,7 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:suffix)
-      expect(result.errors.to_h[:suffix].first[:text]).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
+      expect(result.errors.to_h[:suffix].first[:text]).to eq 'can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
       expect(result.errors.to_h[:suffix].first[:category]).to eq 'Invalid Value'
     end
 
@@ -386,7 +413,25 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:address_line1)
-      expect(result.errors.to_h[:address_line1].first[:text]).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
+      expect(result.errors.to_h[:address_line1].first[:text]).to eq 'can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
+      expect(result.errors.to_h[:address_line1].first[:category]).to eq 'Invalid Value'
+    end
+
+    it 'address_line1 contains 2 spaces in a row' do
+      valid_params[:address_line1] = 'testinghs  dkfjhjfdhg'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:address_line1)
+      expect(result.errors.to_h[:address_line1].first[:text]).to eq 'can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
+      expect(result.errors.to_h[:address_line1].first[:category]).to eq 'Invalid Value'
+    end
+
+    it 'address_line1 starts with a space' do
+      valid_params[:address_line1] = ' testinghs dkfjhjfdhg'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:address_line1)
+      expect(result.errors.to_h[:address_line1].first[:text]).to eq 'can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
       expect(result.errors.to_h[:address_line1].first[:category]).to eq 'Invalid Value'
     end
 
@@ -404,7 +449,7 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:address_line2)
-      expect(result.errors.to_h[:address_line2].first[:text]).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
+      expect(result.errors.to_h[:address_line2].first[:text]).to eq 'can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
       expect(result.errors.to_h[:address_line2].first[:category]).to eq 'Invalid Value'
     end
 
