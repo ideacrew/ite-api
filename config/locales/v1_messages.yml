@@ -36,7 +36,7 @@ en:
         category: "Invalid Value"
       special_characters: 
         text: "cannot contain special characters"
-        category: "Invalid Field"
+        category: "Wrong Format"
       before1920:
         text: "must be after January 1, 1920"
         category: "Invalid Value"
@@ -126,10 +126,10 @@ en:
         category: "Data Inconsistency"
       unsuported_name_characters:
         text: "can only contain a hyphen (-), Apostrophe (‘), or a single space between characters"
-        category: "Invalid Value"
+        category: "Wrong Format"
       unsuported_city_characters:
         text: "City can only contain a hyphen (-), Apostrophe (‘), or a single space between characters"
-        category: "Invalid Value"
+        category: "Wrong Format"
       doesnt_start_with7:
         text: "must start with 7"
         category: "Invalid Value"

@@ -119,7 +119,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:client_id)
         expect(errors[:client_id].first[:text]).to eq('cannot contain special characters')
-        expect(errors[:client_id].first[:category]).to eq('Invalid Field')
+        expect(errors[:client_id].first[:category]).to eq('Wrong Format')
       end
       it 'with all 00s' do
         all_params[:client_id] = '000000'
@@ -415,7 +415,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:admission_id)
         expect(errors.to_h[:admission_id].first[:text]).to eq('cannot contain special characters')
-        expect(errors[:admission_id].first[:category]).to eq('Invalid Field')
+        expect(errors[:admission_id].first[:category]).to eq('Wrong Format')
       end
     end
     context 'with invalid num_of_prior_su_episodes it should fail' do
