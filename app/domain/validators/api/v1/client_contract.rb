@@ -38,11 +38,21 @@ module Validators
           optional(:address_ward).maybe(:string)
         end
 
-        %i[first_name middle_name last_name first_name_alt last_name_alt address_line1 address_line2].each do |field|
+        %i[first_name middle_name last_name first_name_alt last_name_alt].each do |field|
           rule(field) do
             if key && value
               key.failure(:length_more_than50) if value.length > 50
-              pattern = Regexp.new('^[a-zA-Z\d\s\-\'\ ]*$').freeze
+              pattern = Regexp.new('(?!.*\s\s)^[a-zA-Z\s\-\'\ ]*$').freeze
+              key.failure(:unsuported_name_characters) unless pattern.match(value)
+            end
+          end
+        end
+
+        %i[address_line1 address_line2].each do |field|
+          rule(field) do
+            if key && value
+              key.failure(:length_more_than50) if value.length > 50
+              pattern = Regexp.new('(?!.*\s\s)^[a-zA-Z\d\s\-\'\ ]*$').freeze
               key.failure(:unsuported_name_characters) unless pattern.match(value)
             end
           end
@@ -61,7 +71,7 @@ module Validators
         rule(:address_city) do
           if key && value
             key.failure(:length_more_than30) if value.length > 30
-            pattern = Regexp.new('^[a-zA-Z\s\-\'\ ]*$').freeze
+            pattern = Regexp.new('(?!.*\s\s)^[a-zA-Z\s\-\'\ ]*$').freeze
             key.failure(:unsuported_city_characters) unless pattern.match(value)
           end
         end

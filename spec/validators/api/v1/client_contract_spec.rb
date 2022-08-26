@@ -60,6 +60,15 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       expect(result.errors.to_h[:first_name].first[:category]).to eq 'Invalid Value'
     end
 
+    it 'first name contains 2 spaces in a row' do
+      valid_params[:first_name] = 'testinghs  dkfjhjfdhg'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:first_name)
+      expect(result.errors.to_h[:first_name].first[:text]).to eq 'Name can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
+      expect(result.errors.to_h[:first_name].first[:category]).to eq 'Invalid Value'
+    end
+
     it 'without last name' do
       valid_params[:last_name] = nil
       result = subject.call(valid_params)
