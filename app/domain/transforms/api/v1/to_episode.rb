@@ -59,7 +59,7 @@ module Transforms
         end
 
         def valid_date(value)
-          return value if value.nil?
+          return value if value.blank?
 
           re = Regexp.new('^([1-9]|0[1-9]|1[0-2])\/([1-9]|(0[1-9]|1[0-9]|2[0-9]|3[0-1]))\/\d{4}$').freeze
           return Date.strptime(value, '%m/%d/%Y') if value.match(re)
