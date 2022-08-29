@@ -22,7 +22,7 @@ module Transforms
         CLIENT_PROFILE_FIELDS = %i[marital_status veteran_status education employment not_in_labor
                                    income_source pregnant school_attendance legal_status arrests_past_30days_admission
                                    arrests_past_30days_discharge self_help_group_admission self_help_group_discharge health_insurance].freeze
-        NON_STRING_FIELDS = %i[admission_date service_request_date discharge_date last_contact_date dob coverage_end coverage_start].freeze
+        NON_STRING_FIELDS = %i[admission_date discharge_date service_request_date last_contact_date dob coverage_end coverage_start].freeze
 
         def call(record)
           validated_payload = yield validate_record(record)
@@ -67,7 +67,7 @@ module Transforms
           re = Regexp.new('^\d{4}\-([1-9]|0[1-9]|1[0-2])\-([1-9]|(0[1-9]|1[0-9]|2[0-9]|3[0-1]))$').freeze
           return Date.strptime(value, '%Y-%m-%d') if value.match(re)
 
-          value
+          'unformatted date'
         rescue ArgumentError
           value
         end

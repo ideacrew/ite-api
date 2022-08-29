@@ -19,6 +19,9 @@ en:
       date?:
         text: "must be a valid date in format YYYY-mm-dd or mm/dd/YYYY"
         category: "Wrong Format"
+      date_format:
+        text: "must be a valid date in format YYYY-mm-dd or mm/dd/YYYY"
+        category: "Wrong Format"
       missing_field:
         text: "Must be filled"
         category: "Missing Value"
