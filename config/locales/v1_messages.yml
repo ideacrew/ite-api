@@ -56,7 +56,7 @@ en:
         text: "must correspond to record_type"
         category: "Data Inconsistency"
       treatment_type96:
-        text: "can only specify 96 if client is Collateral/Codependent"
+        text: "Can use 96 only for a collateral record"
         category: "Data Inconsistency"
       earlier_than_admission:
         text: "cannot be earlier than the date of admission"

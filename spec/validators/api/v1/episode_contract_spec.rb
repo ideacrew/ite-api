@@ -281,7 +281,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
         all_params[:collateral] = '2'
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:treatment_type)
-        expect(errors.to_h[:treatment_type].first[:text]).to eq('can only specify 96 if client is Collateral/Codependent')
+        expect(errors.to_h[:treatment_type].first[:text]).to eq('Can use 96 only for a collateral record')
         expect(errors.to_h[:treatment_type].first[:category]).to eq('Data Inconsistency')
       end
     end
