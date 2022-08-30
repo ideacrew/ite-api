@@ -335,18 +335,19 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
         expect(errors[:discharge_date].first[:category]).to eq('Data Inconsistency')
       end
 
-      it 'is later than the date of last contact' do
-        all_params[:last_contact_date] = (Date.today - 10).to_s
-        all_params[:discharge_date] = Date.today.to_s
+      it 'is earlier than the date of last contact' do
+        all_params[:discharge_date] = (Date.today - 10).to_s
+        all_params[:last_contact_date] = Date.today.to_s
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:discharge_date)
-        expect(errors[:discharge_date].first[:text]).to eq('cannot be later than the date of last contact')
+        expect(errors[:discharge_date].first[:text]).to eq('cannot be earlier than the date of last contact')
         expect(errors[:discharge_date].first[:category]).to eq('Data Inconsistency')
       end
 
       it 'is after the date of discharge' do
         all_params[:admission_date] = Date.today.to_s
         all_params[:discharge_date] = (Date.today - 10).to_s
+        all_params[:last_contact_date] = (Date.today - 10).to_s
         errors = subject.call(all_params).errors.to_h
         expect(errors).to have_key(:discharge_date)
         expect(errors.to_h[:discharge_date].first[:text]).to eq('cannot be earlier than the date of admission')

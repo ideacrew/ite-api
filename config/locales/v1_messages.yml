@@ -46,6 +46,9 @@ en:
       after_last_contact:
         text: "cannot be later than the date of last contact"
         category: "Data Inconsistency"
+      before_last_contact:
+        text: "cannot be earlier than the date of last contact"
+        category: "Data Inconsistency"
       after_extraction:
         text: "cannot be later than the date of extraction"
         category: "Data Inconsistency"

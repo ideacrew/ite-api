@@ -92,8 +92,8 @@ module Validators
 
         rule(:discharge_date, :last_contact_date) do
           if key && (values[:last_contact_date] && values[:discharge_date]) &&
-             values[:discharge_date] > values[:last_contact_date]
-            key.failure(:after_last_contact)
+             values[:discharge_date] < values[:last_contact_date]
+            key.failure(:before_last_contact)
           end
         end
 
