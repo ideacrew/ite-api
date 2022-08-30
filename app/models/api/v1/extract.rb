@@ -80,6 +80,22 @@ module Api
           status:
         }
       end
+
+      def summary_view
+        {
+          id: id.to_s,
+          provider_gateway_identifier:,
+          coverage_start:,
+          coverage_end:,
+          extracted_on:,
+          file_name:,
+          provider_id:,
+          updated_at:,
+          created_at: created_at,
+          status:,
+          records: records
+        }
+      end
     end
   end
 end

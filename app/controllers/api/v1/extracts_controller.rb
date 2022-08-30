@@ -15,7 +15,7 @@ module Api
                       ::Api::V1::Provider.all.select { |p| p.extracts.pluck(:id.to_s).any? BSON::ObjectId.from_string(params[:id]) }
                     end
         @extract = providers.first.extracts.includes(:records).find(params[:id])
-        render json: @extract.attributes.merge(records: @extract.records&.map(&:attributes)) if @extract
+        render json: @extract.summary_view if @extract
       end
 
       def ingest
