@@ -376,14 +376,6 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
         expect(errors[:last_contact_date].first[:text]).to eq('cannot be later than the date of extraction')
         expect(errors[:last_contact_date].first[:category]).to eq('Data Inconsistency')
       end
-      it 'is earlier than the date of admission' do
-        all_params[:last_contact_date] = (Date.today - 10).to_s
-        all_params[:admission_date] = Date.today.to_s
-        errors = subject.call(all_params).errors.to_h
-        expect(errors).to have_key(:last_contact_date)
-        expect(errors.to_h[:last_contact_date].first[:text]).to eq('cannot be earlier than the date of admission')
-        expect(errors.to_h[:last_contact_date].first[:category]).to eq('Data Inconsistency')
-      end
     end
     context 'with invalid discharge reason field it should fail' do
       it 'is not present when discharge_date present' do

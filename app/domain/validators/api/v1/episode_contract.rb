@@ -120,13 +120,6 @@ module Validators
           end
         end
 
-        rule(:last_contact_date, :admission_date) do
-          if key && (values[:last_contact_date] && values[:admission_date]) &&
-             values[:last_contact_date] < Date.parse(values[:admission_date].to_s)
-            key.failure(:earlier_than_admission)
-          end
-        end
-
         rule(:admission_id) do
           if key && value
             key.failure(:special_characters) if value.match(/[^a-zA-Z\d-]/)
