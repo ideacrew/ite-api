@@ -4,11 +4,12 @@ module Api
   module V1
     # Accepts and processes requests
     class ExtractsController < ApplicationController
+      before_action :authenticate!
       before_action :permit_params
 
       def show
         # will need to adjust this logic so only if an admin see all extracts
-
+        # if current_user.role dbh, else
         providers = if params[:provider_gateway_identifier]
                       ::Api::V1::Provider.where(provider_gateway_identifier: params[:provider_gateway_identifier].to_i)
                     else

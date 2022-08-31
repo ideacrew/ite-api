@@ -4,6 +4,7 @@ module Api
   module V1
     # Accepts and processes providers
     class ProvidersController < ApplicationController
+      before_action :authenticate!
       before_action :permit_params
 
       def index
