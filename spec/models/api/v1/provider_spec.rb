@@ -16,6 +16,15 @@ RSpec.describe Api::V1::Provider, type: :model, dbclean: :around_each do
       office_locations: [office_location], extracts: [] }
   end
 
+  let(:extract_params) do
+    {
+      provider_gateway_identifier: 1,
+      coverage_start: Date.today - 100,
+      coverage_end: Date.today - 80,
+      extracted_on: Date.today - 80
+    }
+  end
+
   context 'with a valid params' do
     context 'all values filled in' do
       before do
@@ -109,6 +118,41 @@ RSpec.describe Api::V1::Provider, type: :model, dbclean: :around_each do
         new_provider.save
         expect(new_provider.provider_gateway_identifier).not_to eq(existing_provider.provider_gateway_identifier)
       end
+    end
+  end
+
+  context 'with a submission status' do
+    before do
+      @provider = described_class.create(provider_params)
+      extract_params[:provider_gateway_identifier] = @provider.provider_gateway_identifier
+    end
+    it 'will have a status of Overdue if no extracts' do
+      expect(@provider.submission_status).to eq 'Overdue'
+    end
+
+    it 'will have a status of Overdue if no extracts where the coverage age is more than the limit' do
+      @provider.extracts.build(extract_params)
+      @provider.save
+      expect(@provider.submission_status).to eq 'Overdue'
+    end
+
+    it 'will have a status of Need Resubmission if no valid extracts where the coverage age is less than 1 months ago' do
+      extract_params[:coverage_end] = Date.today
+      extract_params[:status] = 'Invalid'
+      @provider.extracts.build(extract_params)
+      @provider.save
+      expect(@provider.submission_status).to eq 'Need Resubmission'
+    end
+
+    it 'will have a status of Current if valid extract where the coverage age is less than 1 months ago' do
+      extract_params[:coverage_end] = Date.today
+      extract_params[:status] = 'Invalid'
+      @provider.extracts.build(extract_params)
+      extract_params[:coverage_end] = Date.today
+      extract_params[:status] = 'Valid'
+      @provider.extracts.build(extract_params)
+      @provider.save
+      expect(@provider.submission_status).to eq 'Current'
     end
   end
 end

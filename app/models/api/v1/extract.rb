@@ -25,6 +25,8 @@ module Api
 
       index({ provider_gateway_identifier: 1 }, { sparse: true })
 
+      default_scope { order(created_at: :desc) }
+
       def coverage_range
         coverage_start..coverage_end
       end
@@ -78,22 +80,6 @@ module Api
           pass_count:,
           fail_count:,
           status:
-        }
-      end
-
-      def summary_view
-        {
-          id: id.to_s,
-          provider_gateway_identifier:,
-          coverage_start:,
-          coverage_end:,
-          extracted_on:,
-          file_name:,
-          provider_id:,
-          updated_at:,
-          created_at: created_at,
-          status:,
-          records: records
         }
       end
     end

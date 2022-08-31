@@ -37,8 +37,8 @@ module Api
       def index
         # will need to adjust this logic so only if an admin see all extracts
         provider = ::Api::V1::Provider.where(provider_gateway_identifier: params[:provider_gateway_identifier].to_i).first
-        extracts = provider.present? ? provider.extracts : ::Api::V1::Provider.all.map(&:extracts).flatten
-        render json: extracts&.sort_by(&:created_at)&.reverse&.map(&:list_view)
+        extracts = provider.present? ? provider.extracts.limit(10) : ::Api::V1::Extract.all.limit(10)
+        render json: extracts&.map(&:list_view)
       end
 
       private
