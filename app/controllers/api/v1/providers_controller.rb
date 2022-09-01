@@ -8,11 +8,13 @@ module Api
       before_action :permit_params
 
       def index
+        authorize Provider, :show_dbh?
         providers = Api::V1::Provider.all
         render json: providers
       end
 
       def create
+        authorize Provider, :show_dbh?
         result = ::Operations::Api::V1::CreateProvider.new.call(permit_params.to_h)
         if result.success?
           render json: { status_text: 'created provider', status: 200, content_type: 'application/json',
@@ -35,7 +37,13 @@ module Api
       end
 
       def show
-        @provider = Api::V1::Provider.find(params[:id])
+        authorize Provider
+
+        @provider = if current_user.provider?
+                      ::Api::V1::Provider.find(current_user.provider_id)
+                    else
+                      Api::V1::Provider.find(params[:id])
+                    end
 
         render json: @provider.attributes.to_h.except('extracts') if @provider
       end

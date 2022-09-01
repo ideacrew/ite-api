@@ -3,6 +3,7 @@
 # User model
 class User
   include Mongoid::Document
+  include Mongoid::Timestamps
   include RailsJwtAuth::Authenticatable
   include RailsJwtAuth::Recoverable
   include RailsJwtAuth::Trackable
@@ -48,7 +49,3 @@ class User
     provider_staff_role&.provider_id&.to_s
   end
 end
-
-# one provider role right now
-# yes can be both dbh user and a provider
-# user cannot be both dbh staff and provider - Won-ok, but is checking with the client
