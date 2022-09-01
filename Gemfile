@@ -24,8 +24,8 @@ gem 'redis', '~> 4.7'
 # gem 'image_processing', '~> 1.2'
 
 # authentication
-gem 'devise', '~> 4.8', '>= 4.8.1'
 gem 'pundit', '~> 2.2'
+gem 'rails_jwt_auth'
 
 # HTTP/REST API client library
 # gem 'faraday', '~> 2.2'
@@ -49,10 +49,9 @@ gem 'fhir_models', '~> 4.2', '>= 4.2.1'
 gem 'bootsnap', '>= 1.4.4', require: false
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
-gem 'email_validator', '~> 2.2', '>= 2.2.3'
 gem 'rack-cors'
 
-gem 'rails_jwt_auth'
+gem 'email_validator', '~> 2.2', '>= 2.2.3'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
