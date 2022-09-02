@@ -39,10 +39,10 @@ module Api
       def show
         authorize Provider
 
-        @provider = if current_user.provider?
-                      ::Api::V1::Provider.find(current_user.provider_id)
-                    else
+        @provider = if current_user.dbh_user?
                       Api::V1::Provider.find(params[:id])
+                    else
+                      Api::V1::Provider.find(current_user.provider_id)
                     end
 
         render json: @provider.attributes.to_h.except('extracts') if @provider

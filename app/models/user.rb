@@ -17,6 +17,8 @@ class User
                     uniqueness: true,
                     format: URI::MailTo::EMAIL_REGEXP
 
+  validate :password_custom_rules
+
   def to_token_payload(_request = nil)
     if RailsJwtAuth.simultaneous_sessions.positive?
       auth_tokens&.last ? { auth_token: auth_tokens.last, dbh_user: dbh_user?, provider: provider?, provider_gateway_identifier:, provider_id: } : false
@@ -47,5 +49,15 @@ class User
     return unless provider?
 
     provider_staff_role&.provider_id&.to_s
+  end
+
+  def password_custom_rules
+    if password.present? && (password.length >= 8)
+      errors.add :password, 'Password must be at least 8 characters'
+    elsif password.present? && !password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d ]).+$/)
+      errors.add :password, 'Your password must include at least 1 lowercase letter, 1 uppercase letter, 1 number, and 1 character that’s not a number, letter, or space.'
+    elsif password.present? && !password.match(/#{::Regexp.escape(email)}/i)
+      errors.add :password, 'Password cannot contain username'
+    end
   end
 end
