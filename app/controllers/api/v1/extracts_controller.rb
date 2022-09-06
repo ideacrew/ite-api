@@ -44,7 +44,8 @@ module Api
                    end
         render json: extracts&.map(&:list_view)
       rescue StandardError => e
-        Rails.logger.info("error in extracts index controller: #{e}")
+        puts "#{current_user}"
+        puts "error in extracts index controller: #{e}"
       end
 
       private
