@@ -21,7 +21,7 @@ class User
 
   def to_token_payload(_request = nil)
     if RailsJwtAuth.simultaneous_sessions.positive?
-      auth_tokens&.last ? { auth_token: auth_tokens.last, dbh_user: dbh_user?, provider: provider?, provider_gateway_identifier:, provider_id: } : false
+      auth_tokens&.last ? { auth_token: auth_tokens.last, dbh_user: dbh_user?, provider: provider?, provider_gateway_identifier:, provider_id:, email: } : false
     else
       { id: id.to_s }
     end
