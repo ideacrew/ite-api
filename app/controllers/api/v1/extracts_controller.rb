@@ -9,13 +9,11 @@ module Api
       before_action :permit_params
 
       def show
-        puts "got to show action"
-        puts current_user.to_s
         authorize Extract
-        puts "passed show authorization"
-        @extract = ::Api::V1::Extract.find(params[:id]).includes(:records)
 
-        if @extract && (current_user.dbh_user? || (current_user.provider_id == @extract.provider_id))
+        @extract = ::Api::V1::Extract.find(params[:id])
+
+        if @extract && (current_user.dbh_user? || (current_user.provider_id == @extract.provider_id.to_s))
           render json: @extract.attributes.merge(records: @extract.records&.map(&:attributes))
         else
           render json: { status_text: 'Could not find extract', status: 400, content_type: 'application/json' }
