@@ -52,11 +52,11 @@ class User
   end
 
   def password_custom_rules
-    if password.present? && (password.length >= 8)
+    if password.present? && (password.length < 8)
       errors.add :password, 'Password must be at least 8 characters'
     elsif password.present? && !password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d ]).+$/)
       errors.add :password, 'Your password must include at least 1 lowercase letter, 1 uppercase letter, 1 number, and 1 character that’s not a number, letter, or space.'
-    elsif password.present? && !password.match(/#{::Regexp.escape(email)}/i)
+    elsif password.present? && password.match(/#{::Regexp.escape(email)}/i)
       errors.add :password, 'Password cannot contain username'
     end
   end
