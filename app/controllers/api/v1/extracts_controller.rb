@@ -21,8 +21,12 @@ module Api
       end
 
       def ingest
+        puts "got to ingest"
+        puts current_user.to_s
         authorize Extract
+        puts "can ingest!"
         result = ::Operations::Api::V1::IngestExtract.new.call(permit_params.to_h)
+        puts "result: #{result}"
         if result.success?
           render json: { status_text: 'ingested payload', status: 200, content_type: 'application/json',
                          extract_id: result.value!.id, ingestion_status: result.value!.status,
