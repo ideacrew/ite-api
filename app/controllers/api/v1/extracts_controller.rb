@@ -37,13 +37,14 @@ module Api
 
       def index
         authorize Extract, :show?
-
         extracts = if current_user.dbh_user?
                      ::Api::V1::Extract.all.limit(10)
                    else
                      ::Api::V1::Extract.where(provider_id: current_user.provider_id).limit(10)
                    end
         render json: extracts&.map(&:list_view)
+      rescue StandardError => e
+        Rails.logger.info("error in extracts index controller: #{e}")
       end
 
       private
