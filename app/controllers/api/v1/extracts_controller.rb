@@ -36,6 +36,8 @@ module Api
       end
 
       def index
+        puts "got to extracts index"
+        puts "#{current_user}"
         authorize Extract, :show?
         extracts = if current_user.dbh_user?
                      ::Api::V1::Extract.all.limit(10)
