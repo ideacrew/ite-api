@@ -1,7 +1,17 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  resources :reset_passwords, controller: 'rails_jwt_auth/reset_passwords', only: %i[show create update]
+
+  resource :user, controller: 'rails_jwt_auth/profiles', only: %i[show update] do
+    collection do
+      put :email
+      put :password
+    end
+  end
+
+  resource :session, controller: 'rails_jwt_auth/sessions', only: %i[create destroy]
+
   namespace :api do
     namespace :v1 do
       resources :extracts, only: %i[index show] do

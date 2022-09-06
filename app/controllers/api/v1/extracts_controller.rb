@@ -4,21 +4,22 @@ module Api
   module V1
     # Accepts and processes requests
     class ExtractsController < ApplicationController
+      before_action :authenticate!
       before_action :permit_params
 
       def show
-        # will need to adjust this logic so only if an admin see all extracts
+        authorize Extract
+        @extract = ::Api::V1::Extract.find(params[:id]).includes(:records)
 
-        providers = if params[:provider_gateway_identifier]
-                      ::Api::V1::Provider.where(provider_gateway_identifier: params[:provider_gateway_identifier].to_i)
-                    else
-                      ::Api::V1::Provider.all.select { |p| p.extracts.pluck(:id.to_s).any? BSON::ObjectId.from_string(params[:id]) }
-                    end
-        @extract = providers.first.extracts.includes(:records).find(params[:id])
-        render json: @extract.attributes.merge(records: @extract.records&.map(&:attributes)) if @extract
+        if @extract && (current_user.dbh_user? || (current_user.provider_id == @extract.provider_id))
+          render json: @extract.attributes.merge(records: @extract.records&.map(&:attributes))
+        else
+          render json: { status_text: 'Could not find extract', status: 400, content_type: 'application/json' }
+        end
       end
 
       def ingest
+        authorize Extract
         result = ::Operations::Api::V1::IngestExtract.new.call(permit_params.to_h)
         if result.success?
           render json: { status_text: 'ingested payload', status: 200, content_type: 'application/json',
@@ -35,9 +36,13 @@ module Api
       end
 
       def index
-        # will need to adjust this logic so only if an admin see all extracts
-        provider = ::Api::V1::Provider.where(provider_gateway_identifier: params[:provider_gateway_identifier].to_i).first
-        extracts = provider.present? ? provider.extracts.limit(10) : ::Api::V1::Extract.all.limit(10)
+        authorize Extract, :show?
+
+        extracts = if current_user.dbh_user?
+                     ::Api::V1::Extract.all.limit(10)
+                   else
+                     ::Api::V1::Extract.where(provider_id: current_user.provider_id).limit(10)
+                   end
         render json: extracts&.map(&:list_view)
       end
 

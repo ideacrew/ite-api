@@ -18,7 +18,7 @@ module Validators
           required(:collateral).filled(Types::CODEPEDENT_OPTIONS)
           required(:client_id).filled(:string)
           required(:record_type).filled(Types::RECORD_TYPE_OPTIONS)
-          optional(:admission_type).maybe(:date)
+          optional(:admission_type).maybe(:string)
           required(:admission_date).filled(:date)
           required(:treatment_type).filled(Types::TREATMENT_TYPE_OPTIONS)
           optional(:treatment_location).maybe(:string)
