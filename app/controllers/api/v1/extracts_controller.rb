@@ -4,6 +4,7 @@ module Api
   module V1
     # Accepts and processes requests
     class ExtractsController < ApplicationController
+      before_action :check_auth_errors
       before_action :authenticate!
       before_action :permit_params
 
@@ -36,7 +37,7 @@ module Api
       end
 
       def index
-        puts "got to extracts index"
+        puts "got to extracts index!"
         puts "#{current_user}"
         authorize Extract, :show?
         extracts = if current_user.dbh_user?
@@ -48,6 +49,12 @@ module Api
       rescue StandardError => e
         puts "#{current_user}"
         puts "error in extracts index controller: #{e}"
+      end
+
+      def check_auth_errors
+        puts "checking auth"
+        puts request.env['HTTP_AUTHORIZATION']&.split&.last
+        puts "#{RailsJwtAuth::JwtManager.decode(get_jwt_from_request).first}"
       end
 
       private
