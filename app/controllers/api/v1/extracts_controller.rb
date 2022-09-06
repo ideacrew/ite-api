@@ -37,8 +37,8 @@ module Api
       end
 
       def index
-        puts "got to extracts index!"
-        puts "#{current_user}"
+        puts 'got to extracts index!'
+        puts current_user.to_s
         authorize Extract, :show?
         extracts = if current_user.dbh_user?
                      ::Api::V1::Extract.all.limit(10)
@@ -47,14 +47,14 @@ module Api
                    end
         render json: extracts&.map(&:list_view)
       rescue StandardError => e
-        puts "#{current_user}"
+        puts current_user.to_s
         puts "error in extracts index controller: #{e}"
       end
 
       def check_auth_errors
-        puts "checking auth"
+        puts 'checking auth'
         puts request.env['HTTP_AUTHORIZATION']&.split&.last
-        puts "#{RailsJwtAuth::JwtManager.decode(get_jwt_from_request).first}"
+        puts RailsJwtAuth::JwtManager.decode(get_jwt_from_request).first.to_s
       end
 
       private
