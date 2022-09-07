@@ -83,7 +83,8 @@ module Api
           record_warning_count:,
           pass_count:,
           fail_count:,
-          status:
+          status:,
+          provider_name:
         }
       end
     end
