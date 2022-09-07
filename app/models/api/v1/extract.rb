@@ -68,7 +68,8 @@ module Api
       end
 
       def provider_name
-        provider.provider_name
+        return unless provider
+        provider&.provider_name
       end
 
       def list_view
