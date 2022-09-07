@@ -39,12 +39,12 @@ module Api
       index({ provider_gateway_identifier: 1 }, { sparse: true })
 
       def submission_status
-        return 'Overdue' unless extracts.any?
+        return 'Past Due' unless extracts.any?
 
         today = Date.today
         reporting_period_end = today.day < 11 ? (today - 2.months).end_of_month : today.last_month.end_of_month
         current_extracts = extracts.where(:coverage_end.gte => reporting_period_end)
-        return 'Overdue' unless current_extracts.any?
+        return 'Past Due' unless current_extracts.any?
 
         valid = current_extracts.detect { |extract| extract.status == 'Valid' }
         return 'Need Resubmission' unless valid

@@ -127,13 +127,13 @@ RSpec.describe Api::V1::Provider, type: :model, dbclean: :around_each do
       extract_params[:provider_gateway_identifier] = @provider.provider_gateway_identifier
     end
     it 'will have a status of Overdue if no extracts' do
-      expect(@provider.submission_status).to eq 'Overdue'
+      expect(@provider.submission_status).to eq 'Past Due'
     end
 
     it 'will have a status of Overdue if no extracts where the coverage age is more than the limit' do
       @provider.extracts.build(extract_params)
       @provider.save
-      expect(@provider.submission_status).to eq 'Overdue'
+      expect(@provider.submission_status).to eq 'Past Due'
     end
 
     it 'will have a status of Need Resubmission if no valid extracts where the coverage age is less than 1 months ago' do
