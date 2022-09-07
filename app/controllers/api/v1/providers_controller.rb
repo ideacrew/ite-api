@@ -47,6 +47,18 @@ module Api
         render json: @provider.attributes.to_h.except('extracts') if @provider
       end
 
+      def submission_summary
+        authorize Provider, :show_dbh?
+
+        provider = Api::V1::Provider.find(permit_params[:id])
+        extract = provider.extracts.last
+        records = extract.records
+        render json: { provider_name: provider.provider_name, status: provider.submission_status, submitted_on: extract.created_at,
+                       total_records: records.count, pass: records.where(status: 'Pass').count, fail: records.where(status: 'Fail').count }
+      rescue StandardError => e
+        render json: { status_text: 'Could not get the submission status', status: 400, failure: e.message }
+      end
+
       private
 
       def permit_params
