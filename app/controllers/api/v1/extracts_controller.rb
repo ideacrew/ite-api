@@ -4,7 +4,6 @@ module Api
   module V1
     # Accepts and processes requests
     class ExtractsController < ApplicationController
-      before_action :check_auth_errors
       before_action :authenticate!
       before_action :permit_params
 
@@ -21,12 +20,8 @@ module Api
       end
 
       def ingest
-        puts "got to ingest"
-        puts current_user.to_s
         authorize Extract
-        puts "can ingest!"
         result = ::Operations::Api::V1::IngestExtract.new.call(permit_params.to_h)
-        puts "result: #{result}"
         if result.success?
           render json: { status_text: 'ingested payload', status: 200, content_type: 'application/json',
                          extract_id: result.value!.id, ingestion_status: result.value!.status,
@@ -42,8 +37,6 @@ module Api
       end
 
       def index
-        puts 'got to extracts index!'
-        puts current_user.to_s
         authorize Extract, :show?
         extracts = if current_user.dbh_user?
                      ::Api::V1::Extract.all.limit(10)
@@ -52,14 +45,7 @@ module Api
                    end
         render json: extracts&.map(&:list_view)
       rescue StandardError => e
-        puts current_user.to_s
         puts "error in extracts index controller: #{e}"
-      end
-
-      def check_auth_errors
-        puts 'checking auth'
-        puts request.env['HTTP_AUTHORIZATION']&.split&.last
-        puts RailsJwtAuth::JwtManager.decode(get_jwt_from_request).first.to_s
       end
 
       private

@@ -21,7 +21,7 @@ class User
 
   def to_token_payload(_request = nil)
     if RailsJwtAuth.simultaneous_sessions.positive?
-      auth_tokens&.last ? { auth_token: auth_tokens.last, dbh_user: dbh_user?, provider: provider?, provider_gateway_identifier:, provider_id:, email: } : false
+      auth_tokens&.last ? { auth_token: auth_tokens.last, dbh_user: dbh_user?, provider: provider?, provider_gateway_identifier:, provider_id:, email:, provider_name: } : false
     else
       { id: id.to_s }
     end
@@ -49,6 +49,12 @@ class User
     return unless provider?
 
     provider_staff_role&.provider_id&.to_s
+  end
+
+  def provider_name
+    return unless provider?
+
+    provider_staff_role&.provider_name&.to_s
   end
 
   def password_custom_rules

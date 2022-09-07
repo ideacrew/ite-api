@@ -37,8 +37,7 @@ module Api
       end
 
       def show
-        authorize Provider
-
+        authorize Provider, :show?
         @provider = if current_user.dbh_user?
                       Api::V1::Provider.find(params[:id])
                     else

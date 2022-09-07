@@ -13,4 +13,11 @@ class ProviderStaffRole
   def active?
     is_active
   end
+
+  def provider_name
+    provider = Api::V1::Provider.find(provider_id)
+    return unless provider
+
+    provider.provider_name
+  end
 end
