@@ -67,6 +67,10 @@ module Api
         records&.select { |t| t.status == 'Fail' }&.count
       end
 
+      def provider_name
+        provider.provider_name
+      end
+
       def list_view
         {
           id: id.to_s,

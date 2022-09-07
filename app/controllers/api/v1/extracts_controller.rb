@@ -13,7 +13,7 @@ module Api
         @extract = ::Api::V1::Extract.find(params[:id])
 
         if @extract && (current_user.dbh_user? || (current_user.provider_id == @extract.provider_id.to_s))
-          render json: @extract.attributes.merge(records: @extract.records&.map(&:attributes))
+          render json: @extract.attributes.merge(records: @extract.records&.map(&:attributes), provider_name: @extract.provider_name)
         else
           render json: { status_text: 'Could not find extract', status: 400, content_type: 'application/json' }
         end
