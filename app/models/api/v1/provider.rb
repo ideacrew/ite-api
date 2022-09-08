@@ -38,31 +38,38 @@ module Api
 
       index({ provider_gateway_identifier: 1 }, { sparse: true })
 
-      def submission_status
-        return 'Past Due' unless extracts.any?
-
+      def submission_status(extract, reporting_period)
         today = Date.today
-        reporting_period_end = today.day < 11 ? (today - 2.months).end_of_month : today.last_month.end_of_month
-        current_extracts = extracts.where(:coverage_end.gte => reporting_period_end)
-        return 'Past Due' unless current_extracts.any?
+        is_current_month = (today.end_of_month == reporting_period.end_of_month)
 
-        valid = current_extracts.detect { |extract| extract.status == 'Valid' }
+        unless extract
+          return 'Past Due' unless is_current_month
+          return 'Expecting Submission' if is_current_month && today.day < 11
+          return 'Past Due' if is_current_month && today.day >= 11
+        end
+
+        valid = (extract.status == 'Valid')
         return 'Need Resubmission' unless valid
 
         'Current'
       end
 
-      def list_view
-        extract = extracts.last
-        records = extract.records
+      def list_view(reporting_period)
+        extract = reporting_period_extracts(reporting_period).last
+        records = extract&.records
         {
           provider_name:,
-          status: submission_status,
-          submitted_on: extract.created_at,
-          total_records: records.count.to_s,
-          pass: records.where(status: 'Pass').count.to_s,
-          fail: records.where(status: 'Fail').count.to_s
+          status: submission_status(extract, reporting_period),
+          submitted_on: extract.present? ? extract.created_at : 'N/A',
+          total_records: records.present? ? records.count.to_s : 'N/A',
+          pass: records.present? ? records.where(status: 'Pass').count.to_s : 'N/A',
+          fail: records.present? ? records.where(status: 'Fail').count.to_s : 'N/A'
         }
+      end
+
+      def reporting_period_extracts(reporting_period)
+        period = reporting_period..reporting_period.end_of_month
+        extracts.where(coverage_end: period)
       end
 
       private
