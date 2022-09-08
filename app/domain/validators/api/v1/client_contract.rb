@@ -42,7 +42,7 @@ module Validators
           rule(field) do
             if key && value
               key.failure(:length_more_than50) if value.length > 50
-              pattern = Regexp.new('(?!.*\s\s)^[a-zA-Z\s\-\'\ ]*$').freeze
+              pattern = Regexp.new('(?!.*\s\s)^[a-zA-Z\s\-\'‘’]*$').freeze
               key.failure(:unsuported_name_characters) unless pattern.match(value) && !value.start_with?(' ') && !value.end_with?(' ')
             end
           end

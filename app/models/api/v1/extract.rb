@@ -69,6 +69,7 @@ module Api
 
       def provider_name
         return unless provider
+
         provider&.provider_name
       end
 
