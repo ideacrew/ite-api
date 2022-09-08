@@ -51,12 +51,20 @@ module Api
         authorize Provider, :show_dbh?
         providers = Api::V1::Provider.all
 
-        render json: providers&.map(&:list_view)
+        render json: providers&.map { |provider| provider.list_view(reporting_period_for(permit_params)) }
       rescue StandardError => e
         render json: { status_text: 'Could not get the submission status', status: 400, failure: e.message }
       end
 
       private
+
+      def reporting_period_for(params)
+        if params['year'] && params['month']
+          Date.new(params['year'].to_i, params['month'].to_i)
+        else
+          Date.today.beginning_of_month
+        end
+      end
 
       def permit_params
         params.permit!.except(:controller, :action, :provider)

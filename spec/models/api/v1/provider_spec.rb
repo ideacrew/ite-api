@@ -125,34 +125,67 @@ RSpec.describe Api::V1::Provider, type: :model, dbclean: :around_each do
     before do
       @provider = described_class.create(provider_params)
       extract_params[:provider_gateway_identifier] = @provider.provider_gateway_identifier
+      allow(Date).to receive(:today).and_return(Date.new(Date.today.year, Date.today.month, 11))
     end
+
     it 'will have a status of Overdue if no extracts' do
-      expect(@provider.submission_status).to eq 'Past Due'
+      expect(@provider.submission_status(nil, Date.today)).to eq 'Past Due'
     end
 
-    it 'will have a status of Overdue if no extracts where the coverage age is more than the limit' do
-      @provider.extracts.build(extract_params)
-      @provider.save
-      expect(@provider.submission_status).to eq 'Past Due'
+    it 'will have a status of Overdue if no extracts' do
+      allow(Date).to receive(:today).and_return(Date.new(Date.today.year, Date.today.month, 9))
+      expect(@provider.submission_status(nil, Date.today)).to eq 'Expecting Submission'
     end
 
-    it 'will have a status of Need Resubmission if no valid extracts where the coverage age is less than 1 months ago' do
+    it 'will have a status of Need Resubmission if no valid extracts in the given period' do
       extract_params[:coverage_end] = Date.today
       extract_params[:status] = 'Invalid'
       @provider.extracts.build(extract_params)
       @provider.save
-      expect(@provider.submission_status).to eq 'Need Resubmission'
+      expect(@provider.submission_status(@provider.extracts.last, Date.today)).to eq 'Need Resubmission'
     end
 
-    it 'will have a status of Current if valid extract where the coverage age is less than 1 months ago' do
-      extract_params[:coverage_end] = Date.today
-      extract_params[:status] = 'Invalid'
-      @provider.extracts.build(extract_params)
+    it 'will have a status of Current if valid extract where the coverage is in the given period' do
       extract_params[:coverage_end] = Date.today
       extract_params[:status] = 'Valid'
       @provider.extracts.build(extract_params)
       @provider.save
-      expect(@provider.submission_status).to eq 'Current'
+      expect(@provider.submission_status(@provider.extracts.last, Date.today)).to eq 'Current'
+    end
+
+    after do
+      allow(Date).to receive(:today).and_return(Date.today)
+    end
+  end
+
+  context 'reporting_period_extracts' do
+    before do
+      @provider = described_class.create(provider_params)
+      extract_params[:provider_gateway_identifier] = @provider.provider_gateway_identifier
+    end
+
+    it 'will return an extract when coverage end is in the period' do
+      extract_params[:coverage_end] = Date.today
+      extract_params[:status] = 'Valid'
+      @provider.extracts.build(extract_params)
+      @provider.save
+      expect(@provider.reporting_period_extracts(Date.today).count).to eq 1
+    end
+
+    it 'will not return an extract when coverage end is in the month of period' do
+      extract_params[:coverage_end] = Date.today.next_month
+      extract_params[:status] = 'Valid'
+      @provider.extracts.build(extract_params)
+      @provider.save
+      expect(@provider.reporting_period_extracts(Date.today).count).to eq 0
+    end
+
+    it 'will not return an extract when coverage end is in the prev month of period' do
+      extract_params[:coverage_end] = Date.today.prev_month
+      extract_params[:status] = 'Valid'
+      @provider.extracts.build(extract_params)
+      @provider.save
+      expect(@provider.reporting_period_extracts(Date.today).count).to eq 0
     end
   end
 end
