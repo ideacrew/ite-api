@@ -40,11 +40,7 @@ module Validators
 
         %i[first_name middle_name last_name first_name_alt last_name_alt].each do |field|
           rule(field) do
-            if key && value
-              key.failure(:length_more_than50) if value.length > 50
-              pattern = Regexp.new('(?!.*\s\s)^[a-zA-Z\s\-\'‘’]*$').freeze
-              key.failure(:unsuported_name_characters) unless pattern.match(value) && !value.start_with?(' ') && !value.end_with?(' ')
-            end
+            key.failure(:length_more_than50) if key && value && (value.length > 50)
           end
         end
 
@@ -94,11 +90,7 @@ module Validators
         end
 
         rule(:suffix) do
-          if key && value
-            pattern = Regexp.new('^[a-zA-Z\d\s\-\'\ ]*$').freeze
-            key.failure(:unsuported_name_characters) unless pattern.match(value)
-            key.failure(:length_more_than10) if value.length > 10
-          end
+          key.failure(:length_more_than10) if key && value && (value.length > 18)
         end
 
         rule(:ssn) do
