@@ -52,6 +52,19 @@ module Api
         'Current'
       end
 
+      def list_view
+        extract = extracts.last
+        records = extract.records
+        {
+          provider_name:,
+          status: submission_status,
+          submitted_on: extract.created_at,
+          total_records: records.count.to_s,
+          pass: records.where(status: 'Pass').count.to_s,
+          fail: records.where(status: 'Fail').count.to_s
+        }
+      end
+
       private
 
       def generate_gateway_id

@@ -21,7 +21,7 @@ Rails.application.routes.draw do
       end
 
       resources :providers, only: %i[index create update show] do
-        member do
+        collection do
           get 'submission_summary'
         end
       end
