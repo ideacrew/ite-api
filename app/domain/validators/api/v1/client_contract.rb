@@ -38,12 +38,6 @@ module Validators
           optional(:address_ward).maybe(:string)
         end
 
-        %i[first_name middle_name last_name first_name_alt last_name_alt].each do |field|
-          rule(field) do
-            key.failure(:length_more_than50) if key && value && (value.length > 50)
-          end
-        end
-
         %i[address_line1 address_line2].each do |field|
           rule(field) do
             if key && value

@@ -42,15 +42,6 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       expect(result.errors.to_h[:first_name].first[:category]).to eq 'Missing Value'
     end
 
-    it 'First name more than 50 characters' do
-      valid_params[:first_name] = 'testinghsbdkabcakdsbdsidnakbciaksbdtestinghsbdkabcakdsbdsidnakbciaksbd'
-      result = subject.call(valid_params)
-      expect(result.failure?).to be_truthy
-      expect(result.errors.to_h).to have_key(:first_name)
-      expect(result.errors.to_h[:first_name].first[:text]).to eq 'cannot contain more than 50 characters'
-      expect(result.errors.to_h[:first_name].first[:category]).to eq 'Invalid Field Length'
-    end
-
     it 'without last name' do
       valid_params[:last_name] = nil
       result = subject.call(valid_params)
@@ -58,42 +49,6 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       expect(result.errors.to_h).to have_key(:last_name)
       expect(result.errors.to_h[:last_name].first[:text]).to eq 'Must be filled'
       expect(result.errors.to_h[:last_name].first[:category]).to eq 'Missing Value'
-    end
-
-    it 'Last name more than 50 characters' do
-      valid_params[:last_name] = 'testinghsbdkabcakdsbdsidnakbciaksbdtestinghsbdkabcakdsbdsidnakbciaksbd'
-      result = subject.call(valid_params)
-      expect(result.failure?).to be_truthy
-      expect(result.errors.to_h).to have_key(:last_name)
-      expect(result.errors.to_h[:last_name].first[:text]).to eq 'cannot contain more than 50 characters'
-      expect(result.errors.to_h[:last_name].first[:category]).to eq 'Invalid Field Length'
-    end
-
-    it 'Middle name more than 50 characters' do
-      valid_params[:middle_name] = 'testinghsbdkabcakdsbdsidnakbciaksbdtestinghsbdkabcakdsbdsidnakbciaksbd'
-      result = subject.call(valid_params)
-      expect(result.failure?).to be_truthy
-      expect(result.errors.to_h).to have_key(:middle_name)
-      expect(result.errors.to_h[:middle_name].first[:text]).to eq 'cannot contain more than 50 characters'
-      expect(result.errors.to_h[:middle_name].first[:category]).to eq 'Invalid Field Length'
-    end
-
-    it 'alt_first_name more than 50 characters' do
-      valid_params[:first_name_alt] = 'testinghsbdkabcakdsbdsidnakbciaksbdtestinghsbdkabcakdsbdsidnakbciaksbd'
-      result = subject.call(valid_params)
-      expect(result.failure?).to be_truthy
-      expect(result.errors.to_h).to have_key(:first_name_alt)
-      expect(result.errors.to_h[:first_name_alt].first[:text]).to eq 'cannot contain more than 50 characters'
-      expect(result.errors.to_h[:first_name_alt].first[:category]).to eq 'Invalid Field Length'
-    end
-
-    it 'alt_last_name more than 50 characters' do
-      valid_params[:last_name_alt] = 'testinghsbdkabcakdsbdsidnakbciaksbdtestinghsbdkabcakdsbdsidnakbciaksbd'
-      result = subject.call(valid_params)
-      expect(result.failure?).to be_truthy
-      expect(result.errors.to_h).to have_key(:last_name_alt)
-      expect(result.errors.to_h[:last_name_alt].first[:text]).to eq 'cannot contain more than 50 characters'
-      expect(result.errors.to_h[:last_name_alt].first[:category]).to eq 'Invalid Field Length'
     end
 
     it 'suffix more than 18 characters' do
@@ -281,7 +236,7 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:sexual_orientation)
-      expect(result.errors.to_h[:sexual_orientation].first[:text]).to eq 'must be one of 1, 2, 3, 4, 95, 97, 98'
+      expect(result.errors.to_h[:sexual_orientation].first[:text]).to eq 'must be one of 1, 2, 3, 4, 5, 6, 95, 97, 98'
       expect(result.errors.to_h[:sexual_orientation].first[:category]).to eq 'Invalid Value'
     end
 
