@@ -12,6 +12,7 @@ require 'mongoid-rspec'
 
 # Add additional requires below this line. Rails is not loaded until this point!
 require_relative 'support/factory_bot'
+require 'rails_jwt_auth/spec_helpers'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -34,6 +35,7 @@ RSpec.configure do |config|
 
   # Mongoid adapter
   config.include Mongoid::Matchers, type: :model
+  config.include RailsJwtAuth::SpecHelpers, type: :controller
 
   # DatabaseCleaner[:mongoid].strategy = [:deletion]
 
