@@ -15,7 +15,7 @@ module Api
 
       def create
         authorize Provider, :show_dbh?
-        result = ::Operations::Api::V1::CreateProvider.new.call(permit_params.to_h)
+        result = ::Operations::Api::V1::CreateProvider.new.call(permit_params.to_h.symbolize_keys)
         if result.success?
           render json: { status_text: 'created provider', status: 200, content_type: 'application/json',
                          provider_id: result.value!.id, provider_gateway_id: result.value!.provider_gateway_identifier }
@@ -23,8 +23,8 @@ module Api
           failure_text = if result.failure.instance_of?(String)
                            result.failure
                          else
-                           result.failure.errors.map do |_k, _v|
-                             "#{k}: #{v}"
+                           result.failure.errors.map do |error|
+                             "#{error.path.first}: #{error.text}"
                            end
                          end
           render json: { status_text: 'Could not create provider', status: 400, content_type: 'application/json',
@@ -49,11 +49,13 @@ module Api
 
       def submission_summary
         authorize Provider, :show_dbh?
-        providers = Api::V1::Provider.all
+        begin
+          providers = Api::V1::Provider.all
 
-        render json: providers&.map { |provider| provider.list_view(reporting_period_for(permit_params)) }
-      rescue StandardError => e
-        render json: { status_text: 'Could not get the submission status', status: 400, failure: e.message }
+          render json: providers&.map { |provider| provider.list_view(reporting_period_for(permit_params)) }
+        rescue StandardError => e
+          render json: { status_text: 'Could not get the submission status', status: 400, failure: e.message }
+        end
       end
 
       private

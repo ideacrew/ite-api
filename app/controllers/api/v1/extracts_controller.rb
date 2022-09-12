@@ -9,7 +9,6 @@ module Api
 
       def show
         authorize Extract
-
         @extract = ::Api::V1::Extract.find(params[:id])
 
         if @extract && (current_user.dbh_user? || (current_user.provider_id == @extract.provider_id.to_s))
@@ -38,14 +37,16 @@ module Api
 
       def index
         authorize Extract, :show?
-        extracts = if current_user.dbh_user?
-                     ::Api::V1::Extract.all.limit(10)
-                   else
-                     ::Api::V1::Extract.where(provider_id: current_user.provider_id).limit(10)
-                   end
-        render json: extracts&.map(&:list_view)
-      rescue StandardError => e
-        puts "error in extracts index controller: #{e}"
+        begin
+          extracts = if current_user.dbh_user?
+                       ::Api::V1::Extract.all.limit(10)
+                     else
+                       ::Api::V1::Extract.where(provider_id: current_user.provider_id).limit(10)
+                     end
+          render json: extracts&.map(&:list_view)
+        rescue StandardError => e
+          puts "error in extracts index controller: #{e}"
+        end
       end
 
       private
