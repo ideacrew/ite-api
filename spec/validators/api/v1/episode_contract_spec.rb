@@ -597,6 +597,18 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
       end
     end
 
+    context 'with invalid legal_status' do
+      it 'fails if school_attendance is not 96 and age is greater than 21' do
+        all_params[:treatment_type] = '72'
+        all_params[:client_profile][:legal_status] = '96'
+        result = subject.call(all_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:legal_status)
+        expect(result.errors.to_h[:legal_status].first[:text]).to eq 'cannot be 96 (indicating not applicable) if treatment_type is 72'
+        expect(result.errors.to_h[:legal_status].first[:category]).to eq 'Data Inconsistency'
+      end
+    end
+
     context 'with invalid smi_sed' do
       it 'fails if smi_sed is 1 and client younger than 22' do
         all_params[:client][:dob] = (Date.today - (366 * 20)).to_s

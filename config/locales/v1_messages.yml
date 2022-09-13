@@ -175,6 +175,9 @@ en:
       co_occurring_sud_mh_mismatch:
         text: 'must be 1 if MH record and sud_dx1 is applicable'
         category: 'Data Inconsistency'
+      legal_status96:
+        text: 'cannot be 96 (indicating not applicable) if treatment_type is 72'
+        category: 'Data Inconsistency'
 
       rules:
         address_zip_code:

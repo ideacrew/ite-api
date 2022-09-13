@@ -203,6 +203,12 @@ module Validators
           end
         end
 
+        rule('client_profile.legal_status', :treatment_type) do
+          if key && (values.dig(:client_profile, :legal_status) && values.dig(:treatment_type))
+            key(:legal_status).failure(:legal_status96) if values.dig(:client_profile, :legal_status) == '96' && values[:treatment_type] == '72'
+          end
+        end
+
         rule('client.dob', 'clinical_info.smi_sed') do
           if key && (values.dig(:clinical_info, :smi_sed) && values.dig(:client, :dob))
             now = Time.now.utc.to_date
