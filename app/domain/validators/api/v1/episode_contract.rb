@@ -204,9 +204,7 @@ module Validators
         end
 
         rule('client_profile.legal_status', :treatment_type) do
-          if key && (values.dig(:client_profile, :legal_status) && values.dig(:treatment_type))
-            key(:legal_status).failure(:legal_status96) if values.dig(:client_profile, :legal_status) == '96' && values[:treatment_type] == '72'
-          end
+          key(:legal_status).failure(:legal_status96) if key && (values.dig(:client_profile, :legal_status) && values[:treatment_type]) && (values.dig(:client_profile, :legal_status) == '96' && values[:treatment_type] == '72')
         end
 
         rule('client.dob', 'clinical_info.smi_sed') do
