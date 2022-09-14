@@ -88,8 +88,8 @@ en:
       length_more_than50:
         text: "cannot contain more than 50 characters"
         category: "Invalid Field Length"
-      length_more_than10:
-        text: "cannot contain more than 10 characters"
+      length_more_than18:
+        text: "cannot contain more than 18 characters"
         category: "Invalid Field Length"
       length_more_than30:
         text: "cannot contain more than 30 characters"

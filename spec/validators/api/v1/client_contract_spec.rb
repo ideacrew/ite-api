@@ -56,7 +56,7 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:suffix)
-      expect(result.errors.to_h[:suffix].first[:text]).to eq 'cannot contain more than 10 characters'
+      expect(result.errors.to_h[:suffix].first[:text]).to eq 'cannot contain more than 18 characters'
       expect(result.errors.to_h[:suffix].first[:category]).to eq 'Invalid Field Length'
     end
 

@@ -84,7 +84,7 @@ module Validators
         end
 
         rule(:suffix) do
-          key.failure(:length_more_than10) if key && value && (value.length > 18)
+          key.failure(:length_more_than18) if key && value && (value.length > 18)
         end
 
         rule(:ssn) do
