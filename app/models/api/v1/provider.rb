@@ -74,6 +74,7 @@ module Api
           provider_name:,
           status: submission_status(extract, reporting_period),
           file_name: extract.present? ? extract.file_name : 'N/A',
+          extract_id: extract.present? ? extract.id : 'N/A',
           submitted_on: extract.present? ? extract.created_at : 'N/A',
           total_records: records.present? ? records.count.to_s : 'N/A',
           pass: records.present? ? records.where(status: 'Pass').count.to_s : 'N/A',
