@@ -30,11 +30,7 @@ module RailsJwtAuth
     end
 
     def render_422(_errors)
-      user = User.all.detect { |u| u.email == params['email'] } if params['email']
-      error_text = user.present? ? 'Invalid credentials' : 'Invalid email'
-      render json: error_text, status: 422
-    rescue Mongoid::Errors::DocumentNotFound
-      render json: 'Invalid email', status: 422
+      render json: 'Invalid credentials', status: 422
     end
 
     # rubocop:enable Naming/VariableNumber
