@@ -50,15 +50,13 @@ module Api
       def submission_summary
         authorize Provider, :show?
         begin
-          if current_user.dbh_user?
-            providers =  Api::V1::Provider.all
+          providers = if current_user.dbh_user?
+                        Api::V1::Provider.all
+                      else
+                        Api::V1::Provider.where(id: current_user.provider_id)
+                      end
 
-            render json: providers&.map { |provider| provider.providers_summary_for_period(reporting_period_for(permit_params)) }
-          else
-            provider = Api::V1::Provider.find(current_user.provider_id)
-
-            render json: provider.submission_summary_for_period(reporting_period_for(permit_params))
-          end
+          render json: providers&.map { |provider| provider.provider_summary_for_period(reporting_period_for(permit_params)) }
         rescue StandardError => e
           render json: { status_text: 'Could not get the submission status', status: 400, failure: e.message }
         end
