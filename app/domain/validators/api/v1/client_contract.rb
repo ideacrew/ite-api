@@ -121,7 +121,7 @@ module Validators
           if key && value
             pattern = Regexp.new('^[0-9]{5}(?:-[0-9]{4})?$')
             key.failure(:length) unless [5, 10].include?(value.length)
-            key.failure(:start_with00) if value.start_with?('0')
+            key.failure(:start_with00) if value.start_with?('00')
             key.failure(:invalid_zip) unless pattern.match(value)
           end
         end
