@@ -54,12 +54,16 @@ module Api
         'Current'
       end
 
-      def list_view(reporting_period)
+      def provider_summary_for_period(reporting_period)
         extract = reporting_period_extracts(reporting_period).last
         records = extract&.records
         {
           provider_name:,
+          mh:,
+          sud:,
           status: submission_status(extract, reporting_period),
+          file_name: extract.present? ? extract.file_name : 'N/A',
+          extract_id: extract.present? ? extract.id : 'N/A',
           submitted_on: extract.present? ? extract.created_at : 'N/A',
           total_records: records.present? ? records.count.to_s : 'N/A',
           pass: records.present? ? records.where(status: 'Pass').count.to_s : 'N/A',
