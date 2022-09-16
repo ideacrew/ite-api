@@ -274,33 +274,6 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       expect(result.errors.to_h[:address_line1].first[:category]).to eq 'Invalid Field Length'
     end
 
-    it 'address line 1 contains special characters other than \' \' \' or -' do
-      valid_params[:address_line1] = 'testinghs!'
-      result = subject.call(valid_params)
-      expect(result.failure?).to be_truthy
-      expect(result.errors.to_h).to have_key(:address_line1)
-      expect(result.errors.to_h[:address_line1].first[:text]).to eq 'can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
-      expect(result.errors.to_h[:address_line1].first[:category]).to eq 'Wrong Format'
-    end
-
-    it 'address_line1 contains 2 spaces in a row' do
-      valid_params[:address_line1] = 'testinghs  dkfjhjfdhg'
-      result = subject.call(valid_params)
-      expect(result.failure?).to be_truthy
-      expect(result.errors.to_h).to have_key(:address_line1)
-      expect(result.errors.to_h[:address_line1].first[:text]).to eq 'can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
-      expect(result.errors.to_h[:address_line1].first[:category]).to eq 'Wrong Format'
-    end
-
-    it 'address_line1 starts with a space' do
-      valid_params[:address_line1] = ' testinghs dkfjhjfdhg'
-      result = subject.call(valid_params)
-      expect(result.failure?).to be_truthy
-      expect(result.errors.to_h).to have_key(:address_line1)
-      expect(result.errors.to_h[:address_line1].first[:text]).to eq 'can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
-      expect(result.errors.to_h[:address_line1].first[:category]).to eq 'Wrong Format'
-    end
-
     it 'address line 2 has more than 50 characters' do
       valid_params[:address_line2] = 'testinghsbdkabcakdsbdsidnakbciaksbdtestinghsbdkabcakdsbdsidnakbciaksbd'
       result = subject.call(valid_params)
@@ -308,15 +281,6 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       expect(result.errors.to_h).to have_key(:address_line2)
       expect(result.errors.to_h[:address_line2].first[:text]).to eq 'cannot contain more than 50 characters'
       expect(result.errors.to_h[:address_line2].first[:category]).to eq 'Invalid Field Length'
-    end
-
-    it 'address line 2 contains special characters other than \' \' \' or -' do
-      valid_params[:address_line2] = 'testinghs!'
-      result = subject.call(valid_params)
-      expect(result.failure?).to be_truthy
-      expect(result.errors.to_h).to have_key(:address_line2)
-      expect(result.errors.to_h[:address_line2].first[:text]).to eq 'can only contain a hyphen (-), Apostrophe (‘), or a single space between characters'
-      expect(result.errors.to_h[:address_line2].first[:category]).to eq 'Wrong Format'
     end
 
     it 'phone1 contains non numeric characters' do
