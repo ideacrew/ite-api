@@ -178,6 +178,9 @@ en:
       legal_status96:
         text: 'cannot be 96 (indicating not applicable) if treatment_type is 72'
         category: 'Data Inconsistency'
+      not_2_characters:
+        text: 'must be 2 characters long'
+        category: 'Invalid Field Length'
 
       rules:
         address_zip_code:

@@ -52,6 +52,7 @@ module Validators
 
         rule(:address_state) do
           key.failure(:not_a_state) if key && value && !Types::UsStateAbbreviationKind.include?(value)
+          key.failure(:not_2_characters) if key && value && value.length != 2
         end
 
         rule(:address_city) do

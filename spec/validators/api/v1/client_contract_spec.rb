@@ -374,12 +374,21 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
     end
 
     it 'Passing address_state with invalid value' do
-      valid_params[:address_state] = 'invalid!'
+      valid_params[:address_state] = 'n!'
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:address_state)
       expect(result.errors.to_h[:address_state].first[:text]).to eq 'must be a valid 2 letter state abbreviation'
       expect(result.errors.to_h[:address_state].first[:category]).to eq 'Invalid Value'
+    end
+
+    it 'Passing address_state with invalid value' do
+      valid_params[:address_state] = 'MAINE'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:address_state)
+      expect(result.errors.to_h[:address_state].last[:text]).to eq 'must be 2 characters long'
+      expect(result.errors.to_h[:address_state].last[:category]).to eq 'Invalid Field Length'
     end
 
     it 'without address_city' do
