@@ -32,7 +32,7 @@ module Validators
           optional(:address_line2).maybe(:string)
           optional(:phone1).maybe(:string)
           optional(:phone2).maybe(:string)
-          optional(:address_zip_code).maybe(:string)
+          optional(:address_zipcode).maybe(:string)
           optional(:address_state).maybe(:string)
           optional(:address_city).maybe(:string)
           optional(:address_ward).maybe(:string)
@@ -117,9 +117,9 @@ module Validators
           end
         end
 
-        rule(:address_zip_code) do
+        rule(:address_zipcode) do
           if key && value
-            pattern = Regexp.new('^\d{5}(-\d{4})?$')
+            pattern = Regexp.new('^[0-9]{5}(?:-[0-9]{4})?$')
             key.failure(:length) unless [5, 10].include?(value.length)
             key.failure(:start_with00) if value.start_with?('0')
             key.failure(:invalid_zip) unless pattern.match(value)

@@ -337,31 +337,31 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       expect(result.errors.to_h[:phone2].first[:category]).to eq 'Invalid Value'
     end
 
-    it 'address_zip_code is not 5 or 10' do
-      valid_params[:address_zip_code] = '123456'
+    it 'address_zipcode is not 5 or 10' do
+      valid_params[:address_zipcode] = '123456'
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
-      expect(result.errors.to_h).to have_key(:address_zip_code)
-      expect(result.errors.to_h[:address_zip_code].first[:text]).to eq 'must contain 5 or 10 characters'
-      expect(result.errors.to_h[:address_zip_code].first[:category]).to eq 'Invalid Field Length'
+      expect(result.errors.to_h).to have_key(:address_zipcode)
+      expect(result.errors.to_h[:address_zipcode].first[:text]).to eq 'must contain 5 or 10 characters'
+      expect(result.errors.to_h[:address_zipcode].first[:category]).to eq 'Invalid Field Length'
     end
 
-    it 'address_zip_code starts with 00' do
-      valid_params[:address_zip_code] = '00345'
+    it 'address_zipcode starts with 00' do
+      valid_params[:address_zipcode] = '00345'
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
-      expect(result.errors.to_h).to have_key(:address_zip_code)
-      expect(result.errors.to_h[:address_zip_code].first[:text]).to eq 'cannot start with 00'
-      expect(result.errors.to_h[:address_zip_code].first[:category]).to eq 'Invalid Value'
+      expect(result.errors.to_h).to have_key(:address_zipcode)
+      expect(result.errors.to_h[:address_zipcode].first[:text]).to eq 'cannot start with 00'
+      expect(result.errors.to_h[:address_zipcode].first[:category]).to eq 'Invalid Value'
     end
 
-    it 'address_zip_code doesnt match zip patter' do
-      valid_params[:address_zip_code] = '1034512345'
+    it 'address_zipcode doesnt match zip patter' do
+      valid_params[:address_zipcode] = '1034512345'
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
-      expect(result.errors.to_h).to have_key(:address_zip_code)
-      expect(result.errors.to_h[:address_zip_code].first[:text]).to eq 'must be either 5 or 10 numeric characters, including a hyphen (-) and a leading zero (e.g., 20002 or 01701-3320)'
-      expect(result.errors.to_h[:address_zip_code].first[:category]).to eq 'Invalid Value'
+      expect(result.errors.to_h).to have_key(:address_zipcode)
+      expect(result.errors.to_h[:address_zipcode].first[:text]).to eq 'must be either 5 or 10 numeric characters, including a hyphen (-) and a leading zero (e.g., 20002 or 01701-3320)'
+      expect(result.errors.to_h[:address_zipcode].first[:category]).to eq 'Invalid Value'
     end
 
     it 'without address_state' do

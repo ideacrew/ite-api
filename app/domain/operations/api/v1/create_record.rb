@@ -47,7 +47,7 @@ module Operations
         end
 
         def structure_errors(result)
-          warnings = %i[address_ward address_zip_code phone1 phone2 veteran_status not_in_labor income_source pregnant medicaid_id suffix sexual_orientation first_name_alt
+          warnings = %i[address_ward address_zipcode phone1 phone2 veteran_status not_in_labor income_source pregnant medicaid_id suffix sexual_orientation first_name_alt
                         last_name_alt self_help_group_admission middle_name suffix admission_id service_request_date criminal_justice_referral
                         health_insurance address_line2 address_line1 co_occurring_sud_mh non_bh_dx1 non_bh_dx2 non_bh_dx3 sud_dx2 sud_dx3 mh_dx2 mh_dx3]
           critical_error_fields = %i[gaf_score_admission smi_sed address_city address_state school_attendance marital_status employment education

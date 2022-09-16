@@ -183,7 +183,7 @@ en:
         category: 'Invalid Field Length'
 
       rules:
-        address_zip_code:
+        address_zipcode:
           length:
             text: 'must contain 5 or 10 characters'
             category: 'Invalid Field Length'
