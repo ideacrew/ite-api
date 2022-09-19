@@ -58,6 +58,7 @@ module Api
         extract = reporting_period_extracts(reporting_period).last
         records = extract&.records
         {
+          provider_id: id.to_s,
           provider_name:,
           mh:,
           sud:,
