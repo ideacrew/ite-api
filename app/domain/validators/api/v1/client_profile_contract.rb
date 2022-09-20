@@ -43,6 +43,14 @@ module Validators
             key.failure(text: "must be one of #{types.values.join(', ')}", category: 'Invalid Value') if key && value && !types.include?(value)
           end
         end
+
+        rule(:not_in_labor, :employment) do
+          if values[:employment]
+            key.failure(:not_in_labor1) if (values[:not_in_labor] && values[:not_in_labor] != '96') && values[:employment] == '1'
+            key.failure(:not_in_labor_not96) if (values[:not_in_labor] && values[:not_in_labor] != '96') && values[:employment] != '4'
+            key.failure(:not_in_labor96) if (values[:not_in_labor] && values[:not_in_labor] == '96') && values[:employment] == '4'
+          end
+        end
       end
     end
   end

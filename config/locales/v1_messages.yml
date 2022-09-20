@@ -181,6 +181,15 @@ en:
       not_2_characters:
         text: 'must be 2 characters long'
         category: 'Invalid Field Length'
+      not_in_labor96:
+        text: 'cannot be 96 if employment is 4'
+        category: 'Data Inconsistency'
+      not_in_labor_not96:
+        text: 'must be Null or 96 (Not applicable) if the value of Employment is other than 4'
+        category: 'Data Inconsistency'
+      not_in_labor1:
+        text: 'must be Null or 96 (Not applicable) if the value of Employment is 1 (full time)'
+        category: 'Data Inconsistency'
 
       rules:
         address_zipcode:

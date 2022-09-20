@@ -33,7 +33,7 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :around_each do
       'last_name' => 'Bluth',
       'race' => '1',
       'veteran_status' => '1',
-      'not_in_labor' => '1',
+      'not_in_labor' => '96',
       'pregnant' => '2',
       'school_attendance' => '2',
       'arrests_past_30days_admission' => '1',

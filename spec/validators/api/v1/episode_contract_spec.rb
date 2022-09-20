@@ -62,7 +62,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
       veteran_status: '1',
       education: '1',
       employment: '1',
-      not_in_labor: '1',
+      not_in_labor: '96',
       income_source: '1',
       school_attendance: '1',
       legal_status: '1',

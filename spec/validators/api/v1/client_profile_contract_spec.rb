@@ -10,7 +10,6 @@ RSpec.describe ::Validators::Api::V1::ClientProfileContract, dbclean: :around_ea
       veteran_status: '1',
       education: '1',
       employment: '1',
-      not_in_labor: '1',
       income_source: '1',
       pregnant: '1',
       school_attendance: '1',
@@ -203,6 +202,36 @@ RSpec.describe ::Validators::Api::V1::ClientProfileContract, dbclean: :around_ea
       expect(result.errors.to_h).to have_key(:arrests_past_30days_admission)
       expect(result.errors.to_h[:arrests_past_30days_admission].first[:text]).to eq 'Must be filled'
       expect(result.errors.to_h[:arrests_past_30days_admission].first[:category]).to eq 'Missing Value'
+    end
+
+    it 'with employment of 1 and not_in_labor not 96' do
+      valid_params[:not_in_labor] = '97'
+      valid_params[:employment] = '1'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:not_in_labor)
+      expect(result.errors.to_h[:not_in_labor].first[:text]).to eq 'must be Null or 96 (Not applicable) if the value of Employment is 1 (full time)'
+      expect(result.errors.to_h[:not_in_labor].first[:category]).to eq 'Data Inconsistency'
+    end
+
+    it 'with employment of not 4 or 1 and not_in_labor not 96' do
+      valid_params[:not_in_labor] = '97'
+      valid_params[:employment] = '2'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:not_in_labor)
+      expect(result.errors.to_h[:not_in_labor].first[:text]).to eq 'must be Null or 96 (Not applicable) if the value of Employment is other than 4'
+      expect(result.errors.to_h[:not_in_labor].first[:category]).to eq 'Data Inconsistency'
+    end
+
+    it 'with employment of 4 and not_in_labor of 96' do
+      valid_params[:not_in_labor] = '96'
+      valid_params[:employment] = '4'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:not_in_labor)
+      expect(result.errors.to_h[:not_in_labor].first[:text]).to eq 'cannot be 96 if employment is 4'
+      expect(result.errors.to_h[:not_in_labor].first[:category]).to eq 'Data Inconsistency'
     end
   end
 
