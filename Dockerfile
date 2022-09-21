@@ -86,4 +86,4 @@ COPY --chown=nonroot:nonroot . $HOME
 USER nonroot
 
 EXPOSE 8080
-ENTRYPOINT ["bundle", "exec", "rails", "s", "-u", "thin", "-b", "0.0.0.0", "-p", "8080"]
+ENTRYPOINT ["bundle", "exec", "rails", "s", "-b", "0.0.0.0", "-p", "8080"]
