@@ -85,4 +85,5 @@ COPY --chown=nonroot:nonroot . $HOME
 
 USER nonroot
 
-CMD bundle exec rails s
+EXPOSE 8080
+ENTRYPOINT ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "8080"]
