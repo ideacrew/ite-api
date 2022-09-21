@@ -34,6 +34,7 @@ ENV HOME=/dbh
 ENV PATH=$HOME/bin:$BUNDLE_BIN:$GEM_HOME/gems/bin:$PATH
 
 RUN gem update --system
+RUN gem uninstall bundler
 RUN gem install bundler -v 2.2.14
 
 RUN groupadd --gid 1001 nonroot \
