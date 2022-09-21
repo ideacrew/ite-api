@@ -46,7 +46,7 @@ module Validators
 
         rule(:not_in_labor, :employment) do
           if values[:employment]
-            key.failure(:not_in_labor1) if (values[:not_in_labor] && values[:not_in_labor] != '96') && values[:employment] == '1'
+            # key.failure(:not_in_labor1) if (values[:not_in_labor] && values[:not_in_labor] != '96') && values[:employment] == '1'
             key.failure(:not_in_labor_not96) if (values[:not_in_labor] && values[:not_in_labor] != '96') && values[:employment] != '4'
             key.failure(:not_in_labor96) if (values[:not_in_labor] && values[:not_in_labor] == '96') && values[:employment] == '4'
           end
