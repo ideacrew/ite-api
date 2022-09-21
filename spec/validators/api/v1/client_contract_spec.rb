@@ -101,7 +101,7 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:ssn)
-      expect(result.errors.to_h[:ssn].first[:text]).to eq 'Cannot end with 9, 666 or 000'
+      expect(result.errors.to_h[:ssn].first[:text]).to eq 'Cannot start with 9, 666 or 000'
       expect(result.errors.to_h[:ssn].first[:category]).to eq 'Invalid Value'
     end
 
@@ -119,7 +119,7 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:ssn)
-      expect(result.errors.to_h[:ssn].first[:text]).to eq 'Cannot end with 9, 666 or 000'
+      expect(result.errors.to_h[:ssn].first[:text]).to eq 'Cannot start with 9, 666 or 000'
       expect(result.errors.to_h[:ssn].first[:category]).to eq 'Invalid Value'
     end
 
@@ -128,7 +128,7 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:ssn)
-      expect(result.errors.to_h[:ssn].first[:text]).to eq 'Cannot end with 9, 666 or 000'
+      expect(result.errors.to_h[:ssn].first[:text]).to eq 'Cannot start with 9, 666 or 000'
       expect(result.errors.to_h[:ssn].first[:category]).to eq 'Invalid Value'
     end
 

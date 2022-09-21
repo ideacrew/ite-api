@@ -223,7 +223,7 @@ en:
             text: "Cannot end with 0000"
             category: "Invalid Value"
           cannot_start_with:
-            text: "Cannot end with 9, 666 or 000"
+            text: "Cannot start with 9, 666 or 000"
             category: "Invalid Value"
           middle_zeros:
             text: "the 5th and 6th numbers from the right cannot be 00"
