@@ -58,7 +58,7 @@ module Api
 
           render json: providers&.map { |provider| provider.provider_summary_for_period(reporting_period_for(permit_params)) }
         rescue StandardError => e
-          render json: { status_text: 'Could not get the submission status', status: 400, failure: e.message }
+          render json: { status_text: 'Could not get the submission status', status: 400, failure: e.message }, status: 400
         end
       end
 
@@ -66,9 +66,9 @@ module Api
 
       def reporting_period_for(params)
         if params['year'] && params['month']
-          Date.new(params['year'].to_i, params['month'].to_i)
+          Date.new(params['year'].to_i, params['month'].to_i)&.beginning_of_month
         else
-          Date.today.beginning_of_month
+          1.month.ago.beginning_of_month
         end
       end
 

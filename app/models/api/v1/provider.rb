@@ -39,8 +39,8 @@ module Api
       index({ provider_gateway_identifier: 1 }, { sparse: true })
 
       def submission_status(extract, reporting_period)
-        today = Date.today
-        is_current_month = (today.end_of_month == reporting_period.end_of_month)
+        today = Date.today - 1.month
+        is_current_month = (today.end_of_month.to_date == reporting_period.end_of_month.to_date)
 
         unless extract
           return 'Past Due' unless is_current_month

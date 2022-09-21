@@ -132,9 +132,10 @@ RSpec.describe Api::V1::Provider, type: :model, dbclean: :around_each do
       expect(@provider.submission_status(nil, Date.today)).to eq 'Past Due'
     end
 
-    it 'will have a status of Overdue if no extracts' do
+    it 'will have a status of Expecting Submission if no extracts' do
+      year = (Date.today - 1.month).month > 0 ? Date.today.year : (Date.today.year - 1)
       allow(Date).to receive(:today).and_return(Date.new(Date.today.year, Date.today.month, 9))
-      expect(@provider.submission_status(nil, Date.today)).to eq 'Expecting Submission'
+      expect(@provider.submission_status(nil, Date.new(year, (Date.today - 1.month).month, 9))).to eq 'Expecting Submission'
     end
 
     it 'will have a status of Need Resubmission if no valid extracts in the given period' do
