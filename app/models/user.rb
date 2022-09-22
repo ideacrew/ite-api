@@ -27,6 +27,33 @@ class User
     end
   end
 
+  # rubocop:disable Metrics/PerceivedComplexity
+  def update_password(params)
+    current_password_error = if (current_password = params.delete(:current_password)).blank?
+                               'blank'
+                             elsif !authenticate(current_password)
+                               'invalid'
+                             end
+
+    # if recoberable module is enabled ensure clean recovery to allow save
+    self.reset_password_token = self.reset_password_sent_at = nil if respond_to? :reset_password_token
+
+    # close all sessions or other sessions when pass current_auth_token
+    current_auth_token = params.delete :current_auth_token
+    self.auth_tokens = current_auth_token ? [current_auth_token] : []
+
+    assign_attributes(params)
+    valid? # validates first other fields
+    errors.add(:current_password, current_password_error) if current_password_error
+    errors.add(:password, 'blank') if params[:password].blank?
+
+    return false unless errors.empty?
+    return false unless save
+
+    true
+  end
+  # rubocop:enable Metrics/PerceivedComplexity
+
   def dbh_user?
     return false unless dbh_staff_role
 
