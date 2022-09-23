@@ -1,58 +1,8 @@
 production:
-  # Configure available database clients. (required)
   clients:
-    # Define the default client. (required)
     default:
-      # A uri may be defined for a client:
-      # uri: 'mongodb://user:password@myhost1.mydomain.com:27017/my_db'
-      # Please see driver documentation for details. Alternatively, you can define the following:
-      #
-      # Define the name of the default database that Mongoid can connect to.
-      # (required).
-      database: ite_api_production
-      # Provide the hosts the default client can connect to. Must be an array
-      # of host:port pairs. (required)
-      hosts:
-        - <%= ENV['MONGODB_HOST'] %>
-      options:
-        # The name of the user for authentication.
-        user: <%= ENV['MONGODB_USER'] %>
+      uri: <%= ENV['MONGODB_URI'] %>
 
-        # The password of the user for authentication.
-        password: <%= ENV['MONGODB_PW'] %>
-
-        # The user's database roles.
-        roles:
-          - 'readWrite'
-
-        # Change the default authentication mechanism. Valid options are: :scram,
-        # :mongodb_cr, :mongodb_x509, and :plain. (default on 3.0 is :scram, default
-        # on 2.4 and 2.6 is :plain)
-        # auth_mech: :scram
-
-        # The database or source to authenticate the user against. (default: admin)
-        # auth_source: test
-
-        # Force the driver to connect in a specific way instead of auto-
-        # discovering. Can be one of: :direct, :replica_set, :sharded. Set to :direct
-        # when connecting to hidden members of a replica set.
-        # connect: :replica_set
-
-        # The name of the replica set to connect to. Servers provided as seeds that do
-        # not belong to this replica set will be ignored.
-        # replica_set: 'RS-example-0'
-
-        # Whether to connect to the servers via ssl. (default: false)
-        ssl: false
-
-        # Whether or not to do peer certification validation. (default: true)
-        ssl_verify: false
-
-        # The file containing a set of concatenated certification authority certifications
-        # used to validate certs passed from the other end of the connection.
-        # ssl_ca_cert: './rds-combined-ca-bundle.pem'
-
-        log_level: :debug
 
 development:
   # Configure available database clients. (required)
@@ -199,7 +149,7 @@ development:
 
     # Set the Mongoid and Ruby driver log levels when Mongoid is not using
     # Ruby on Rails logger instance. (default: :info)
-    log_level: :debug
+    # log_level: :info
     
     # Preload all models in development, needed when models use
     # inheritance. (default: false)
