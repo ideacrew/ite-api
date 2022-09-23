@@ -2,6 +2,7 @@ production:
   clients:
     default:
       uri: <%= ENV['MONGODB_URI'] %>
+      database: ite_api_production
 
 
 development:
