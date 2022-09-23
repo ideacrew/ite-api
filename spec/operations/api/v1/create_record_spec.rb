@@ -136,8 +136,8 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :around_each do
       it 'should add an admission_id id failure' do
         params[:payload][:admission_id] = '1234'
         record = described_class.new.call(params).value!
-        expect(record.fatal_errors.map(&:keys).flatten).to include(:admission_id)
-        expect(record.fatal_errors.first[:admission_id][:text]).to eq 'must be a unique identifier for admission episodes'
+        expect(record.warnings.map(&:keys).flatten).to include(:admission_id)
+        expect(record.warnings.first[:admission_id][:text]).to eq 'must be a unique identifier for admission episodes'
       end
     end
 
