@@ -52,6 +52,8 @@ production:
         # used to validate certs passed from the other end of the connection.
         ssl_ca_cert: './rds-combined-ca-bundle.pem'
 
+        log_level: :debug
+
 development:
   # Configure available database clients. (required)
   clients:
