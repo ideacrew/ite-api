@@ -36,21 +36,21 @@ production:
         # Force the driver to connect in a specific way instead of auto-
         # discovering. Can be one of: :direct, :replica_set, :sharded. Set to :direct
         # when connecting to hidden members of a replica set.
-        connect: :replica_set
+        # connect: :replica_set
 
         # The name of the replica set to connect to. Servers provided as seeds that do
         # not belong to this replica set will be ignored.
-        replica_set: 'RS-example-0'
+        # replica_set: 'RS-example-0'
 
         # Whether to connect to the servers via ssl. (default: false)
-        ssl: true
+        ssl: false
 
         # Whether or not to do peer certification validation. (default: true)
         ssl_verify: false
 
         # The file containing a set of concatenated certification authority certifications
         # used to validate certs passed from the other end of the connection.
-        ssl_ca_cert: './rds-combined-ca-bundle.pem'
+        # ssl_ca_cert: './rds-combined-ca-bundle.pem'
 
         log_level: :debug
 
