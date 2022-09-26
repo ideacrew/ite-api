@@ -65,8 +65,8 @@ module Operations
         end
 
         def dup_admission_ids(params)
-          admission_ids = params[:records].map.map { |r| r[:admission_id] }
-          admission_ids.select { |e| admission_ids.count(e) > 1 }.uniq
+          admission_ids = params[:records].map { |r| r[:admission_id] }
+          admission_ids.select { |e| admission_ids.count(e) > 1 }.uniq.compact_blank
         end
       end
       # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity

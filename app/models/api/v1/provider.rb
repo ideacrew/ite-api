@@ -55,7 +55,7 @@ module Api
       end
 
       def provider_summary_for_period(reporting_period)
-        extract = reporting_period_extracts(reporting_period).last
+        extract = reporting_period_extracts(reporting_period).first
         records = extract&.records
         {
           provider_id: id.to_s,
