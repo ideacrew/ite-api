@@ -52,15 +52,29 @@ module Validators
           key.failure(:co_occurring_sud_mh_mismatch) if key && value && values[:co_occurring_sud_mh] != '1' && %w[M X].include?(values[:record_type]) && values[:sud_dx1] != '999.9996'
         end
 
-        %i[sud_dx1 mh_dx1 sud_dx2 sud_dx3 mh_dx2 mh_dx3].each do |field|
+        %i[sud_dx1 sud_dx2 sud_dx3].each do |field|
           rule(field) do
             if key && value
               key.failure(:length_eq3_or8) unless value.length == 3 || value.length == 8
               unless value == '999.9996'
                 pattern1 = Regexp.new('^[fF][1][0-9]{1}$').freeze
-                pattern2 = Regexp.new('^[fF][1][0-9]{1}\.[a-zA-Z0-9]{4}$').freeze
-                key.failure(:format_with3_or8) if value.length == 3 && !pattern1.match(value)
-                key.failure(:format_with3_or8) if value.length == 8 && !pattern2.match(value)
+                pattern2 = Regexp.new('^[fF][1][0-9]{1}\.*[a-zA-Z0-9]{4,5}$').freeze
+                key.failure(:sud_format_with3_or8) if value.length == 3 && !pattern1.match(value)
+                key.failure(:sud_format_with3_or8) if value.length == 8 && !pattern2.match(value)
+              end
+            end
+          end
+        end
+
+        %i[mh_dx1 mh_dx2 mh_dx3].each do |field|
+          rule(field) do
+            if key && value
+              key.failure(:length_eq3_or8) unless value.length == 3 || value.length == 8
+              unless value == '999.9996'
+                pattern1 = Regexp.new('^[fF][^1][0-9]{1}$').freeze
+                pattern2 = Regexp.new('^[fF][^1][0-9]{1}\.*[a-zA-Z0-9]{4,5}$').freeze
+                key.failure(:mh_format_with3_or8) if value.length == 3 && !pattern1.match(value)
+                key.failure(:mh_format_with3_or8) if value.length == 8 && !pattern2.match(value)
               end
             end
           end
@@ -106,7 +120,7 @@ module Validators
               key.failure(:length_eq3_or8) unless value.length == 3 || value.length == 8
               unless value == '999.9996'
                 pattern1 = Regexp.new('^[^fF][0-9]{2}$').freeze
-                pattern2 = Regexp.new('^[^fF][0-9]{2}\.[a-zA-Z0-9]{4}$').freeze
+                pattern2 = Regexp.new('^[^fF][0-9]{2}\.*[a-zA-Z0-9]{4,5}$').freeze
                 key.failure(:bh_format_with3_or8) if value.length == 3 && !pattern1.match(value)
                 key.failure(:bh_format_with3_or8) if value.length == 8 && !pattern2.match(value)
               end

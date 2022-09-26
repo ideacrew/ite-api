@@ -10,7 +10,7 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
       gaf_score_admission: '1',
       gaf_score_discharge: '1',
       sud_dx1: 'F14.8393',
-      mh_dx1: 'F14.8393',
+      mh_dx1: 'F24.8393',
       collateral: '1'
     }
   end
@@ -255,7 +255,7 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
 
     context 'mh_dx2' do
       before do
-        valid_params[:mh_dx2] = 'F14.8393'
+        valid_params[:mh_dx2] = 'F24.8393'
       end
 
       it 'without mh_dx1' do
@@ -299,7 +299,7 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
 
     context 'mh_dx3' do
       before do
-        valid_params[:mh_dx3] = 'F14.8393'
+        valid_params[:mh_dx3] = 'F24.8393'
       end
 
       it 'without mh_dx3' do
@@ -348,7 +348,7 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
         result = subject.call(valid_params)
         expect(result.failure?).to be_truthy
         expect(result.errors.to_h).to have_key(:non_bh_dx1)
-        expect(result.errors.to_h[:non_bh_dx1].first[:text]).to eq "should not start with F, with length 3 or 8 with character '.' after 3 digits"
+        expect(result.errors.to_h[:non_bh_dx1].first[:text]).to eq "should not start with F, with length 3 or 8 with or without character '.' after 3 digits"
         expect(result.errors.to_h[:non_bh_dx1].first[:category]).to eq 'Invalid Value'
       end
 
@@ -357,7 +357,7 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
         result = subject.call(valid_params)
         expect(result.failure?).to be_truthy
         expect(result.errors.to_h).to have_key(:non_bh_dx2)
-        expect(result.errors.to_h[:non_bh_dx2].first[:text]).to eq "should not start with F, with length 3 or 8 with character '.' after 3 digits"
+        expect(result.errors.to_h[:non_bh_dx2].first[:text]).to eq "should not start with F, with length 3 or 8 with or without character '.' after 3 digits"
         expect(result.errors.to_h[:non_bh_dx2].first[:category]).to eq 'Invalid Value'
       end
 
@@ -366,7 +366,7 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
         result = subject.call(valid_params)
         expect(result.failure?).to be_truthy
         expect(result.errors.to_h).to have_key(:non_bh_dx3)
-        expect(result.errors.to_h[:non_bh_dx3].first[:text]).to eq "should not start with F, with length 3 or 8 with character '.' after 3 digits"
+        expect(result.errors.to_h[:non_bh_dx3].first[:text]).to eq "should not start with F, with length 3 or 8 with or without character '.' after 3 digits"
         expect(result.errors.to_h[:non_bh_dx3].first[:category]).to eq 'Invalid Value'
       end
     end

@@ -46,7 +46,7 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :around_each do
       'primary_language' => '1',
       'sud_dx1' => 'F14.8393',
       'sud_dx2' => 'F14.8393',
-      'mh_dx1' => 'F14.8393' }
+      'mh_dx1' => 'F24.8393' }
   end
 
   let(:dups) { [1234] }
