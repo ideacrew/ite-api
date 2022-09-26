@@ -77,7 +77,7 @@ module Operations
           return Success(errors) unless duplicate
 
           failure = { admission_id: { text: 'must be a unique identifier for admission episodes', category: 'Data Inconsistency' } }
-          errors[:fatal_error_fields] << failure
+          errors[:warnings] << failure
           Success(errors)
         end
       end

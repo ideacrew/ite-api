@@ -6,7 +6,11 @@ module RailsJwtAuth
     # rubocop:disable Naming/VariableNumber
     def render_session(jwt, user)
       auth_field = RailsJwtAuth.auth_field_name
-      render json: { session: { jwt:, auth_field => user[auth_field] } }, status: 201
+      if params['formLocation'] == 'ITE Portal' && !user.dbh_user?
+        render json: 'Invalid credentials', status: 422
+      else
+        render json: { session: { jwt:, auth_field => user[auth_field] } }, status: 201
+      end
     end
 
     def render_registration(resource)

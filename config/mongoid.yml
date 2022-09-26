@@ -8,6 +8,7 @@ production:
         user: <%= ENV['MONGODB_USER'] %>
         password: <%= ENV['MONGODB_PASSWORD'] %>
 
+
 development:
   # Configure available database clients. (required)
   clients:

@@ -75,17 +75,37 @@ jobs:
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
-  deploy-to-heroku:
+#   deploy-to-heroku:
+#     needs: [test]
+#     runs-on: ubuntu-latest
+#     environment: dev
+#     steps:
+#       - uses: actions/checkout@v3
+#       - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+#         with:
+#           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+#           heroku_app_name: "ite-api" #Must be unique in Heroku
+#           heroku_email: "kristin.merbach@ideacrew.com"
+#           usedocker: true
+#         env:
+#           HD_MONGODB_URI: ${{ secrets.MONGODB_URI }}
+
+  deploy-to-awsecs:
     needs: [test]
     runs-on: ubuntu-latest
     environment: dev
     steps:
       - uses: actions/checkout@v3
-      - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: "ite-api" #Must be unique in Heroku
-          heroku_email: "kristin.merbach@ideacrew.com"
-          usedocker: true
-        env:
-          HD_MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - name: Deploy Image on Fargate
+        run: |
+          aws ecs update-service --cluster "dbh-ite" --service "dbhite-dev-bff" --force-new-deployment
+      - name: Wait For Deployment To Complete
+        run: |
+          sleep 15
+          aws ecs wait services-stable --cluster "dbh-ite" --services "dbhite-dev-bff"

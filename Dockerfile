@@ -34,7 +34,6 @@ ENV HOME=/dbh
 ENV PATH=$HOME/bin:$BUNDLE_BIN:$GEM_HOME/gems/bin:$PATH
 
 RUN gem update --system
-RUN gem uninstall bundler
 RUN gem install bundler -v 2.2.14
 
 RUN groupadd --gid 1001 nonroot \
@@ -86,5 +85,7 @@ COPY --chown=nonroot:nonroot . $HOME
 
 USER nonroot
 
-EXPOSE 8080
-ENTRYPOINT bundle exec rails s -b 0.0.0.0 -p 8080
+ENV PORT=${PORT:-3000}
+EXPOSE 3000
+
+CMD bundle exec rails s -b 0.0.0.0 -p $PORT 
