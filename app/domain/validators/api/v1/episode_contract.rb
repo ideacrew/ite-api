@@ -62,10 +62,6 @@ module Validators
           key.failure(:after_extraction) if key && values[:extracted_on] && values[:admission_date] > Date.parse(values[:extracted_on].to_s)
         end
 
-        rule(:admission_date, :coverage_start) do
-          key.failure(:outside_coverage) if key && values[:coverage_start] && values[:admission_date] < Date.parse(values[:coverage_start].to_s)
-        end
-
         rule(:admission_date, :coverage_end) do
           key.failure(:outside_coverage) if key && values[:coverage_end] && values[:admission_date] > Date.parse(values[:coverage_end].to_s)
         end

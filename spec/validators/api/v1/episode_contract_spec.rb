@@ -226,9 +226,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
         all_params[:admission_date] = (Date.today - 10).to_s
         all_params[:coverage_start] = Date.today.to_s
         errors = subject.call(all_params).errors.to_h
-        expect(errors).to have_key(:admission_date)
-        expect(errors[:admission_date].first[:text]).to eq('must be within the coverage period of the dataset')
-        expect(errors[:admission_date].first[:category]).to eq('Data Inconsistency')
+        expect(errors).not_to have_key(:admission_date)
       end
       it 'is later than the coverage_end date' do
         all_params[:coverage_end] = (Date.today - 10).to_s
