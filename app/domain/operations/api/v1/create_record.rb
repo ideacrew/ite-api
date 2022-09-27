@@ -49,7 +49,7 @@ module Operations
         def structure_errors(result)
           warnings = %i[address_ward ssn address_zipcode phone1 phone2 veteran_status not_in_labor income_source pregnant medicaid_id suffix sexual_orientation first_name_alt
                         last_name_alt self_help_group_admission middle_name suffix admission_id service_request_date criminal_justice_referral
-                        health_insurance address_line2 address_line1 address_city address_state co_occurring_sud_mh non_bh_dx1 non_bh_dx2 
+                        health_insurance address_line2 address_line1 address_city address_state co_occurring_sud_mh non_bh_dx1 non_bh_dx2
                         non_bh_dx3 sud_dx2 sud_dx3 mh_dx2 mh_dx3 primary_payment_source]
           critical_error_fields = %i[gaf_score_admission smi_sed school_attendance marital_status employment education
                                      legal_status primary_language ethnicity race first_name last_name dob gender self_help_group_discharge
