@@ -100,7 +100,7 @@ module Validators
           rule(field, :record_type, :co_occurring_sud_mh) do
             if key && value
               key.failure(:mh_dx1_mismatch_collateral) if (value == '999.9996') && %w[M X].include?(values[:record_type])
-              key.failure(:mh_dx1_co_occuring_mismatch) if !schema_error?(field) && %w[A T].include?(values[:record_type]) && values[:co_occurring_sud_mh] != '1'
+              key.failure(:mh_dx1_co_occuring_mismatch) if value != '999.9996' && !schema_error?(field) && %w[A T].include?(values[:record_type]) && values[:co_occurring_sud_mh] != '1'
             end
           end
         end
@@ -109,7 +109,7 @@ module Validators
           rule(field, :record_type, :collateral, :co_occurring_sud_mh) do
             if key && value
               key.failure(:sud_dx1_mismatch_collateral) if (value == '999.9996') && %w[A T].include?(values[:record_type]) && values[:collateral] == '2'
-              key.failure(:sud_dx1_co_occuring_mismatch) if !schema_error?(field) && %w[M X].include?(values[:record_type]) && values[:co_occurring_sud_mh] != '1'
+              key.failure(:sud_dx1_co_occuring_mismatch) if value != '999.9996' && !schema_error?(field) && %w[M X].include?(values[:record_type]) && values[:co_occurring_sud_mh] != '1'
             end
           end
         end
