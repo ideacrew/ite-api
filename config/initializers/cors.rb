@@ -7,9 +7,26 @@
 
 # Read more: https://github.com/cyu/rack-cors
 
+domains = [
+  'dbh-ite.com',
+  'github.dev',
+  'githubpreview.dev'
+].join('|')
+
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
     origins '*'
+    resource '/api/v1/extracts/ingest', headers: :any, methods: %i[post]
+    resource '/session', headers: :any, methods: %i[post]
+  end
+
+  allow do
+    if Rails.env.development?
+      origins(%r{^(http?://)?localhost(:\d+)?/?$})
+    else
+      origins(%r{^https://(|[^.]+\.)(#{domains})/?$})
+    end
+
     resource '*',
              headers: :any,
              methods: %i[get post put patch delete options head]
