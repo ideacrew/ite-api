@@ -176,7 +176,7 @@ module Validators
 
         rule(:clinical_info) do
           if key && value
-            result = Validators::Api::V1::ClinicalInfoContract.new.call(value)
+            result = Validators::Api::V1::ClinicalInfoContract.new.call(value.merge(record_type: values[:record_type], collateral: values[:collateral]))
             result.errors.to_a.each do |error|
               key(error.path.last).failure(text: error.text, category: error.meta[:category])
             end
