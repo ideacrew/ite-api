@@ -8,8 +8,7 @@ RSpec.describe ::Validators::Api::V1::OfficeLocationContract, dbclean: :around_e
   let(:required_params) do
     {
       address:,
-      phones: [phone],
-      emails: [email]
+      phones: [phone]
     }
   end
 
