@@ -17,7 +17,7 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
     origins '*'
     resource '/api/v1/extracts/ingest', headers: :any, methods: %i[post]
-    resource '/session', headers: :any, methods: %i[post]
+    resource '/session', headers: :any, methods: %i[post delete]
   end
 
   allow do
