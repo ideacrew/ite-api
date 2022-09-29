@@ -11,7 +11,7 @@ module Validators
         params do
           required(:provider_name).filled(:string)
           optional(:provider_nick_name).maybe(:string)
-          required(:npi).filled(:string)
+          optional(:npi).maybe(:string)
           required(:is_active).filled(:bool)
           required(:mh).filled(:bool)
           required(:sud).filled(:bool)

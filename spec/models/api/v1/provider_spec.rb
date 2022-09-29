@@ -36,6 +36,12 @@ RSpec.describe Api::V1::Provider, type: :model, dbclean: :around_each do
         expect(@provider.class).to eq(described_class)
       end
 
+      it 'without a npi' do
+        provider_params[:npi] = nil
+        provider = described_class.new(provider_params)
+        expect(provider.save).to eq true
+      end
+
       it 'will create an provider with provider gateway id of length 3' do
         expect(@provider.provider_gateway_identifier).not_to eq nil
         expect(@provider.provider_gateway_identifier.length).to eq 3
@@ -47,12 +53,6 @@ RSpec.describe Api::V1::Provider, type: :model, dbclean: :around_each do
     context 'will not create an provider' do
       it 'without a provider name' do
         provider_params[:provider_name] = nil
-        provider = described_class.new(provider_params)
-        expect(provider.save).to eq false
-      end
-
-      it 'without a npi' do
-        provider_params[:npi] = nil
         provider = described_class.new(provider_params)
         expect(provider.save).to eq false
       end

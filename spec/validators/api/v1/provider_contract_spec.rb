@@ -8,7 +8,6 @@ RSpec.describe ::Validators::Api::V1::ProviderContract, dbclean: :around_each do
   let(:required_params) do
     {
       provider_name: 'Acme Studio',
-      npi: '0102030405',
       is_active: true,
       mh: true,
       sud: false,

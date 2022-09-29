@@ -7,7 +7,7 @@ module Entities
       class Provider < Dry::Struct
         attribute :provider_name, Types::String.meta(omittable: false)
         attribute :provider_nick_name, Types::String.meta(omittable: true)
-        attribute :npi, Types::String.meta(omittable: false)
+        attribute :npi, Types::String.optional.meta(omittable: true)
         attribute :is_active, Types::Bool.meta(omittable: false)
         attribute :mh, Types::Bool.optional.meta(omittable: true)
         attribute :sud, Types::Bool.meta(omittable: false)

@@ -25,7 +25,7 @@ module Api
       validates :npi,
                 numericality: true,
                 length: { minimum: 10, maximum: 10, message: '%<value>s is not a valid npi' },
-                allow_blank: false
+                allow_blank: true
 
       validates_presence_of :provider_name, :is_active, :mh, :sud, :adult_care,
                             :child_care, :office_locations
