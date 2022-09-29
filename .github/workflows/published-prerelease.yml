@@ -13,7 +13,7 @@ jobs:
   deploy-to-awsecs:
     needs: [test]
     runs-on: ubuntu-latest
-    environment: dev
+    environment: uat
     steps:
       - uses: actions/checkout@v3
       - name: Configure AWS credentials
