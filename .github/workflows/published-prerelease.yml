@@ -1,9 +1,9 @@
-name: Publish Release (to PROD)
+name: Publish PRE-Release (to UAT)
 
 on:
   release:
     types:
-      - published
+      - prereleased
 
 concurrency:
   group: release-${{ github.ref }}
@@ -24,8 +24,8 @@ jobs:
           aws-region: us-east-1
       - name: Deploy Image on Fargate
         run: |
-          aws ecs update-service --cluster "dbh-ite" --service "dbhite-prod-bff" --force-new-deployment
+          aws ecs update-service --cluster "dbh-ite" --service "dbhite-uat-bff" --force-new-deployment
       - name: Wait For Deployment To Complete
         run: |
           sleep 15
-          aws ecs wait services-stable --cluster "dbh-ite" --services "dbhite-prod-bff"
+          aws ecs wait services-stable --cluster "dbh-ite" --services "dbhite-uat-bff"
