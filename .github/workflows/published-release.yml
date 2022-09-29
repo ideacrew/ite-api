@@ -6,7 +6,7 @@ on:
       - released
 
 concurrency:
-  group: release-${{ github.ref }}
+  group: prod-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:

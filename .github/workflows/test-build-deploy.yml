@@ -1,7 +1,7 @@
 name: Test, Build, Deploy (to DEV)
 
 concurrency:
-  group: deploy-${{ github.ref }}
+  group: dev-${{ github.ref }}
   cancel-in-progress: true
 
 on:

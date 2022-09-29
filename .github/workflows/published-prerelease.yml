@@ -6,7 +6,7 @@ on:
       - prereleased
 
 concurrency:
-  group: release-${{ github.ref }}
+  group: uat-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
