@@ -14,7 +14,7 @@ module Validators
           optional(:is_primary).maybe(:bool)
           required(:address).hash(Validators::Api::V1::AddressContract.params)
           required(:phones).array(Validators::Api::V1::PhoneContract.params)
-          required(:emails).array(Validators::Api::V1::EmailContract.params)
+          optional(:emails).array(Validators::Api::V1::EmailContract.params)
         end
       end
     end

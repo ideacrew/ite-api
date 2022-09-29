@@ -8,7 +8,7 @@ module Validators
       # Contract for EmailContract.
       class EmailContract < Dry::Validation::Contract
         params do
-          required(:address).filled(:string)
+          optional(:address).maybe(:string)
         end
 
         rule(:address) do

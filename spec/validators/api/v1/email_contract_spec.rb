@@ -12,19 +12,6 @@ RSpec.describe ::Validators::Api::V1::EmailContract, dbclean: :around_each do
   end
 
   context 'invalid parameters' do
-    context 'with empty parameters' do
-      it 'should list error for every required parameter' do
-        expect(subject.call({}).errors.to_h.keys).to match_array all_params.keys
-      end
-    end
-
-    context 'Keys with missing values' do
-      it 'should return failure' do
-        all_params.merge!(address: nil)
-        expect(subject.call(all_params).errors.to_h[:address]).to eq(['must be filled'])
-      end
-    end
-
     context 'invalid email address' do
       it 'should fail if more than 5 characters' do
         all_params.merge!(address: 'dfkjvhjfdh')
