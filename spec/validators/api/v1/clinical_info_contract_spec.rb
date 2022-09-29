@@ -96,7 +96,7 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
         result = subject.call(valid_params)
         expect(result.failure?).to be_truthy
         expect(result.errors.to_h).to have_key(:sud_dx1)
-        expect(result.errors.to_h[:sud_dx1].first[:text]).to eq 'should have length 3 or 8'
+        expect(result.errors.to_h[:sud_dx1].first[:text]).to eq 'should have length between 3 and 8'
         expect(result.errors.to_h[:sud_dx1].first[:category]).to eq 'Invalid Field Length'
       end
 
@@ -141,7 +141,7 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
         result = subject.call(valid_params)
         expect(result.failure?).to be_truthy
         expect(result.errors.to_h).to have_key(:sud_dx2)
-        expect(result.errors.to_h[:sud_dx2].first[:text]).to eq 'should have length 3 or 8'
+        expect(result.errors.to_h[:sud_dx2].first[:text]).to eq 'should have length between 3 and 8'
         expect(result.errors.to_h[:sud_dx2].first[:category]).to eq 'Invalid Field Length'
       end
 
@@ -187,7 +187,7 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
         result = subject.call(valid_params)
         expect(result.failure?).to be_truthy
         expect(result.errors.to_h).to have_key(:sud_dx3)
-        expect(result.errors.to_h[:sud_dx3].first[:text]).to eq 'should have length 3 or 8'
+        expect(result.errors.to_h[:sud_dx3].first[:text]).to eq 'should have length between 3 and 8'
         expect(result.errors.to_h[:sud_dx3].first[:category]).to eq 'Invalid Field Length'
       end
 
@@ -228,7 +228,7 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
         result = subject.call(valid_params)
         expect(result.failure?).to be_truthy
         expect(result.errors.to_h).to have_key(:mh_dx1)
-        expect(result.errors.to_h[:mh_dx1].first[:text]).to eq 'should have length 3 or 8'
+        expect(result.errors.to_h[:mh_dx1].first[:text]).to eq 'should have length between 3 and 8'
         expect(result.errors.to_h[:mh_dx1].first[:category]).to eq 'Invalid Field Length'
       end
 
@@ -272,7 +272,7 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
         result = subject.call(valid_params)
         expect(result.failure?).to be_truthy
         expect(result.errors.to_h).to have_key(:mh_dx2)
-        expect(result.errors.to_h[:mh_dx2].first[:text]).to eq 'should have length 3 or 8'
+        expect(result.errors.to_h[:mh_dx2].first[:text]).to eq 'should have length between 3 and 8'
         expect(result.errors.to_h[:mh_dx2].first[:category]).to eq 'Invalid Field Length'
       end
 
@@ -317,7 +317,7 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
         result = subject.call(valid_params)
         expect(result.failure?).to be_truthy
         expect(result.errors.to_h).to have_key(:mh_dx3)
-        expect(result.errors.to_h[:mh_dx3].first[:text]).to eq 'should have length 3 or 8'
+        expect(result.errors.to_h[:mh_dx3].first[:text]).to eq 'should have length between 3 and 8'
         expect(result.errors.to_h[:mh_dx3].first[:category]).to eq 'Invalid Field Length'
       end
 
@@ -348,7 +348,7 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
         result = subject.call(valid_params)
         expect(result.failure?).to be_truthy
         expect(result.errors.to_h).to have_key(:non_bh_dx1)
-        expect(result.errors.to_h[:non_bh_dx1].first[:text]).to eq "should not start with F, with length 3 or 8 with or without character '.' after 3 digits"
+        expect(result.errors.to_h[:non_bh_dx1].first[:text]).to eq "should not start with F, with length between 3 and 8 with or without character '.' after 3 digits"
         expect(result.errors.to_h[:non_bh_dx1].first[:category]).to eq 'Invalid Value'
       end
 
@@ -357,7 +357,7 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
         result = subject.call(valid_params)
         expect(result.failure?).to be_truthy
         expect(result.errors.to_h).to have_key(:non_bh_dx2)
-        expect(result.errors.to_h[:non_bh_dx2].first[:text]).to eq "should not start with F, with length 3 or 8 with or without character '.' after 3 digits"
+        expect(result.errors.to_h[:non_bh_dx2].first[:text]).to eq "should not start with F, with length between 3 and 8 with or without character '.' after 3 digits"
         expect(result.errors.to_h[:non_bh_dx2].first[:category]).to eq 'Invalid Value'
       end
 
@@ -366,7 +366,7 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
         result = subject.call(valid_params)
         expect(result.failure?).to be_truthy
         expect(result.errors.to_h).to have_key(:non_bh_dx3)
-        expect(result.errors.to_h[:non_bh_dx3].first[:text]).to eq "should not start with F, with length 3 or 8 with or without character '.' after 3 digits"
+        expect(result.errors.to_h[:non_bh_dx3].first[:text]).to eq "should not start with F, with length between 3 and 8 with or without character '.' after 3 digits"
         expect(result.errors.to_h[:non_bh_dx3].first[:category]).to eq 'Invalid Value'
       end
     end

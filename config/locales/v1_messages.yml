@@ -100,14 +100,17 @@ en:
       length_eq3_or8:
         text: "should have length 3 or 8"
         category: "Invalid Field Length"
+      length_between3and8:
+        text: "should have length between 3 and 8"
+        category: "Invalid Field Length"
       sud_format_with3_or8:
-        text: "should start with F then 1 with length 3 or 8 with or without character '.' after 3 digits"
+        text: "should start with F then 1 with length between 3 and 8 with or without character '.' after 3 digits"
         category: "Invalid Value"
       mh_format_with3_or8:
-        text: "should start with F then not 1 with length 3 or 8 with or without character '.' after 3 digits"
+        text: "should start with F then not 1 with length between 3 and 8 with or without character '.' after 3 digits"
         category: "Invalid Value"
       bh_format_with3_or8:
-        text: "should not start with F, with length 3 or 8 with or without character '.' after 3 digits"
+        text: "should not start with F, with length between 3 and 8 with or without character '.' after 3 digits"
         category: "Invalid Value"
       sud_dx1_mismatch_collateral:
         text: "cannot be non applicable with a record type as 'A'/'T' and collateral as 2"

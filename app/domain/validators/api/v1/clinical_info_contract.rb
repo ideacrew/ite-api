@@ -55,7 +55,7 @@ module Validators
         %i[sud_dx1 sud_dx2 sud_dx3].each do |field|
           rule(field) do
             if key && value
-              key.failure(:length_eq3_or8) unless value.length == 3 || value.length == 8
+              key.failure(:length_between3and8) unless value.length >= 3 && value.length <= 8
               unless value == '999.9996'
                 pattern1 = Regexp.new('^[fF][1][0-9]{1}$').freeze
                 pattern2 = Regexp.new('^[fF][1][0-9]{1}\.*[a-zA-Z0-9]{4,5}$').freeze
@@ -69,7 +69,7 @@ module Validators
         %i[mh_dx1 mh_dx2 mh_dx3].each do |field|
           rule(field) do
             if key && value
-              key.failure(:length_eq3_or8) unless value.length == 3 || value.length == 8
+              key.failure(:length_between3and8) unless value.length >= 3 && value.length <= 8
               unless value == '999.9996'
                 pattern1 = Regexp.new('^[fF][^1][0-9]{1}$').freeze
                 pattern2 = Regexp.new('^[fF][^1][0-9]{1}\.*[a-zA-Z0-9]{4,5}$').freeze
@@ -117,7 +117,7 @@ module Validators
         %i[non_bh_dx1 non_bh_dx2 non_bh_dx3].each do |field|
           rule(field) do
             if key && value
-              key.failure(:length_eq3_or8) unless value.length == 3 || value.length == 8
+              key.failure(:length_between3and8) unless value.length >= 3 && value.length <= 8
               unless value == '999.9996'
                 pattern1 = Regexp.new('^[^fF][0-9]{2}$').freeze
                 pattern2 = Regexp.new('^[^fF][0-9]{2}\.*[a-zA-Z0-9]{4,5}$').freeze
