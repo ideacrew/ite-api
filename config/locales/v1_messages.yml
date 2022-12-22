@@ -202,6 +202,12 @@ en:
       primary_su_frequency_admission_missing:
         text: 'Must be filled when valid primary_substance'
         category: 'Missing Value'
+      secondary_su_frequency_admission_missing:
+        text: 'Must be filled when valid secondary_substance'
+        category: 'Missing Value'
+      tertiary_su_frequency_admission_missing:
+        text: 'Must be filled when valid tertiary_substance'
+        category: 'Missing Value'
 
       rules:
         address_zipcode:

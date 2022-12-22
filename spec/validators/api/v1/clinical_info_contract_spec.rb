@@ -119,6 +119,44 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
       expect(result.errors.to_h[:primary_su_frequency_admission].first[:category]).to eq 'Missing Value'
     end
 
+    it 'with invalid secondary_su_frequency_admission' do
+      valid_params[:secondary_su_frequency_admission] = 'not a real status'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:secondary_su_frequency_admission)
+      expect(result.errors.to_h[:secondary_su_frequency_admission].first[:text]).to eq 'must be one of 1-5, 96-98'
+      expect(result.errors.to_h[:secondary_su_frequency_admission].first[:category]).to eq 'Invalid Value'
+    end
+
+    it 'with missing primary_su_frequency_admission and primary_substance is valid' do
+      valid_params[:secondary_su_frequency_admission] = nil
+      valid_params[:secondary_substance] = '1'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:secondary_su_frequency_admission)
+      expect(result.errors.to_h[:secondary_su_frequency_admission].first[:text]).to eq 'Must be filled when valid secondary_substance'
+      expect(result.errors.to_h[:secondary_su_frequency_admission].first[:category]).to eq 'Missing Value'
+    end
+
+    it 'with invalid tertiary_su_frequency_admission' do
+      valid_params[:tertiary_su_frequency_admission] = 'not a real status'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:tertiary_su_frequency_admission)
+      expect(result.errors.to_h[:tertiary_su_frequency_admission].first[:text]).to eq 'must be one of 1-5, 96-98'
+      expect(result.errors.to_h[:tertiary_su_frequency_admission].first[:category]).to eq 'Invalid Value'
+    end
+
+    it 'with missing primary_su_frequency_admission and primary_substance is valid' do
+      valid_params[:tertiary_su_frequency_admission] = nil
+      valid_params[:tertiary_substance] = '1'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:tertiary_su_frequency_admission)
+      expect(result.errors.to_h[:tertiary_su_frequency_admission].first[:text]).to eq 'Must be filled when valid tertiary_substance'
+      expect(result.errors.to_h[:tertiary_su_frequency_admission].first[:category]).to eq 'Missing Value'
+    end
+
     it 'with invalid co_occurring_sud_mh' do
       valid_params[:co_occurring_sud_mh] = 'not a real status'
       result = subject.call(valid_params)
