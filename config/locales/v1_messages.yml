@@ -199,6 +199,9 @@ en:
       primary_substance_missing:
         text: 'Must be filled when valid sud_dx1'
         category: 'Missing Value'
+      primary_su_frequency_admission_missing:
+        text: 'Must be filled when valid primary_substance'
+        category: 'Missing Value'
 
       rules:
         address_zipcode:

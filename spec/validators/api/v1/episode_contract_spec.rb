@@ -88,7 +88,8 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
       sud_dx1: 'F14.8393',
       mh_dx1: 'F24.8393',
       sud_dx2: 'F14.8393',
-      primary_substance: '1'
+      primary_substance: '1',
+      primary_su_frequency_admission: '1'
     }
   end
 

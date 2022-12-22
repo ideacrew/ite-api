@@ -27,6 +27,7 @@ module Validators
           optional(:primary_substance).maybe(:string)
           optional(:secondary_substance).maybe(:string)
           optional(:tertiary_substance).maybe(:string)
+          optional(:primary_su_frequency_admission).maybe(:string)
           # from episode
           optional(:collateral)
           optional(:record_type)
@@ -47,6 +48,12 @@ module Validators
         %i[primary_substance secondary_substance tertiary_substance].each do |field|
           rule(field) do
             key.failure(text: 'must be one of 1-18, 20, 96-98', category: 'Invalid Value') if key && value && !Types::SUBSTANCE_OPTIONS.values.first.include?(value)
+          end
+        end
+
+        %i[primary_su_frequency_admission].each do |field|
+          rule(field) do
+            key.failure(text: 'must be one of 1-5, 96-98', category: 'Invalid Value') if key && value && !Types::SU_FREQUENCY_ADMISSION.values.first.include?(value)
           end
         end
 
@@ -125,6 +132,12 @@ module Validators
         %i[primary_substance].each do |field|
           rule(field, :sud_dx1) do
             key.failure(:primary_substance_missing) if key && (!value && values[:sud_dx1] && !schema_error?(:sud_dx1))
+          end
+        end
+
+        %i[primary_su_frequency_admission].each do |field|
+          rule(field, :primary_substance) do
+            key.failure(:primary_su_frequency_admission_missing) if key && (!value && !schema_error?(:primary_substance))
           end
         end
 
