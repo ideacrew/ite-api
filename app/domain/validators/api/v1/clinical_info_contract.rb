@@ -24,7 +24,7 @@ module Validators
           optional(:non_bh_dx1).maybe(:string)
           optional(:non_bh_dx2).maybe(:string)
           optional(:non_bh_dx3).maybe(:string)
-
+          optional(:primary_substance).maybe(:string)
           # from episode
           optional(:collateral)
           optional(:record_type)
@@ -39,6 +39,12 @@ module Validators
         %i[gaf_score_discharge gaf_score_admission].each do |field|
           rule(field) do
             key.failure(text: 'must be one of 1-100, 997, 998', category: 'Invalid Value') if key && value && !Types::GAF_OPTIONS.values.first.include?(value)
+          end
+        end
+
+        %i[primary_substance].each do |field|
+          rule(field) do
+            key.failure(text: 'must be one of 1-18, 20, 96-98', category: 'Invalid Value') if key && value && !Types::SUBSTANCE_OPTIONS.values.first.include?(value)
           end
         end
 
@@ -111,6 +117,12 @@ module Validators
               key.failure(:sud_dx1_mismatch_collateral) if (value == '999.9996') && %w[A T].include?(values[:record_type]) && values[:collateral] == '2'
               key.failure(:sud_dx1_co_occuring_mismatch) if value != '999.9996' && !schema_error?(field) && %w[M X].include?(values[:record_type]) && values[:co_occurring_sud_mh] != '1'
             end
+          end
+        end
+
+        %i[primary_substance].each do |field|
+          rule(field, :sud_dx1) do
+            key.failure(:primary_substance_missing) if key && (!value && values[:sud_dx1] && !schema_error?(:sud_dx1))
           end
         end
 

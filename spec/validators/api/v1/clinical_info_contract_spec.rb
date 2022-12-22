@@ -11,7 +11,8 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
       gaf_score_discharge: '1',
       sud_dx1: 'F14.8393',
       mh_dx1: 'F24.8393',
-      collateral: '1'
+      collateral: '1',
+      primary_substance: '1'
     }
   end
 
@@ -59,6 +60,25 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
       expect(result.errors.to_h).to have_key(:gaf_score_discharge)
       expect(result.errors.to_h[:gaf_score_discharge].first[:text]).to eq 'must be one of 1-100, 997, 998'
       expect(result.errors.to_h[:gaf_score_discharge].first[:category]).to eq 'Invalid Value'
+    end
+
+    it 'with invalid primary_substance' do
+      valid_params[:primary_substance] = 'not a real status'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:primary_substance)
+      expect(result.errors.to_h[:primary_substance].first[:text]).to eq 'must be one of 1-18, 20, 96-98'
+      expect(result.errors.to_h[:primary_substance].first[:category]).to eq 'Invalid Value'
+    end
+
+    it 'with missing primary_substance and sud_dx1 is valid' do
+      valid_params[:primary_substance] = nil
+      valid_params[:sud_dx1] = 'F14.8393'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:primary_substance)
+      expect(result.errors.to_h[:primary_substance].first[:text]).to eq 'Must be filled when valid sud_dx1'
+      expect(result.errors.to_h[:primary_substance].first[:category]).to eq 'Missing Value'
     end
 
     it 'with invalid co_occurring_sud_mh' do

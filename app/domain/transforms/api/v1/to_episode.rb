@@ -17,8 +17,8 @@ module Transforms
         CLIENT_FIELDS = %i[first_name middle_name last_name first_name_alt last_name_alt suffix alias ssn medicaid_id
                            dob gender sexual_orientation race ethnicity primary_language phone1 phone2 living_arrangement
                            address_line2 address_line1 address_zipcode address_state address_city address_ward].freeze
-        CLINICAL_INFO_FIELDS = %i[smi_sed co_occurring_sud_mh opioid_therapy substance_problems gaf_score_admission gaf_score_discharge
-                                  sud_diagnostic_codes mh_diagnostic_codes non_bh_dx1 non_bh_dx2 non_bh_dx3 sud_dx1 mh_dx1 sud_dx2 sud_dx3 mh_dx2 mh_dx3].freeze
+        CLINICAL_INFO_FIELDS = %i[smi_sed co_occurring_sud_mh opioid_therapy gaf_score_admission gaf_score_discharge
+                                  sud_diagnostic_codes mh_diagnostic_codes non_bh_dx1 non_bh_dx2 non_bh_dx3 sud_dx1 mh_dx1 sud_dx2 sud_dx3 mh_dx2 mh_dx3 primary_substance].freeze
         CLIENT_PROFILE_FIELDS = %i[marital_status veteran_status education employment not_in_labor
                                    income_source pregnant school_attendance legal_status arrests_past_30days_admission
                                    arrests_past_30days_discharge self_help_group_admission self_help_group_discharge health_insurance].freeze
