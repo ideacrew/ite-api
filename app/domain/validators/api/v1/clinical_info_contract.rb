@@ -25,6 +25,8 @@ module Validators
           optional(:non_bh_dx2).maybe(:string)
           optional(:non_bh_dx3).maybe(:string)
           optional(:primary_substance).maybe(:string)
+          optional(:secondary_substance).maybe(:string)
+          optional(:tertiary_substance).maybe(:string)
           # from episode
           optional(:collateral)
           optional(:record_type)
@@ -42,7 +44,7 @@ module Validators
           end
         end
 
-        %i[primary_substance].each do |field|
+        %i[primary_substance secondary_substance tertiary_substance].each do |field|
           rule(field) do
             key.failure(text: 'must be one of 1-18, 20, 96-98', category: 'Invalid Value') if key && value && !Types::SUBSTANCE_OPTIONS.values.first.include?(value)
           end

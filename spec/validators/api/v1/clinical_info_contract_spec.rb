@@ -81,6 +81,24 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
       expect(result.errors.to_h[:primary_substance].first[:category]).to eq 'Missing Value'
     end
 
+    it 'with invalid secondary_substance' do
+      valid_params[:secondary_substance] = 'not a real status'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:secondary_substance)
+      expect(result.errors.to_h[:secondary_substance].first[:text]).to eq 'must be one of 1-18, 20, 96-98'
+      expect(result.errors.to_h[:secondary_substance].first[:category]).to eq 'Invalid Value'
+    end
+
+    it 'with invalid tertiary_substance' do
+      valid_params[:tertiary_substance] = 'not a real status'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:tertiary_substance)
+      expect(result.errors.to_h[:tertiary_substance].first[:text]).to eq 'must be one of 1-18, 20, 96-98'
+      expect(result.errors.to_h[:tertiary_substance].first[:category]).to eq 'Invalid Value'
+    end
+
     it 'with invalid co_occurring_sud_mh' do
       valid_params[:co_occurring_sud_mh] = 'not a real status'
       result = subject.call(valid_params)
