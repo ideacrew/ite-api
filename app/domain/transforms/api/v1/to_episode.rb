@@ -21,7 +21,7 @@ module Transforms
                                   sud_diagnostic_codes mh_diagnostic_codes non_bh_dx1 non_bh_dx2 non_bh_dx3 sud_dx1 mh_dx1 sud_dx2 sud_dx3 mh_dx2 mh_dx3
                                   primary_substance secondary_substance tertiary_substance primary_su_frequncy_admission
                                   secondary_su_frequency_admission tertiary_su_frequency_admission primary_su_frequency_discharge
-                                  tertiary_su_frequency_discharge secondary_su_frequency_discharge primary_su_route].freeze
+                                  tertiary_su_frequency_discharge secondary_su_frequency_discharge primary_su_route secondary_su_route tertiary_su_route].freeze
         CLIENT_PROFILE_FIELDS = %i[marital_status veteran_status education employment not_in_labor
                                    income_source pregnant school_attendance legal_status arrests_past_30days_admission
                                    arrests_past_30days_discharge self_help_group_admission self_help_group_discharge health_insurance].freeze

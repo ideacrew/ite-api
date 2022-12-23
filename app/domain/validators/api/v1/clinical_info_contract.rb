@@ -34,6 +34,8 @@ module Validators
           optional(:secondary_su_frequency_discharge).maybe(:string)
           optional(:tertiary_su_frequency_discharge).maybe(:string)
           optional(:primary_su_route).maybe(:string)
+          optional(:secondary_su_route).maybe(:string)
+          optional(:tertiary_su_route).maybe(:string)
           # from episode
           optional(:collateral)
           optional(:record_type)
@@ -57,7 +59,7 @@ module Validators
           end
         end
 
-        %i[primary_su_route].each do |field|
+        %i[primary_su_route secondary_su_route tertiary_su_route].each do |field|
           rule(field) do
             key.failure(text: 'must be one of 1-4, 20, 96-98', category: 'Invalid Value') if key && value && !Types::SU_ROUTE_OPTIONS.values.first.include?(value)
           end
@@ -169,6 +171,16 @@ module Validators
         rule(:primary_su_route, :primary_substance) do
           substance_options = %w[1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 20]
           key.failure(:su_route_missing) if !values[:primary_su_route] && substance_options.include?(values[:primary_substance])
+        end
+
+        rule(:secondary_su_route, :secondary_substance) do
+          substance_options = %w[1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 20]
+          key.failure(:su_route_missing) if !values[:secondary_su_route] && substance_options.include?(values[:secondary_substance])
+        end
+
+        rule(:tertiary_su_route, :tertiary_substance) do
+          substance_options = %w[1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 20]
+          key.failure(:su_route_missing) if !values[:tertiary_su_route] && substance_options.include?(values[:tertiary_substance])
         end
 
         %i[non_bh_dx1 non_bh_dx2 non_bh_dx3].each do |field|

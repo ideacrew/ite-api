@@ -137,6 +137,24 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
       expect(result.errors.to_h[:primary_su_route].first[:category]).to eq 'Invalid Value'
     end
 
+    it 'with invalid tertiary_su_route' do
+      valid_params[:tertiary_su_route] = 'not a real status'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:tertiary_su_route)
+      expect(result.errors.to_h[:tertiary_su_route].first[:text]).to eq 'must be one of 1-4, 20, 96-98'
+      expect(result.errors.to_h[:tertiary_su_route].first[:category]).to eq 'Invalid Value'
+    end
+
+    it 'with invalid secondary_su_route' do
+      valid_params[:secondary_su_route] = 'not a real status'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:secondary_su_route)
+      expect(result.errors.to_h[:secondary_su_route].first[:text]).to eq 'must be one of 1-4, 20, 96-98'
+      expect(result.errors.to_h[:secondary_su_route].first[:category]).to eq 'Invalid Value'
+    end
+
     it 'with missing primary_su_route and primary_substance present' do
       valid_params[:primary_su_route] = nil
       valid_params[:primary_substance] = '1'
@@ -145,6 +163,26 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
       expect(result.errors.to_h).to have_key(:primary_su_route)
       expect(result.errors.to_h[:primary_su_route].first[:text]).to eq 'Must be filled when valid associated substance present'
       expect(result.errors.to_h[:primary_su_route].first[:category]).to eq 'Missing Value'
+    end
+
+    it 'with missing secondary_su_route and secondary_substance present' do
+      valid_params[:secondary_su_route] = nil
+      valid_params[:secondary_substance] = '1'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:secondary_su_route)
+      expect(result.errors.to_h[:secondary_su_route].first[:text]).to eq 'Must be filled when valid associated substance present'
+      expect(result.errors.to_h[:secondary_su_route].first[:category]).to eq 'Missing Value'
+    end
+
+    it 'with missing tertiary_su_route and tertiary_substance present' do
+      valid_params[:tertiary_su_route] = nil
+      valid_params[:tertiary_substance] = '1'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:tertiary_su_route)
+      expect(result.errors.to_h[:tertiary_su_route].first[:text]).to eq 'Must be filled when valid associated substance present'
+      expect(result.errors.to_h[:tertiary_su_route].first[:category]).to eq 'Missing Value'
     end
 
     it 'with invalid primary_su_frequency_admission' do
