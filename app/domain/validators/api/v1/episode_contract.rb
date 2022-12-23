@@ -242,6 +242,24 @@ module Validators
           end
         end
 
+        rule('clinical_info.secondary_su_age_at_first_use', 'client.dob', :admission_date) do
+          if key && (values.dig(:clinical_info, :secondary_su_age_at_first_use) && values.dig(:client, :dob) && values[:admission_date])
+            now = values[:admission_date]
+            dob = values.dig(:client, :dob)
+            admission_age = now.year - dob.year - (now.month > dob.month || (now.month == dob.month && now.day >= dob.day) ? 0 : 1)
+            key(:secondary_su_age_at_first_use).failure(:primary_su_age_at_first_use_greater_than_admission_age) if values.dig(:clinical_info, :secondary_su_age_at_first_use).to_i > admission_age
+          end
+        end
+
+        rule('clinical_info.tertiary_su_age_at_first_use', 'client.dob', :admission_date) do
+          if key && (values.dig(:clinical_info, :tertiary_su_age_at_first_use) && values.dig(:client, :dob) && values[:admission_date])
+            now = values[:admission_date]
+            dob = values.dig(:client, :dob)
+            admission_age = now.year - dob.year - (now.month > dob.month || (now.month == dob.month && now.day >= dob.day) ? 0 : 1)
+            key(:tertiary_su_age_at_first_use).failure(:primary_su_age_at_first_use_greater_than_admission_age) if values.dig(:clinical_info, :tertiary_su_age_at_first_use).to_i > admission_age
+          end
+        end
+
         %i[self_help_group_discharge arrests_past_30days_discharge].each do |field|
           rule(:discharge_date, client_profile: field) do
             key(field).failure(:discharge_date_nil) if key && (!values[:discharge_date] && values.dig(:client_profile, field))

@@ -706,6 +706,32 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
         expect(result.errors.to_h[:primary_su_age_at_first_use].first[:category]).to eq 'Data Inconsistency'
       end
     end
+
+    context 'with invalid secondary_su_age_at_first_use' do
+      it 'fails if secondary_su_age_at_first_use is greater than the age at time of admission' do
+        all_params[:clinical_info][:secondary_su_age_at_first_use] = '88'
+        all_params[:client][:dob] = (Date.today - (366 * 23)).to_s
+        all_params[:admission_date] = Date.today.to_s
+        result = subject.call(all_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:secondary_su_age_at_first_use)
+        expect(result.errors.to_h[:secondary_su_age_at_first_use].first[:text]).to eq 'cannot be later than the client age at admission'
+        expect(result.errors.to_h[:secondary_su_age_at_first_use].first[:category]).to eq 'Data Inconsistency'
+      end
+    end
+
+    context 'with invalid tertiary_su_age_at_first_use' do
+      it 'fails if tertiary_su_age_at_first_use is greater than the age at time of admission' do
+        all_params[:clinical_info][:tertiary_su_age_at_first_use] = '88'
+        all_params[:client][:dob] = (Date.today - (366 * 23)).to_s
+        all_params[:admission_date] = Date.today.to_s
+        result = subject.call(all_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:tertiary_su_age_at_first_use)
+        expect(result.errors.to_h[:tertiary_su_age_at_first_use].first[:text]).to eq 'cannot be later than the client age at admission'
+        expect(result.errors.to_h[:tertiary_su_age_at_first_use].first[:category]).to eq 'Data Inconsistency'
+      end
+    end
   end
 
   context 'valid parameters' do
