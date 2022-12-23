@@ -113,8 +113,10 @@ module Validators
               unless value == '999.9996'
                 pattern1 = Regexp.new('^[fF][^1][0-9]{1}$').freeze
                 pattern2 = Regexp.new('^[fF][^1][0-9]{1}\.*[a-zA-Z0-9]{4,5}$').freeze
-                key.failure(:mh_format_with3_or8) if value.length == 3 && !pattern1.match(value)
-                key.failure(:mh_format_with3_or8) if value.length == 8 && !pattern2.match(value)
+                pattern3 = Regexp.new('^[gGzZ][0-9]{2}$').freeze
+                pattern4 = Regexp.new('^[zZgG][0-9]{2}\.*[a-zA-Z0-9]{4,5}$').freeze
+                key.failure(:mh_format_with3_or8) if value.length == 3 && (!pattern1.match(value) && !pattern3.match(value))
+                key.failure(:mh_format_with3_or8) if value.length == 8 && (!pattern2.match(value) && !pattern4.match(value))
               end
             end
           end

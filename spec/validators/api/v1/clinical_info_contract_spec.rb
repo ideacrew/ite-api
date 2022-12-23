@@ -480,6 +480,52 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
         expect(result.errors.to_h[:mh_dx1].first[:text]).to eq "cannot be with a record type as 'A'/'T' and co occurring sud mh not 1"
         expect(result.errors.to_h[:mh_dx1].first[:category]).to eq 'Data Inconsistency'
       end
+
+      it 'starts with F1' do
+        valid_params[:mh_dx1] = 'F11'
+        result = subject.call(valid_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:mh_dx1)
+        expect(result.errors.to_h[:mh_dx1].first[:text]).to eq "should start with F then not 1 with length between 3 and 8 with or without character '.' after 3 digits"
+        expect(result.errors.to_h[:mh_dx1].first[:category]).to eq 'Invalid Value'
+      end
+
+      it 'starts with F1 and has 8 digits' do
+        valid_params[:mh_dx1] = 'F11.2343'
+        result = subject.call(valid_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:mh_dx1)
+        expect(result.errors.to_h[:mh_dx1].first[:text]).to eq "should start with F then not 1 with length between 3 and 8 with or without character '.' after 3 digits"
+        expect(result.errors.to_h[:mh_dx1].first[:category]).to eq 'Invalid Value'
+      end
+
+      it 'starts with G1 and has 8 digits' do
+        valid_params[:mh_dx1] = 'G11.2343'
+        result = subject.call(valid_params)
+        expect(result.success?).to be_truthy
+        expect(result.errors.to_h).not_to have_key(:mh_dx1)
+      end
+
+      it 'starts with G1 and has 3 digits' do
+        valid_params[:mh_dx1] = 'G11'
+        result = subject.call(valid_params)
+        expect(result.success?).to be_truthy
+        expect(result.errors.to_h).not_to have_key(:mh_dx1)
+      end
+
+      it 'starts with Z1 and has 8 digits' do
+        valid_params[:mh_dx1] = 'Z11.2343'
+        result = subject.call(valid_params)
+        expect(result.success?).to be_truthy
+        expect(result.errors.to_h).not_to have_key(:mh_dx1)
+      end
+
+      it 'starts with Z1 and has 3 digits' do
+        valid_params[:mh_dx1] = 'Z11'
+        result = subject.call(valid_params)
+        expect(result.success?).to be_truthy
+        expect(result.errors.to_h).not_to have_key(:mh_dx1)
+      end
     end
 
     context 'mh_dx2' do
@@ -523,6 +569,52 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
         expect(result.errors.to_h).to have_key(:mh_dx2)
         expect(result.errors.to_h[:mh_dx2].first[:text]).to eq "cannot be with a record type as 'A'/'T' and co occurring sud mh not 1"
         expect(result.errors.to_h[:mh_dx2].first[:category]).to eq 'Data Inconsistency'
+      end
+
+      it 'starts with F1' do
+        valid_params[:mh_dx2] = 'F11'
+        result = subject.call(valid_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:mh_dx2)
+        expect(result.errors.to_h[:mh_dx2].first[:text]).to eq "should start with F then not 1 with length between 3 and 8 with or without character '.' after 3 digits"
+        expect(result.errors.to_h[:mh_dx2].first[:category]).to eq 'Invalid Value'
+      end
+
+      it 'starts with F1 and has 8 digits' do
+        valid_params[:mh_dx2] = 'F11.2343'
+        result = subject.call(valid_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:mh_dx2)
+        expect(result.errors.to_h[:mh_dx2].first[:text]).to eq "should start with F then not 1 with length between 3 and 8 with or without character '.' after 3 digits"
+        expect(result.errors.to_h[:mh_dx2].first[:category]).to eq 'Invalid Value'
+      end
+
+      it 'starts with G1 and has 8 digits' do
+        valid_params[:mh_dx2] = 'G11.2343'
+        result = subject.call(valid_params)
+        expect(result.success?).to be_truthy
+        expect(result.errors.to_h).not_to have_key(:mh_dx2)
+      end
+
+      it 'starts with G1 and has 3 digits' do
+        valid_params[:mh_dx2] = 'G11'
+        result = subject.call(valid_params)
+        expect(result.success?).to be_truthy
+        expect(result.errors.to_h).not_to have_key(:mh_dx2)
+      end
+
+      it 'starts with Z1 and has 8 digits' do
+        valid_params[:mh_dx2] = 'Z11.2343'
+        result = subject.call(valid_params)
+        expect(result.success?).to be_truthy
+        expect(result.errors.to_h).not_to have_key(:mh_dx2)
+      end
+
+      it 'starts with Z1 and has 3 digits' do
+        valid_params[:mh_dx2] = 'Z11'
+        result = subject.call(valid_params)
+        expect(result.success?).to be_truthy
+        expect(result.errors.to_h).not_to have_key(:mh_dx2)
       end
     end
 
@@ -568,6 +660,52 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
         expect(result.errors.to_h).to have_key(:mh_dx3)
         expect(result.errors.to_h[:mh_dx3].first[:text]).to eq "cannot be with a record type as 'A'/'T' and co occurring sud mh not 1"
         expect(result.errors.to_h[:mh_dx3].first[:category]).to eq 'Data Inconsistency'
+      end
+
+      it 'starts with F1' do
+        valid_params[:mh_dx3] = 'F11'
+        result = subject.call(valid_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:mh_dx3)
+        expect(result.errors.to_h[:mh_dx3].first[:text]).to eq "should start with F then not 1 with length between 3 and 8 with or without character '.' after 3 digits"
+        expect(result.errors.to_h[:mh_dx3].first[:category]).to eq 'Invalid Value'
+      end
+
+      it 'starts with F1 and has 8 digits' do
+        valid_params[:mh_dx3] = 'F11.2343'
+        result = subject.call(valid_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:mh_dx3)
+        expect(result.errors.to_h[:mh_dx3].first[:text]).to eq "should start with F then not 1 with length between 3 and 8 with or without character '.' after 3 digits"
+        expect(result.errors.to_h[:mh_dx3].first[:category]).to eq 'Invalid Value'
+      end
+
+      it 'starts with G1 and has 8 digits' do
+        valid_params[:mh_dx3] = 'G11.2343'
+        result = subject.call(valid_params)
+        expect(result.success?).to be_truthy
+        expect(result.errors.to_h).not_to have_key(:mh_dx3)
+      end
+
+      it 'starts with G1 and has 3 digits' do
+        valid_params[:mh_dx3] = 'G11'
+        result = subject.call(valid_params)
+        expect(result.success?).to be_truthy
+        expect(result.errors.to_h).not_to have_key(:mh_dx3)
+      end
+
+      it 'starts with Z1 and has 8 digits' do
+        valid_params[:mh_dx3] = 'Z11.2343'
+        result = subject.call(valid_params)
+        expect(result.success?).to be_truthy
+        expect(result.errors.to_h).not_to have_key(:mh_dx3)
+      end
+
+      it 'starts with Z1 and has 3 digits' do
+        valid_params[:mh_dx3] = 'Z11'
+        result = subject.call(valid_params)
+        expect(result.success?).to be_truthy
+        expect(result.errors.to_h).not_to have_key(:mh_dx3)
       end
     end
 
