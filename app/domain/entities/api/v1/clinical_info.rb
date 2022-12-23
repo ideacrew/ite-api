@@ -22,7 +22,7 @@ module Entities
         attribute :primary_su_frequncy_admission, Types::String.optional.meta(omittable: true)
         attribute :secondary_su_frequency_admission, Types::String.optional.meta(omittable: true)
         attribute :tertiary_su_frequency_admission, Types::String.optional.meta(omittable: true)
-        attribute :primary_su_frequncy_discharge, Types::String.optional.meta(omittable: true)
+        attribute :primary_su_frequency_discharge, Types::String.optional.meta(omittable: true)
         attribute :secondary_su_frequency_discharge, Types::String.optional.meta(omittable: true)
         attribute :tertiary_su_frequency_discharge, Types::String.optional.meta(omittable: true)
         attribute :primary_su_route, Types::String.optional.meta(omittable: true)

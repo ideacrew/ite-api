@@ -100,6 +100,15 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
       expect(result.errors.to_h[:tertiary_substance].first[:category]).to eq 'Invalid Value'
     end
 
+    it 'with invalid primary_su_frequency_discharge' do
+      valid_params[:primary_su_frequency_discharge] = 'not a real status'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:primary_su_frequency_discharge)
+      expect(result.errors.to_h[:primary_su_frequency_discharge].first[:text]).to eq 'must be one of 1-5, 96-98'
+      expect(result.errors.to_h[:primary_su_frequency_discharge].first[:category]).to eq 'Invalid Value'
+    end
+
     it 'with invalid primary_su_frequency_admission' do
       valid_params[:primary_su_frequency_admission] = 'not a real status'
       result = subject.call(valid_params)

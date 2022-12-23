@@ -30,6 +30,7 @@ module Validators
           optional(:primary_su_frequency_admission).maybe(:string)
           optional(:secondary_su_frequency_admission).maybe(:string)
           optional(:tertiary_su_frequency_admission).maybe(:string)
+          optional(:primary_su_frequency_discharge).maybe(:string)
           # from episode
           optional(:collateral)
           optional(:record_type)
@@ -53,7 +54,7 @@ module Validators
           end
         end
 
-        %i[primary_su_frequency_admission secondary_su_frequency_admission tertiary_su_frequency_admission].each do |field|
+        %i[primary_su_frequency_admission secondary_su_frequency_admission tertiary_su_frequency_admission primary_su_frequency_discharge].each do |field|
           rule(field) do
             key.failure(text: 'must be one of 1-5, 96-98', category: 'Invalid Value') if key && value && !Types::SU_FREQUENCY_ADMISSION.values.first.include?(value)
           end

@@ -213,6 +213,12 @@ module Validators
           end
         end
 
+        rule('clinical_info.primary_su_frequency_discharge', 'clinical_info.primary_substance', :discharge_date) do
+          substance_options = %w[1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 20]
+          key(:primary_su_frequency_discharge).failure(:missing_primary_su_frequency_discharge) if values.dig(:clinical_info,
+                                                                                                              :primary_su_frequency_discharge).blank? && values.dig(:clinical_info, :primary_substance)&.in?(substance_options) && values[:discharge_date]
+        end
+
         %i[self_help_group_discharge arrests_past_30days_discharge].each do |field|
           rule(:discharge_date, client_profile: field) do
             key(field).failure(:discharge_date_nil) if key && (!values[:discharge_date] && values.dig(:client_profile, field))

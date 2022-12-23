@@ -89,7 +89,8 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
       mh_dx1: 'F24.8393',
       sud_dx2: 'F14.8393',
       primary_substance: '1',
-      primary_su_frequency_admission: '1'
+      primary_su_frequency_admission: '1',
+      primary_su_frequency_discharge: '1'
     }
   end
 
@@ -628,6 +629,19 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
         expect(result.errors.to_h).to have_key(:smi_sed)
         expect(result.errors.to_h[:smi_sed].first[:text]).to eq 'cannot be 2 or 3 if client is older than 22'
         expect(result.errors.to_h[:smi_sed].first[:category]).to eq 'Data Inconsistency'
+      end
+    end
+
+    context 'with invalid primary_su_frequency_discharge' do
+      it 'fails if primary_su_frequency_discharge is missing and discharge date is present and primary_substance present' do
+        all_params[:discharge_date] = Date.today
+        all_params[:clinical_info][:primary_su_frequency_discharge] = nil
+        all_params[:clinical_info][:primary_substance] = '1'
+        result = subject.call(all_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:primary_su_frequency_discharge)
+        expect(result.errors.to_h[:primary_su_frequency_discharge].first[:text]).to eq 'Must be filled when valid primary_substance and discharge date'
+        expect(result.errors.to_h[:primary_su_frequency_discharge].first[:category]).to eq 'Missing Value'
       end
     end
 
