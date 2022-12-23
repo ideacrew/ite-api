@@ -36,6 +36,7 @@ module Validators
           optional(:primary_su_route).maybe(:string)
           optional(:secondary_su_route).maybe(:string)
           optional(:tertiary_su_route).maybe(:string)
+          optional(:primary_su_age_at_first_use).maybe(:string)
           # from episode
           optional(:collateral)
           optional(:record_type)
@@ -55,31 +56,37 @@ module Validators
 
         %i[primary_substance secondary_substance tertiary_substance].each do |field|
           rule(field) do
-            key.failure(text: 'must be one of 1-18, 20, 96-98', category: 'Invalid Value') if key && value && !Types::SUBSTANCE_OPTIONS.values.first.include?(value)
+            key.failure(text: 'must be one of 1-18, 20, 96-98', category: 'Invalid Value') if key && value && !Types::SUBSTANCE_OPTIONS.values.include?(value)
           end
         end
 
         %i[primary_su_route secondary_su_route tertiary_su_route].each do |field|
           rule(field) do
-            key.failure(text: 'must be one of 1-4, 20, 96-98', category: 'Invalid Value') if key && value && !Types::SU_ROUTE_OPTIONS.values.first.include?(value)
+            key.failure(text: 'must be one of 1-4, 20, 96-98', category: 'Invalid Value') if key && value && !Types::SU_ROUTE_OPTIONS.values.include?(value)
           end
         end
 
         %i[primary_su_frequency_admission secondary_su_frequency_admission tertiary_su_frequency_admission primary_su_frequency_discharge tertiary_su_frequency_discharge
            secondary_su_frequency_discharge].each do |field|
           rule(field) do
-            key.failure(text: 'must be one of 1-5, 96-98', category: 'Invalid Value') if key && value && !Types::SU_FREQUENCY_ADMISSION.values.first.include?(value)
+            key.failure(text: 'must be one of 1-5, 96-98', category: 'Invalid Value') if key && value && !Types::SU_FREQUENCY_ADMISSION.values.include?(value)
           end
+        end
+
+        %i[primary_su_age_at_first_use].each do |field|
+          rule(field) do
+            key.failure(text: 'must be one of 1-98', category: 'Invalid Value') if key && value && !Types::AGE_OPTIONS.values.first.include?(value)
+          end
+        end
+
+        rule(:co_occurring_sud_mh, :record_type, :sud_dx1) do
+          key.failure(:co_occurring_sud_mh_mismatch) if key && value && values[:co_occurring_sud_mh] != '1' && %w[M X].include?(values[:record_type]) && values[:sud_dx1] != '999.9996'
         end
 
         { smi_sed: Types::SME_OPTIONS, co_occurring_sud_mh: Types::COOCCURRING_OPTIONS }.each do |field, types|
           rule(field) do
             key.failure(text: "must be one of #{types.values.join(', ')}", category: 'Invalid Value') if key && value && !types.include?(value)
           end
-        end
-
-        rule(:co_occurring_sud_mh, :record_type, :sud_dx1) do
-          key.failure(:co_occurring_sud_mh_mismatch) if key && value && values[:co_occurring_sud_mh] != '1' && %w[M X].include?(values[:record_type]) && values[:sud_dx1] != '999.9996'
         end
 
         %i[sud_dx1 sud_dx2 sud_dx3].each do |field|

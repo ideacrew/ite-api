@@ -214,6 +214,9 @@ en:
       su_route_missing:
         text: 'Must be filled when valid associated substance present'
         category: 'Missing Value'
+      primary_su_age_at_first_use_greater_than_admission_age:
+        text: 'cannot be later than the client age at admission'
+        category: 'Data Inconsistency'
 
       rules:
         address_zipcode:

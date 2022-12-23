@@ -6,15 +6,15 @@ require './app/domain/validators/api/v1/clinical_info_contract'
 RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_each do
   let(:valid_params) do
     {
-      smi_sed: '1',
-      gaf_score_admission: '1',
-      gaf_score_discharge: '1',
+      smi_sed: '2',
+      gaf_score_admission: '3',
+      gaf_score_discharge: '2',
       sud_dx1: 'F14.8393',
       mh_dx1: 'F24.8393',
       collateral: '1',
-      primary_substance: '1',
-      primary_su_frequency_admission: '1',
-      primary_su_route: '1'
+      primary_substance: '3',
+      primary_su_frequency_admission: '2',
+      primary_su_route: '2'
     }
   end
 
@@ -126,6 +126,15 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
       expect(result.errors.to_h).to have_key(:tertiary_su_frequency_discharge)
       expect(result.errors.to_h[:tertiary_su_frequency_discharge].first[:text]).to eq 'must be one of 1-5, 96-98'
       expect(result.errors.to_h[:tertiary_su_frequency_discharge].first[:category]).to eq 'Invalid Value'
+    end
+
+    it 'with invalid primary_su_age_at_first_use' do
+      valid_params[:primary_su_age_at_first_use] = 'not a real status'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:primary_su_age_at_first_use)
+      expect(result.errors.to_h[:primary_su_age_at_first_use].first[:text]).to eq 'must be one of 1-98'
+      expect(result.errors.to_h[:primary_su_age_at_first_use].first[:category]).to eq 'Invalid Value'
     end
 
     it 'with invalid primary_su_route' do

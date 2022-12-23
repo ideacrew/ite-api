@@ -27,6 +27,8 @@ module Entities
         attribute :tertiary_su_frequency_discharge, Types::String.optional.meta(omittable: true)
         attribute :primary_su_route, Types::String.optional.meta(omittable: true)
         attribute :secondary_su_route, Types::String.optional.meta(omittable: true)
+        attribute :tertiary_su_route, Types::String.optional.meta(omittable: true)
+        attribute :primary_su_age_at_first_use, Types::String.optional.meta(omittable: true)
         attribute :sud_diagnostic_codes, Types::Array.of(Types::String)
         attribute :mh_diagnostic_codes, Types::Array.of(Types::String)
         attribute :non_bh_dx1, Types::String.optional.meta(omittable: true)
