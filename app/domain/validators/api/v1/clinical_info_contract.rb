@@ -158,7 +158,7 @@ module Validators
 
         %i[primary_substance].each do |field|
           rule(field, :sud_dx1) do
-            key.failure(:primary_substance_missing) if key && (!value && values[:sud_dx1] && !schema_error?(:sud_dx1))
+            key.failure(:primary_substance_missing) if key && (!value && values[:sud_dx1] && !schema_error?(:sud_dx1) && values[:sud_dx1] != '999.9996')
           end
         end
 

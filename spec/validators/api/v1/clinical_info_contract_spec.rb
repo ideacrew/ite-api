@@ -84,6 +84,14 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
       expect(result.errors.to_h[:primary_substance].first[:category]).to eq 'Missing Value'
     end
 
+    it 'with missing primary_substance and sud_dx1 is 999.9996' do
+      valid_params[:primary_substance] = nil
+      valid_params[:sud_dx1] = '999.9996'
+      result = subject.call(valid_params)
+      expect(result.success?).to be_truthy
+      expect(result.errors.to_h).not_to have_key(:primary_substance)
+    end
+
     it 'with invalid secondary_substance' do
       valid_params[:secondary_substance] = 'not a real status'
       result = subject.call(valid_params)
