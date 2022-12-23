@@ -90,7 +90,8 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
       sud_dx2: 'F14.8393',
       primary_substance: '1',
       primary_su_frequency_admission: '1',
-      primary_su_frequency_discharge: '1'
+      primary_su_frequency_discharge: '1',
+      primary_su_route: '1'
     }
   end
 

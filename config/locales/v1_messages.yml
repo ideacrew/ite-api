@@ -211,6 +211,9 @@ en:
       missing_su_frequency_discharge:
         text: 'Must be filled when valid associated substance and discharge date'
         category: 'Missing Value'
+      su_route_missing:
+        text: 'Must be filled when valid associated substance present'
+        category: 'Missing Value'
 
       rules:
         address_zipcode:

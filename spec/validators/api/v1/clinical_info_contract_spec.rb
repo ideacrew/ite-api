@@ -13,7 +13,8 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
       mh_dx1: 'F24.8393',
       collateral: '1',
       primary_substance: '1',
-      primary_su_frequency_admission: '1'
+      primary_su_frequency_admission: '1',
+      primary_su_route: '1'
     }
   end
 
@@ -125,6 +126,25 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
       expect(result.errors.to_h).to have_key(:tertiary_su_frequency_discharge)
       expect(result.errors.to_h[:tertiary_su_frequency_discharge].first[:text]).to eq 'must be one of 1-5, 96-98'
       expect(result.errors.to_h[:tertiary_su_frequency_discharge].first[:category]).to eq 'Invalid Value'
+    end
+
+    it 'with invalid primary_su_route' do
+      valid_params[:primary_su_route] = 'not a real status'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:primary_su_route)
+      expect(result.errors.to_h[:primary_su_route].first[:text]).to eq 'must be one of 1-4, 20, 96-98'
+      expect(result.errors.to_h[:primary_su_route].first[:category]).to eq 'Invalid Value'
+    end
+
+    it 'with missing primary_su_route and primary_substance present' do
+      valid_params[:primary_su_route] = nil
+      valid_params[:primary_substance] = '1'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:primary_su_route)
+      expect(result.errors.to_h[:primary_su_route].first[:text]).to eq 'Must be filled when valid associated substance present'
+      expect(result.errors.to_h[:primary_su_route].first[:category]).to eq 'Missing Value'
     end
 
     it 'with invalid primary_su_frequency_admission' do
