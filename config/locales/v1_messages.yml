@@ -208,8 +208,8 @@ en:
       tertiary_su_frequency_admission_missing:
         text: 'Must be filled when valid tertiary_substance'
         category: 'Missing Value'
-      missing_primary_su_frequency_discharge:
-        text: 'Must be filled when valid primary_substance and discharge date'
+      missing_su_frequency_discharge:
+        text: 'Must be filled when valid associated substance and discharge date'
         category: 'Missing Value'
 
       rules:

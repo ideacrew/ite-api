@@ -632,6 +632,32 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
       end
     end
 
+    context 'with invalid tertiary_su_frequency_discharge' do
+      it 'fails if tertiary_su_frequency_discharge is missing and discharge date is present and teriatry_substance present' do
+        all_params[:discharge_date] = Date.today
+        all_params[:clinical_info][:tertiary_su_frequency_discharge] = nil
+        all_params[:clinical_info][:tertiary_substance] = '1'
+        result = subject.call(all_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:tertiary_su_frequency_discharge)
+        expect(result.errors.to_h[:tertiary_su_frequency_discharge].first[:text]).to eq 'Must be filled when valid associated substance and discharge date'
+        expect(result.errors.to_h[:tertiary_su_frequency_discharge].first[:category]).to eq 'Missing Value'
+      end
+    end
+
+    context 'with invalid secondary_su_frequency_discharge' do
+      it 'fails if primary_su_frequency_discharge is missing and discharge date is present and secondary_substance present' do
+        all_params[:discharge_date] = Date.today
+        all_params[:clinical_info][:secondary_su_frequency_discharge] = nil
+        all_params[:clinical_info][:secondary_substance] = '1'
+        result = subject.call(all_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:secondary_su_frequency_discharge)
+        expect(result.errors.to_h[:secondary_su_frequency_discharge].first[:text]).to eq 'Must be filled when valid associated substance and discharge date'
+        expect(result.errors.to_h[:secondary_su_frequency_discharge].first[:category]).to eq 'Missing Value'
+      end
+    end
+
     context 'with invalid primary_su_frequency_discharge' do
       it 'fails if primary_su_frequency_discharge is missing and discharge date is present and primary_substance present' do
         all_params[:discharge_date] = Date.today
@@ -640,7 +666,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
         result = subject.call(all_params)
         expect(result.failure?).to be_truthy
         expect(result.errors.to_h).to have_key(:primary_su_frequency_discharge)
-        expect(result.errors.to_h[:primary_su_frequency_discharge].first[:text]).to eq 'Must be filled when valid primary_substance and discharge date'
+        expect(result.errors.to_h[:primary_su_frequency_discharge].first[:text]).to eq 'Must be filled when valid associated substance and discharge date'
         expect(result.errors.to_h[:primary_su_frequency_discharge].first[:category]).to eq 'Missing Value'
       end
     end
