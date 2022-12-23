@@ -14,6 +14,7 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
       collateral: '1',
       primary_substance: '3',
       primary_su_frequency_admission: '2',
+      opioid_therapy: '2',
       primary_su_route: '2'
     }
   end
@@ -597,6 +598,35 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
         expect(result.errors.to_h[:non_bh_dx3].first[:text]).to eq "should not start with F, with length between 3 and 8 with or without character '.' after 3 digits"
         expect(result.errors.to_h[:non_bh_dx3].first[:category]).to eq 'Invalid Value'
       end
+    end
+
+    it 'with invalid opioid_therapy' do
+      valid_params[:opioid_therapy] = 'not a real status'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:opioid_therapy)
+      expect(result.errors.to_h[:opioid_therapy].first[:text]).to eq 'must be one of 1, 2, 96, 97, 98'
+      expect(result.errors.to_h[:opioid_therapy].first[:category]).to eq 'Invalid Value'
+    end
+
+    it 'without opioid_therapy when primary_substance present' do
+      valid_params[:opioid_therapy] = nil
+      valid_params[:primary_substance] = '1'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:opioid_therapy)
+      expect(result.errors.to_h[:opioid_therapy].first[:text]).to eq 'Must be filled when valid associated substance present'
+      expect(result.errors.to_h[:opioid_therapy].first[:category]).to eq 'Missing Value'
+    end
+
+    it 'with opioid_therapy of 96 when primary_substance present' do
+      valid_params[:opioid_therapy] = '96'
+      valid_params[:primary_substance] = '1'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:opioid_therapy)
+      expect(result.errors.to_h[:opioid_therapy].first[:text]).to eq 'Must be filled when valid associated substance present'
+      expect(result.errors.to_h[:opioid_therapy].first[:category]).to eq 'Missing Value'
     end
   end
 

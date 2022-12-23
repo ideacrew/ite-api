@@ -39,6 +39,7 @@ module Validators
           optional(:primary_su_age_at_first_use).maybe(:string)
           optional(:secondary_su_age_at_first_use).maybe(:string)
           optional(:tertiary_su_age_at_first_use).maybe(:string)
+          optional(:opioid_therapy).maybe(:string)
           # from episode
           optional(:collateral)
           optional(:record_type)
@@ -85,7 +86,7 @@ module Validators
           key.failure(:co_occurring_sud_mh_mismatch) if key && value && values[:co_occurring_sud_mh] != '1' && %w[M X].include?(values[:record_type]) && values[:sud_dx1] != '999.9996'
         end
 
-        { smi_sed: Types::SME_OPTIONS, co_occurring_sud_mh: Types::COOCCURRING_OPTIONS }.each do |field, types|
+        { smi_sed: Types::SME_OPTIONS, co_occurring_sud_mh: Types::COOCCURRING_OPTIONS, opioid_therapy: Types::OPIOD_THERAPY_OPTIONS }.each do |field, types|
           rule(field) do
             key.failure(text: "must be one of #{types.values.join(', ')}", category: 'Invalid Value') if key && value && !types.include?(value)
           end
@@ -200,6 +201,11 @@ module Validators
         rule(:secondary_su_age_at_first_use, :secondary_substance) do
           substance_options = %w[1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 20]
           key.failure(:su_details_missing) if !values[:secondary_su_age_at_first_use] && substance_options.include?(values[:secondary_substance])
+        end
+
+        rule(:opioid_therapy, :primary_substance) do
+          substance_options = %w[1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 20]
+          key.failure(:su_details_missing) if (!values[:opioid_therapy] || values[:opioid_therapy] == '96') && substance_options.include?(values[:primary_substance])
         end
 
         %i[non_bh_dx1 non_bh_dx2 non_bh_dx3].each do |field|

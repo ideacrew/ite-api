@@ -58,4 +58,5 @@ module Types
   SU_FREQUENCY_ADMISSION = Types::String.enum('1', '2', '3', '4', '5', '96', '97', '98').freeze
   SU_ROUTE_OPTIONS = Types::String.enum('1', '2', '3', '4', '20', '96', '97', '98').freeze
   AGE_OPTIONS = Types::String.enum((1..98).map(&:to_s).flatten).freeze
+  OPIOD_THERAPY_OPTIONS = Types::String.enum('1', '2', '96', '97', '98').freeze
 end

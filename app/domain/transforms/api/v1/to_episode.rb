@@ -19,7 +19,7 @@ module Transforms
                            address_line2 address_line1 address_zipcode address_state address_city address_ward].freeze
         CLINICAL_INFO_FIELDS = %i[smi_sed co_occurring_sud_mh opioid_therapy gaf_score_admission gaf_score_discharge
                                   sud_diagnostic_codes mh_diagnostic_codes non_bh_dx1 non_bh_dx2 non_bh_dx3 sud_dx1 mh_dx1 sud_dx2 sud_dx3 mh_dx2 mh_dx3
-                                  primary_substance secondary_substance tertiary_substance primary_su_frequncy_admission
+                                  primary_substance secondary_substance tertiary_substance primary_su_frequncy_admission opioid_therapy
                                   secondary_su_frequency_admission tertiary_su_frequency_admission primary_su_frequency_discharge
                                   tertiary_su_frequency_discharge secondary_su_frequency_discharge primary_su_route secondary_su_route tertiary_su_route primary_su_age_at_first_use secondary_su_age_at_first_use tertiary_su_age_at_first_use].freeze
         CLIENT_PROFILE_FIELDS = %i[marital_status veteran_status education employment not_in_labor
