@@ -52,7 +52,7 @@ module Operations
                         health_insurance address_line2 address_line1 address_city address_state co_occurring_sud_mh non_bh_dx1 non_bh_dx2
                         non_bh_dx3 sud_dx2 sud_dx3 mh_dx2 mh_dx3 primary_payment_source secondary_substance tertiary_substance secondary_su_frequency_admission tertiary_su_frequency_admission
                         secondary_su_frequency_discharge tertiary_su_frequency_discharge secondary_su_route tertiary_su_route secondary_su_age_at_first_use tertiary_su_age_at_first_use]
-          critical_error_fields = %i[gaf_score_admission smi_sed school_attendance marital_status employment education
+          critical_error_fields = %i[gaf_score_admission smi_sed school_attendance marital_status employment education primary_su_frequency_admission
                                      legal_status primary_language ethnicity race first_name last_name dob gender self_help_group_discharge
                                      arrests_past_30days_discharge num_of_prior_su_episodes gaf_score_discharge sud_dx1 mh_dx1 opioid_therapy
                                      discharge_reason referral_source living_arrangement arrests_past_30days_admission primary_substance primary_su_frequncy_admission]

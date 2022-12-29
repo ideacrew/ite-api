@@ -50,6 +50,7 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :around_each do
       'primary_substance' => '1',
       'primary_su_route' => '1',
       'opioid_therapy' => '2',
+      'primary_su_frequency_admission' => '1',
       'mh_dx1' => 'F24.8393' }
   end
 
