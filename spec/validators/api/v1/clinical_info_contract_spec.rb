@@ -213,7 +213,7 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
 
     it 'with missing primary_su_route and primary_substance present' do
       valid_params[:primary_su_route] = nil
-      valid_params[:primary_substance] = '1'
+      valid_params[:primary_substance] = '2'
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:primary_su_route)
