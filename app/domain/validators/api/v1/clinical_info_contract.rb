@@ -206,12 +206,12 @@ module Validators
         end
 
         rule(:tertiary_su_age_at_first_use, :tertiary_substance) do
-          substance_options = %w[1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 20]
+          substance_options = %w[2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 20]
           key.failure(:su_details_missing) if !values[:tertiary_su_age_at_first_use] && substance_options.include?(values[:tertiary_substance])
         end
 
         rule(:secondary_su_age_at_first_use, :secondary_substance) do
-          substance_options = %w[1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 20]
+          substance_options = %w[2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 20]
           key.failure(:su_details_missing) if !values[:secondary_su_age_at_first_use] && substance_options.include?(values[:secondary_substance])
         end
 

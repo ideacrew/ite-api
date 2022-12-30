@@ -177,7 +177,7 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
 
     it 'with missing secondary_su_age_at_first_use and secondary_substance present' do
       valid_params[:secondary_su_age_at_first_use] = nil
-      valid_params[:secondary_substance] = '1'
+      valid_params[:secondary_substance] = '2'
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:secondary_su_age_at_first_use)
@@ -187,7 +187,7 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
 
     it 'with missing tertiary_su_age_at_first_use and tertiary_substance present' do
       valid_params[:tertiary_su_age_at_first_use] = nil
-      valid_params[:tertiary_substance] = '1'
+      valid_params[:tertiary_substance] = '2'
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:tertiary_su_age_at_first_use)
