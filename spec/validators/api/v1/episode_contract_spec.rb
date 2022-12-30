@@ -637,7 +637,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
       it 'fails if tertiary_su_frequency_discharge is missing and discharge date is present and teriatry_substance present' do
         all_params[:discharge_date] = Date.today
         all_params[:clinical_info][:tertiary_su_frequency_discharge] = nil
-        all_params[:clinical_info][:tertiary_substance] = '1'
+        all_params[:clinical_info][:tertiary_substance] = '2'
         result = subject.call(all_params)
         expect(result.failure?).to be_truthy
         expect(result.errors.to_h).to have_key(:tertiary_su_frequency_discharge)
@@ -650,7 +650,7 @@ RSpec.describe ::Validators::Api::V1::EpisodeContract, dbclean: :around_each do
       it 'fails if primary_su_frequency_discharge is missing and discharge date is present and secondary_substance present' do
         all_params[:discharge_date] = Date.today
         all_params[:clinical_info][:secondary_su_frequency_discharge] = nil
-        all_params[:clinical_info][:secondary_substance] = '1'
+        all_params[:clinical_info][:secondary_substance] = '2'
         result = subject.call(all_params)
         expect(result.failure?).to be_truthy
         expect(result.errors.to_h).to have_key(:secondary_su_frequency_discharge)

@@ -220,14 +220,14 @@ module Validators
         end
 
         rule('clinical_info.secondary_su_frequency_discharge', 'clinical_info.secondary_substance', :discharge_date) do
-          substance_options = %w[1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 20]
+          substance_options = %w[2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 20]
           key(:secondary_su_frequency_discharge).failure(:missing_su_frequency_discharge) if !values.dig(:clinical_info,
                                                                                                          :secondary_su_frequency_discharge) && substance_options.include?(values.dig(:clinical_info,
                                                                                                                                                                                      :secondary_substance)) && values[:discharge_date]
         end
 
         rule('clinical_info.tertiary_su_frequency_discharge', 'clinical_info.tertiary_substance', :discharge_date) do
-          substance_options = %w[1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 20]
+          substance_options = %w[2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 20]
           key(:tertiary_su_frequency_discharge).failure(:missing_su_frequency_discharge) if !values.dig(:clinical_info,
                                                                                                         :tertiary_su_frequency_discharge) && substance_options.include?(values.dig(:clinical_info,
                                                                                                                                                                                    :tertiary_substance)) && values[:discharge_date]
