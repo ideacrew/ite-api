@@ -206,8 +206,9 @@ module Validators
         end
 
         rule(:opioid_therapy, :primary_substance) do
-          substance_options = %w[1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 20]
-          key.failure(:su_details_missing) if (!values[:opioid_therapy] || values[:opioid_therapy] == '96') && substance_options.include?(values[:primary_substance])
+          substance_options = %w[5 6 7]
+          key.failure(:opioid_therapy_details_missing) if !values[:opioid_therapy] && substance_options.include?(values[:primary_substance])
+          key.failure(:opioid_therapy_details_inconsistent) if values[:opioid_therapy] == '96' && substance_options.include?(values[:primary_substance])
         end
 
         %i[non_bh_dx1 non_bh_dx2 non_bh_dx3].each do |field|

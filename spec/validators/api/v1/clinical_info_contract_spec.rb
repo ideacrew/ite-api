@@ -757,22 +757,22 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
 
     it 'without opioid_therapy when primary_substance present' do
       valid_params[:opioid_therapy] = nil
-      valid_params[:primary_substance] = '1'
+      valid_params[:primary_substance] = '5'
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:opioid_therapy)
-      expect(result.errors.to_h[:opioid_therapy].first[:text]).to eq 'Must be filled when valid associated substance present'
+      expect(result.errors.to_h[:opioid_therapy].first[:text]).to eq 'Must be filled when valid associated substance use is 5, 6 or 7'
       expect(result.errors.to_h[:opioid_therapy].first[:category]).to eq 'Missing Value'
     end
 
     it 'with opioid_therapy of 96 when primary_substance present' do
       valid_params[:opioid_therapy] = '96'
-      valid_params[:primary_substance] = '1'
+      valid_params[:primary_substance] = '5'
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:opioid_therapy)
-      expect(result.errors.to_h[:opioid_therapy].first[:text]).to eq 'Must be filled when valid associated substance present'
-      expect(result.errors.to_h[:opioid_therapy].first[:category]).to eq 'Missing Value'
+      expect(result.errors.to_h[:opioid_therapy].first[:text]).to eq 'Cannot be 96 when substance use is 5, 6 or 7'
+      expect(result.errors.to_h[:opioid_therapy].first[:category]).to eq 'Data Inconsistency'
     end
   end
 
