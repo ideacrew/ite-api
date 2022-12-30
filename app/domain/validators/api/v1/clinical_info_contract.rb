@@ -178,13 +178,15 @@ module Validators
 
         %i[secondary_su_frequency_admission].each do |field|
           rule(field, :secondary_substance) do
-            key.failure(:secondary_su_frequency_admission_missing) if key && (!value && values[:secondary_substance] && !schema_error?(:secondary_substance))
+            substance_options = %w[2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 20]
+            key.failure(:secondary_su_frequency_admission_missing) if key && (!value && values[:secondary_substance] && substance_options.include?(values[:secondary_substance]))
           end
         end
 
         %i[tertiary_su_frequency_admission].each do |field|
           rule(field, :tertiary_substance) do
-            key.failure(:tertiary_su_frequency_admission_missing) if key && (!value && values[:tertiary_substance] && !schema_error?(:tertiary_substance))
+            substance_options = %w[2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 20]
+            key.failure(:tertiary_su_frequency_admission_missing) if key && (!value && values[:tertiary_substance] && substance_options.include?(values[:tertiary_substance]))
           end
         end
 
