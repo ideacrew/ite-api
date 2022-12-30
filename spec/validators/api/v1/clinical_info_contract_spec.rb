@@ -252,11 +252,11 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
 
     it 'with missing primary_su_frequency_admission and primary_substance is valid' do
       valid_params[:primary_su_frequency_admission] = nil
-      valid_params[:primary_substance] = '1'
+      valid_params[:primary_substance] = '2'
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:primary_su_frequency_admission)
-      expect(result.errors.to_h[:primary_su_frequency_admission].first[:text]).to eq 'Must be filled when valid primary_substance'
+      expect(result.errors.to_h[:primary_su_frequency_admission].first[:text]).to eq 'Must be filled when primary_substance is 2-18 or 20'
       expect(result.errors.to_h[:primary_su_frequency_admission].first[:category]).to eq 'Missing Value'
     end
 
@@ -269,7 +269,7 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
       expect(result.errors.to_h[:secondary_su_frequency_admission].first[:category]).to eq 'Invalid Value'
     end
 
-    it 'with missing primary_su_frequency_admission and primary_substance is valid' do
+    it 'with missing secondary_su_frequency_admission and primary_substance is valid' do
       valid_params[:secondary_su_frequency_admission] = nil
       valid_params[:secondary_substance] = '1'
       result = subject.call(valid_params)
@@ -288,7 +288,7 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
       expect(result.errors.to_h[:tertiary_su_frequency_admission].first[:category]).to eq 'Invalid Value'
     end
 
-    it 'with missing primary_su_frequency_admission and primary_substance is valid' do
+    it 'with missing tertiary_su_frequency_admission and primary_substance is valid' do
       valid_params[:tertiary_su_frequency_admission] = nil
       valid_params[:tertiary_substance] = '1'
       result = subject.call(valid_params)

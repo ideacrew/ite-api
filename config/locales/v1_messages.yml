@@ -200,7 +200,7 @@ en:
         text: 'Must be filled when valid sud_dx1'
         category: 'Missing Value'
       primary_su_frequency_admission_missing:
-        text: 'Must be filled when valid primary_substance'
+        text: 'Must be filled when primary_substance is 2-18 or 20'
         category: 'Missing Value'
       secondary_su_frequency_admission_missing:
         text: 'Must be filled when valid secondary_substance'
