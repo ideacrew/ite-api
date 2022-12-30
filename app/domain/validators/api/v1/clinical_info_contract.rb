@@ -162,6 +162,13 @@ module Validators
           end
         end
 
+        %i[primary_su_age_at_first_use].each do |field|
+          rule(field, :primary_substance) do
+            substance_options = %w[2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 20]
+            key.failure(:primary_su_frequency_admission_missing) if key && !value && substance_options.include?(values[:primary_substance])
+          end
+        end
+
         %i[primary_su_frequency_admission].each do |field|
           rule(field, :primary_substance) do
             substance_options = %w[2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 20]

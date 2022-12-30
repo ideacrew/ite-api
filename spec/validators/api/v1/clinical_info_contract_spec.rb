@@ -14,6 +14,7 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
       collateral: '1',
       primary_substance: '3',
       primary_su_frequency_admission: '2',
+      primary_su_age_at_first_use: '2',
       opioid_therapy: '2',
       primary_su_route: '2'
     }
@@ -144,6 +145,16 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
       expect(result.errors.to_h).to have_key(:primary_su_age_at_first_use)
       expect(result.errors.to_h[:primary_su_age_at_first_use].first[:text]).to eq 'must be one of 1-98'
       expect(result.errors.to_h[:primary_su_age_at_first_use].first[:category]).to eq 'Invalid Value'
+    end
+
+    it 'with missing primary_su_age_at_first_use and primary_substance present' do
+      valid_params[:primary_su_age_at_first_use] = nil
+      valid_params[:primary_substance] = '2'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:primary_su_age_at_first_use)
+      expect(result.errors.to_h[:primary_su_age_at_first_use].first[:text]).to eq 'Must be filled when primary_substance is 2-18 or 20'
+      expect(result.errors.to_h[:primary_su_age_at_first_use].first[:category]).to eq 'Missing Value'
     end
 
     it 'with invalid tertiary_su_age_at_first_use' do
