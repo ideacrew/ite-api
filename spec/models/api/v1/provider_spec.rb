@@ -133,7 +133,8 @@ RSpec.describe Api::V1::Provider, type: :model, dbclean: :around_each do
     end
 
     it 'will have a status of Expecting Submission if no extracts' do
-      year = (Date.today - 1.month).month > 0 ? Date.today.year : (Date.today.year - 1)
+      last_month = Date.today - 1.month
+      year = last_month.month > 0 && (Date.today.year == last_month.year) ? Date.today.year : (Date.today.year - 1)
       allow(Date).to receive(:today).and_return(Date.new(Date.today.year, Date.today.month, 9))
       expect(@provider.submission_status(nil, Date.new(year, (Date.today - 1.month).month, 9))).to eq 'Expecting Submission'
     end
