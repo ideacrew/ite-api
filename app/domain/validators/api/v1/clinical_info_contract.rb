@@ -215,10 +215,12 @@ module Validators
           key.failure(:su_details_missing) if !values[:secondary_su_age_at_first_use] && substance_options.include?(values[:secondary_substance])
         end
 
-        rule(:opioid_therapy, :primary_substance) do
+        rule(:opioid_therapy, :primary_substance, :secondary_substance, :tertiary_substance) do
           substance_options = %w[5 6 7]
           key.failure(:opioid_therapy_details_missing) if !values[:opioid_therapy] && substance_options.include?(values[:primary_substance])
           key.failure(:opioid_therapy_details_inconsistent) if values[:opioid_therapy] == '96' && substance_options.include?(values[:primary_substance])
+          substance_values = [values[:primary_substance], values[:secondary_substance], values[:tertiary_substance]].compact
+          key.failure(:opioid_therapy_substance_use_inconsistent) if %w[1 2].include?(values[:opioid_therapy]) && !substance_values.all? { |e| substance_options.include?(e) }
         end
 
         %i[non_bh_dx1 non_bh_dx2 non_bh_dx3].each do |field|

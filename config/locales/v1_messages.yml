@@ -220,6 +220,9 @@ en:
       opioid_therapy_details_inconsistent:
         text: 'Cannot be 96 when substance use is 5, 6 or 7'
         category: 'Data Inconsistency'
+      opioid_therapy_substance_use_inconsistent:
+        text: 'Substance use have to be one of 5,6 or 7 when the value is 1 or 2'
+        category: 'Data Inconsistency'
       primary_su_age_at_first_use_greater_than_admission_age:
         text: 'cannot be later than the client age at admission'
         category: 'Data Inconsistency'

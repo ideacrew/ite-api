@@ -15,7 +15,7 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
       primary_substance: '3',
       primary_su_frequency_admission: '2',
       primary_su_age_at_first_use: '2',
-      opioid_therapy: '2',
+      opioid_therapy: '97',
       primary_su_route: '2'
     }
   end
@@ -757,33 +757,72 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
       end
     end
 
-    it 'with invalid opioid_therapy' do
-      valid_params[:opioid_therapy] = 'not a real status'
-      result = subject.call(valid_params)
-      expect(result.failure?).to be_truthy
-      expect(result.errors.to_h).to have_key(:opioid_therapy)
-      expect(result.errors.to_h[:opioid_therapy].first[:text]).to eq 'must be one of 1, 2, 96, 97, 98'
-      expect(result.errors.to_h[:opioid_therapy].first[:category]).to eq 'Invalid Value'
-    end
+    context 'opioid_therapy' do
+      it 'with invalid opioid_therapy' do
+        valid_params[:opioid_therapy] = 'not a real status'
+        result = subject.call(valid_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:opioid_therapy)
+        expect(result.errors.to_h[:opioid_therapy].first[:text]).to eq 'must be one of 1, 2, 96, 97, 98'
+        expect(result.errors.to_h[:opioid_therapy].first[:category]).to eq 'Invalid Value'
+      end
 
-    it 'without opioid_therapy when primary_substance present' do
-      valid_params[:opioid_therapy] = nil
-      valid_params[:primary_substance] = '5'
-      result = subject.call(valid_params)
-      expect(result.failure?).to be_truthy
-      expect(result.errors.to_h).to have_key(:opioid_therapy)
-      expect(result.errors.to_h[:opioid_therapy].first[:text]).to eq 'Must be filled when valid associated substance use is 5, 6 or 7'
-      expect(result.errors.to_h[:opioid_therapy].first[:category]).to eq 'Missing Value'
-    end
+      it 'without opioid_therapy when primary_substance present' do
+        valid_params[:opioid_therapy] = nil
+        valid_params[:primary_substance] = '5'
+        result = subject.call(valid_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:opioid_therapy)
+        expect(result.errors.to_h[:opioid_therapy].first[:text]).to eq 'Must be filled when valid associated substance use is 5, 6 or 7'
+        expect(result.errors.to_h[:opioid_therapy].first[:category]).to eq 'Missing Value'
+      end
 
-    it 'with opioid_therapy of 96 when primary_substance present' do
-      valid_params[:opioid_therapy] = '96'
-      valid_params[:primary_substance] = '5'
-      result = subject.call(valid_params)
-      expect(result.failure?).to be_truthy
-      expect(result.errors.to_h).to have_key(:opioid_therapy)
-      expect(result.errors.to_h[:opioid_therapy].first[:text]).to eq 'Cannot be 96 when substance use is 5, 6 or 7'
-      expect(result.errors.to_h[:opioid_therapy].first[:category]).to eq 'Data Inconsistency'
+      it 'with opioid_therapy of 96 when primary_substance present' do
+        valid_params[:opioid_therapy] = '96'
+        valid_params[:primary_substance] = '5'
+        result = subject.call(valid_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:opioid_therapy)
+        expect(result.errors.to_h[:opioid_therapy].first[:text]).to eq 'Cannot be 96 when substance use is 5, 6 or 7'
+        expect(result.errors.to_h[:opioid_therapy].first[:category]).to eq 'Data Inconsistency'
+      end
+
+      it 'with opioid_therapy of 1 when primary_substance is not 5,6 or 7' do
+        valid_params[:opioid_therapy] = '1'
+        valid_params[:primary_substance] = '2'
+        result = subject.call(valid_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:opioid_therapy)
+        expect(result.errors.to_h[:opioid_therapy].first[:text]).to eq 'Substance use have to be one of 5,6 or 7 when the value is 1 or 2'
+        expect(result.errors.to_h[:opioid_therapy].first[:category]).to eq 'Data Inconsistency'
+      end
+
+      it 'with opioid_therapy of 2 when secondary_substance is not 5,6 or 7' do
+        valid_params[:opioid_therapy] = '2'
+        valid_params[:secondary_substance] = '3'
+        result = subject.call(valid_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:opioid_therapy)
+        expect(result.errors.to_h[:opioid_therapy].first[:text]).to eq 'Substance use have to be one of 5,6 or 7 when the value is 1 or 2'
+        expect(result.errors.to_h[:opioid_therapy].first[:category]).to eq 'Data Inconsistency'
+      end
+
+      it 'with opioid_therapy of 1 when tertiary_substance is not 5,6 or 7' do
+        valid_params[:opioid_therapy] = '1'
+        valid_params[:tertiary_substance] = '4'
+        result = subject.call(valid_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).to have_key(:opioid_therapy)
+        expect(result.errors.to_h[:opioid_therapy].first[:text]).to eq 'Substance use have to be one of 5,6 or 7 when the value is 1 or 2'
+        expect(result.errors.to_h[:opioid_therapy].first[:category]).to eq 'Data Inconsistency'
+      end
+
+      it 'with opioid_therapy of 97 when tertiary_substance is not 5,6 or 7' do
+        valid_params[:tertiary_substance] = '4'
+        result = subject.call(valid_params)
+        expect(result.failure?).to be_truthy
+        expect(result.errors.to_h).not_to have_key(:opioid_therapy)
+      end
     end
   end
 
