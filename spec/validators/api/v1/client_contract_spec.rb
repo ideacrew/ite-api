@@ -250,15 +250,22 @@ RSpec.describe ::Validators::Api::V1::ClientContract, dbclean: :around_each do
     end
 
     it 'dob is more than 150 years ago' do
-      valid_params[:dob] = (Date.today - 54_900).to_s
+      valid_params[:dob] = (Date.today - 55_900).to_s
       result = subject.call(valid_params)
       expect(result.failure?).to be_truthy
       expect(result.errors.to_h).to have_key(:dob)
       expect(result.errors.to_h[:dob].first[:text]).to eq 'Verify age over 150'
     end
 
+    it 'should be valid when dob is 150 years ago' do
+      valid_params[:dob] = (Date.today - 55_143).to_s
+      result = subject.call(valid_params)
+      expect(result.success?).to be_truthy
+      expect(result.errors.to_h).not_to have_key(:dob)
+    end
+
     it 'should be valid when dob is 01/01/0009' do
-      valid_params[:dob] = '1009-01-01'
+      valid_params[:dob] = '0009-01-01'
       result = subject.call(valid_params)
       expect(result.success?).to be_truthy
       expect(result.errors.to_h).not_to have_key(:dob)
