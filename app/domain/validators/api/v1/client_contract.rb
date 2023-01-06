@@ -103,7 +103,7 @@ module Validators
           if key && value
             now = Time.now.utc.to_date
             age = now.year - value.year - (now.month > value.month || (now.month == value.month && now.day >= value.day) ? 0 : 1)
-            key.failure(:dob_over95) if age > 95
+            key.failure(:dob_over150) if age > 149 && value&.to_s != '1009-01-01'
             key.failure(:cannot_be_in_future) if value > now
           end
         end
