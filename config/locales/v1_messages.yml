@@ -107,7 +107,7 @@ en:
         text: "should start with F then 1 with length between 3 and 8 with or without character '.' after 3 digits"
         category: "Invalid Value"
       mh_format_with3_or8:
-        text: "should start with F then not 1 with length between 3 and 8 with or without character '.' after 3 digits"
+        text: "should start with F then not 1, or G or Z, with length between 3 and 8 with or without character '.' after 3 digits"
         category: "Invalid Value"
       bh_format_with3_or8:
         text: "should not start with F, with length between 3 and 8 with or without character '.' after 3 digits"
