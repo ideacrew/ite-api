@@ -26,17 +26,17 @@ module Api
                 length: { minimum: 7, maximum: 7, message: '%<value>s is not a valid phone number' },
                 allow_blank: false
 
-      def to_s
+      def to_fs
         full_number = (area_code + number).to_i
         if extension.present?
           full_number.to_fs(:phone, area_code: true, extension:)
         else
-          full_number.to_s(:phone, area_code: true)
+          full_number.to_fs(:phone, area_code: true)
         end
       end
 
       def set_full_phone_number
-        self.full_phone_number = to_s
+        self.full_phone_number = to_fs
       end
     end
   end
