@@ -22,13 +22,14 @@ module Api
       def details
         return attributes unless payload[:ssn]
         return attributes if payload[:ssn].blank?
-        return attributes if warnings.detect{ |warning| warning[:ssn]}
+        return attributes if warnings.detect { |warning| warning[:ssn] }
+
         attributes['payload']['ssn'] = obscure_ssn(payload[:ssn])
         attributes
       end
 
       def obscure_ssn(original_ssn)
-        "***-**-" + original_ssn[-4..-1]
+        "***-**-#{original_ssn[-4..]}"
       end
     end
   end

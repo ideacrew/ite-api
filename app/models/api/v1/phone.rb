@@ -29,7 +29,7 @@ module Api
       def to_s
         full_number = (area_code + number).to_i
         if extension.present?
-          full_number.to_s(:phone, area_code: true, extension:)
+          full_number.to_fs(:phone, area_code: true, extension:)
         else
           full_number.to_s(:phone, area_code: true)
         end
