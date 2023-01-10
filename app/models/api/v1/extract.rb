@@ -87,7 +87,8 @@ module Api
           fail_count:,
           status:,
           provider_name:,
-          provider_id: provider_id.to_s
+          provider_id: provider_id.to_s,
+          file_name:
         }
       end
     end
