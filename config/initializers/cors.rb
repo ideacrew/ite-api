@@ -21,15 +21,26 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
     resource '/session', headers: :any, methods: %i[post delete]
   end
 
-  allow do
-    if Rails.env.development?
-      origins(%r{^(http?://)?localhost(:\d+)?/?$})
-    else
-      origins(%r{^https://(|[^.]+\.)(#{domains})/?$})
+  if Rails.env.development?
+    allow do
+      origins 'http://localhost:3000'
+      resource '*', headers: :any, methods: %i[get post put patch delete options head]
     end
+  else
+    allow do
+      origins 'dbh-ite.com'
 
-    resource '*',
+      resource '*',
              headers: :any,
              methods: %i[get post put patch delete options head]
+    end
+
+    allow do
+      origins 'preview.app.github.dev'
+
+      resource '*',
+             headers: :any,
+             methods: %i[get post put patch delete options head]
+    end
   end
 end
