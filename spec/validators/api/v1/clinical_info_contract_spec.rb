@@ -86,7 +86,6 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
     end
 
     it 'with missing primary_substance and sud_dx1 is 999.9996' do
-      valid_params[:primary_substance] = nil
       valid_params[:sud_dx1] = '999.9996'
       result = subject.call(valid_params)
       expect(result.success?).to be_truthy
@@ -204,6 +203,15 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
       expect(result.errors.to_h[:primary_su_route].first[:category]).to eq 'Invalid Value'
     end
 
+    it 'with primary_su_route and primary_substance is non applicable' do
+      valid_params[:primary_substance] = '97'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:primary_su_route)
+      expect(result.errors.to_h[:primary_su_route].first[:text]).to eq 'Primary substance cannot be 1, 96, 97 98 or nil'
+      expect(result.errors.to_h[:primary_su_route].first[:category]).to eq 'Data Inconsistency'
+    end
+
     it 'with invalid tertiary_su_route' do
       valid_params[:tertiary_su_route] = 'not a real status'
       result = subject.call(valid_params)
@@ -278,6 +286,15 @@ RSpec.describe ::Validators::Api::V1::ClinicalInfoContract, dbclean: :around_eac
       expect(result.errors.to_h).to have_key(:primary_su_frequency_admission)
       expect(result.errors.to_h[:primary_su_frequency_admission].first[:text]).to eq 'Must be filled when primary_substance is 2-18 or 20'
       expect(result.errors.to_h[:primary_su_frequency_admission].first[:category]).to eq 'Missing Value'
+    end
+
+    it 'with primary_su_frequency_admission and primary_substance is non applicable' do
+      valid_params[:primary_substance] = '97'
+      result = subject.call(valid_params)
+      expect(result.failure?).to be_truthy
+      expect(result.errors.to_h).to have_key(:primary_su_frequency_admission)
+      expect(result.errors.to_h[:primary_su_frequency_admission].first[:text]).to eq 'Primary substance cannot be 1, 96, 97 98 or nil'
+      expect(result.errors.to_h[:primary_su_frequency_admission].first[:category]).to eq 'Data Inconsistency'
     end
 
     it 'with invalid secondary_su_frequency_admission' do

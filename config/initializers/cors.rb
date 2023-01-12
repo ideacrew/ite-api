@@ -7,7 +7,7 @@
 
 # Read more: https://github.com/cyu/rack-cors
 
-domains = [
+_domains = [
   'dbh-ite.com',
   'github.dev',
   'githubpreview.dev',
@@ -31,16 +31,16 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
       origins 'dbh-ite.com'
 
       resource '*',
-             headers: :any,
-             methods: %i[get post put patch delete options head]
+               headers: :any,
+               methods: %i[get post put patch delete options head]
     end
 
     allow do
       origins 'preview.app.github.dev'
 
       resource '*',
-             headers: :any,
-             methods: %i[get post put patch delete options head]
+               headers: :any,
+               methods: %i[get post put patch delete options head]
     end
   end
 end

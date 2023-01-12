@@ -48,9 +48,9 @@ describe ::Operations::Api::V1::CreateRecord, dbclean: :around_each do
       'sud_dx2' => 'F14.8393',
       'co_occurring_sud_mh' => '1',
       'primary_substance' => '1',
-      'primary_su_route' => '1',
+      'primary_su_route' => '96',
       'opioid_therapy' => '97',
-      'primary_su_frequency_admission' => '1',
+      'primary_su_frequency_admission' => '96',
       'mh_dx1' => 'F24.8393' }
   end
 

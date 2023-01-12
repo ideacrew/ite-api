@@ -214,6 +214,9 @@ en:
       su_details_missing:
         text: 'Must be filled when valid associated substance present'
         category: 'Missing Value'
+      su_primary_substance_mismatch:
+        text: 'Primary substance cannot be 1, 96, 97 98 or nil'
+        category: 'Data Inconsistency'
       opioid_therapy_details_missing:
         text: 'Must be filled when valid associated substance use is 5, 6 or 7'
         category: 'Missing Value'
