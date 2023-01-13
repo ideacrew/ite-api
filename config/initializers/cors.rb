@@ -7,7 +7,7 @@
 
 # Read more: https://github.com/cyu/rack-cors
 
-_domains = [
+domains = [
   'dbh-ite.com',
   'github.dev',
   'githubpreview.dev',
