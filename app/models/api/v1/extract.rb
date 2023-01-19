@@ -91,6 +91,11 @@ module Api
           file_name:
         }
       end
+
+      def failing_records
+        failing_records = records.select { |record| record.warnings.present? || record.critical_errors.present? || record.fatal_errors.present? }
+        failing_records.map(&:details)
+      end
     end
   end
 end

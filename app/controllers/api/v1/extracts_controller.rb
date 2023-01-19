@@ -49,6 +49,20 @@ module Api
         end
       end
 
+      def failing_records
+        authorize Extract, :show_provider?
+        begin
+          extract = ::Api::V1::Extract.find(params[:id])
+          if extract && current_user.provider_id == extract.provider_id.to_s
+            render json: extract.failing_records
+          else
+            render json: { status_text: 'Could not find extract', status: 400, content_type: 'application/json' }
+          end
+        rescue StandardError => e
+          puts "error downloading failing records: #{e}"
+        end
+      end
+
       private
 
       def permit_params

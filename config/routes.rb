@@ -17,6 +17,7 @@ Rails.application.routes.draw do
       resources :extracts, only: %i[index show] do
         collection do
           post 'ingest'
+          get 'failing_records'
         end
       end
 
