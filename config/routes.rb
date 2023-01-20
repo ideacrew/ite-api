@@ -18,6 +18,7 @@ Rails.application.routes.draw do
         collection do
           post 'ingest'
           get 'failing_records'
+          get 'failing_data_fields'
         end
       end
 

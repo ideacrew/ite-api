@@ -96,6 +96,11 @@ module Api
         failing_records = records.select { |record| record.warnings.present? || record.critical_errors.present? || record.fatal_errors.present? }
         failing_records.map(&:details)
       end
+
+      def failing_data_fields
+        failing_records = records.select { |record| record.warnings.present? || record.critical_errors.present? || record.fatal_errors.present? }
+        failing_records.map(&:errors_by_field_array).flatten
+      end
     end
   end
 end

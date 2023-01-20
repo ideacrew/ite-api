@@ -161,4 +161,31 @@ RSpec.describe Api::V1::ExtractsController, dbclean: :around_each do
       expect { get :failing_records, params: { id: @extract.id } }.to raise_error(Pundit::NotAuthorizedError)
     end
   end
+
+  context 'GET failing_data_fields' do
+    it 'When user is dbh' do
+      DbhStaffRole.create(is_active: true, user:)
+      sign_in user
+      expect { get :failing_data_fields, params: { id: @extract.id } }.to raise_error(Pundit::NotAuthorizedError)
+    end
+
+    it 'When user is provider' do
+      ProviderStaffRole.create(is_active: true, user:, provider_gateway_identifier: provider.provider_gateway_identifier, provider_id: provider.id)
+      sign_in user
+      get :failing_data_fields, params: { id: @extract.id }
+      expect(response).to have_http_status(:success)
+    end
+
+    it 'When user is provider without provider id' do
+      ProviderStaffRole.create(is_active: true, user:, provider_gateway_identifier: provider.provider_gateway_identifier, provider_id: nil)
+      sign_in user
+      get :failing_data_fields, params: { id: @extract.id }
+      expect(JSON.parse(response.body)['status_text']).to eq 'Could not find extract'
+    end
+
+    it 'When user is not authorized' do
+      sign_in user
+      expect { get :failing_data_fields, params: { id: @extract.id } }.to raise_error(Pundit::NotAuthorizedError)
+    end
+  end
 end
