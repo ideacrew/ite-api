@@ -50,7 +50,7 @@ module Api
       end
 
       def failing_records
-        authorize Extract, :show_provider?
+        authorize Extract, :show?
         begin
           extract = ::Api::V1::Extract.find(params[:id])
           if extract && current_user.provider_id == extract.provider_id.to_s
@@ -64,7 +64,7 @@ module Api
       end
 
       def failing_data_fields
-        authorize Extract, :show_provider?
+        authorize Extract, :show?
         begin
           extract = ::Api::V1::Extract.find(params[:id])
           if extract && current_user.provider_id == extract.provider_id.to_s

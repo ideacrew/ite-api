@@ -139,7 +139,8 @@ RSpec.describe Api::V1::ExtractsController, dbclean: :around_each do
     it 'When user is dbh' do
       DbhStaffRole.create(is_active: true, user:)
       sign_in user
-      expect { get :failing_records, params: { id: @extract.id } }.to raise_error(Pundit::NotAuthorizedError)
+      get :failing_records, params: { id: @extract.id }
+      expect(response).to have_http_status(:success)
     end
 
     it 'When user is provider' do
@@ -166,7 +167,8 @@ RSpec.describe Api::V1::ExtractsController, dbclean: :around_each do
     it 'When user is dbh' do
       DbhStaffRole.create(is_active: true, user:)
       sign_in user
-      expect { get :failing_data_fields, params: { id: @extract.id } }.to raise_error(Pundit::NotAuthorizedError)
+      get :failing_data_fields, params: { id: @extract.id }
+      expect(response).to have_http_status(:success)
     end
 
     it 'When user is provider' do
