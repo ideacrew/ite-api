@@ -53,7 +53,7 @@ module Api
         authorize Extract, :show?
         begin
           extract = ::Api::V1::Extract.find(params[:id])
-          if extract && current_user.provider_id == extract.provider_id.to_s
+          if extract && (current_user.provider_id == extract.provider_id.to_s || current_user.dbh_user?)
             render json: extract.failing_records
           else
             render json: { status_text: 'Could not find extract', status: 400, content_type: 'application/json' }
@@ -67,7 +67,7 @@ module Api
         authorize Extract, :show?
         begin
           extract = ::Api::V1::Extract.find(params[:id])
-          if extract && current_user.provider_id == extract.provider_id.to_s
+          if extract && (current_user.provider_id == extract.provider_id.to_s || current_user.dbh_user?)
             render json: extract.failing_data_fields
           else
             render json: { status_text: 'Could not find extract', status: 400, content_type: 'application/json' }
