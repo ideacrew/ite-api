@@ -59,6 +59,7 @@ RUN apt-get update -qq \
   && apt-get install -yq --no-install-recommends \
     build-essential \
     libpq-dev \
+    dnsutils \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
   && truncate -s 0 /var/log/*log
