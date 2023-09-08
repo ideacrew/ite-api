@@ -63,6 +63,8 @@ RUN apt-get update -qq \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
   && truncate -s 0 /var/log/*log
 
+RUN apt-get install dnsutils -y
+
 ### Install dependencies
 
 FROM builder as prod_gems_and_assets
@@ -86,7 +88,5 @@ USER nonroot
 
 ENV PORT=${PORT:-3000}
 EXPOSE 3000
-
-RUN apt-get install dnsutils -y
 
 CMD env && nslookup dbh-prod.database.windows.net && nslookup dbh-prod.privatelink.database.windows.net && nc -z 10.57.76.134 1433 && bundle exec rails s -b 0.0.0.0 -p $PORT 
