@@ -16,7 +16,8 @@ RUN apt-get update \
       sshpass \
       unzip \
       zip \
-      zlibc \
+      zlibc \ 
+      dnsutils \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && truncate -s 0 /var/log/*log
@@ -62,8 +63,6 @@ RUN apt-get update -qq \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
   && truncate -s 0 /var/log/*log
-
-RUN apt-get install dnsutils -y
 
 ### Install dependencies
 
