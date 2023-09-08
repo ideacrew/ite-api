@@ -90,4 +90,4 @@ USER nonroot
 ENV PORT=${PORT:-3000}
 EXPOSE 3000
 
-CMD env && nslookup dbh-prod.database.windows.net && nslookup dbh-prod.database.windows.net && nslookup dbh-prod.privatelink.database.windows.net && nc -z 10.57.76.134 1433 && bundle exec rails s -b 0.0.0.0 -p $PORT 
+CMD env && bundle exec rails s -b 0.0.0.0 -p $PORT 
