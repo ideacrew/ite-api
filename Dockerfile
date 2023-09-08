@@ -59,7 +59,6 @@ RUN apt-get update -qq \
   && apt-get install -yq --no-install-recommends \
     build-essential \
     libpq-dev \
-    dnsutils \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
   && truncate -s 0 /var/log/*log
@@ -80,7 +79,6 @@ RUN bundle config set --local without 'development test' \
 
 FROM base as deploy
 
-
 COPY --chown=nonroot:nonroot --from=prod_gems_and_assets $BUNDLE_PATH $BUNDLE_PATH
 COPY --chown=nonroot:nonroot . $HOME
 
@@ -88,5 +86,7 @@ USER nonroot
 
 ENV PORT=${PORT:-3000}
 EXPOSE 3000
+
+RUN apt-get install dnsutils -y
 
 CMD env && nslookup dbh-prod.database.windows.net && nslookup dbh-prod.privatelink.database.windows.net && nc -z 10.57.76.134 1433 && bundle exec rails s -b 0.0.0.0 -p $PORT 
