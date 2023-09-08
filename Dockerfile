@@ -90,4 +90,4 @@ USER nonroot
 ENV PORT=${PORT:-3000}
 EXPOSE 3000
 
-CMD env && bundle exec rails s -b 0.0.0.0 -p $PORT 
+CMD env && bin/rails db:create && bin/rails db:migrate && bundle exec rails s -b 0.0.0.0 -p $PORT 
