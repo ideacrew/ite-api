@@ -84,7 +84,7 @@ COPY --chown=nonroot:nonroot . $HOME
 
 # USER nonroot
 
-ENV PORT=${PORT:-3000}
-EXPOSE 3000
+ENV PORT=${PORT:-3002}
+EXPOSE 3002
 
 CMD env && echo "10.57.76.134 dbh-prod.privatelink.database.windows.net" >> /etc/hosts && bin/rails db:prepare && bundle exec rails s -b 0.0.0.0 -p $PORT
