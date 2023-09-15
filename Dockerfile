@@ -82,7 +82,7 @@ FROM base as deploy
 COPY --chown=nonroot:nonroot --from=prod_gems_and_assets $BUNDLE_PATH $BUNDLE_PATH
 COPY --chown=nonroot:nonroot . $HOME
 
-USER nonroot
+# USER nonroot
 
 ENV PORT=${PORT:-3000}
 EXPOSE 3000
